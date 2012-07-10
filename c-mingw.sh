@@ -8,7 +8,6 @@ i586-mingw32msvc-gcc -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
     -Wno-strict-aliasing -fno-strict-aliasing \
-    -DHAVE_FMEMOPEN=0 \
     -Imingw_include \
     $(cat leptonica_srcs.lst)
 
