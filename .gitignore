@@ -1,0 +1,5 @@
+*.o
+*~
+DEADJOE
+core
+config_auto.h
