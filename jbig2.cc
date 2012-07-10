@@ -68,7 +68,7 @@ pixInfo(PIX *pix, const char *msg) {
           pix->w, pix->h, pix->d, pix->xres, pix->yres, pix->refcount);
 }
 
-#ifdef _MSC_VER
+#ifdef WIN32
 // -----------------------------------------------------------------------------
 // Windows, sadly, lacks asprintf
 // -----------------------------------------------------------------------------
@@ -347,6 +347,14 @@ main(int argc, char **argv) {
     return 6;
   }
 
+#ifdef WIN32
+  int result = setmode(1, WINBINARY);  // stdout.
+  if (result == -1) {
+    perror("Cannot set mode to binary for stdout.");
+    return 1;
+  }
+#endif
+
   struct jbig2ctx *ctx = jbig2_init(threshold, 0.5, 0, 0, !pdfmode, refine ? 10 : -1);
   int pageno = -1;
 
@@ -355,13 +363,17 @@ main(int argc, char **argv) {
     if (subimage==numsubimages) {
       subimage = numsubimages = 0;
       FILE *fp;
-      if ((fp=fopen(argv[i], "r"))==NULL) {
+      if ((fp=fopen(argv[i], "rb"))==NULL) {
         fprintf(stderr, "Unable to open \"%s\"", argv[i]);
         return 1;
       }
       l_int32 filetype;
-      findFileFormatStream(fp, &filetype);
+      if (findFileFormatStream(fp, &filetype)) {
+        fprintf(stderr, "Unable to get file format of \"%s\"", argv[i]);
+        return 1;
+      }
       if (filetype==IFF_TIFF && tiffGetCount(fp, &numsubimages)) {
+        fprintf(stderr, "Cannot process TIFF with subimages: \"%s\"", argv[i]);
         return 1;
       }
       fclose(fp);

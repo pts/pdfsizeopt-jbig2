@@ -3201,7 +3201,7 @@ l_getCurrentTime(l_int32  *sec,
 {
 ULARGE_INTEGER  utime, birthunix;
 FILETIME        systemtime;
-LONGLONG        birthunixhnsec = 116444736000000000;  /*in units of 100 ns */
+LONGLONG        birthunixhnsec = 116444736000000000ll;  /*in units of 100 ns */
 LONGLONG        usecs;
 
     GetSystemTimeAsFileTime(&systemtime);

@@ -107,6 +107,7 @@
 /* --------------------------------------------*/
 
 #include "png.h"
+#include "zlib.h"
 
 /* ----------------Set defaults for read/write options ----------------- */
     /* strip 16 bpp --> 8 bpp on reading png; default is for stripping */
@@ -665,7 +666,7 @@ png_bytep   *row_pointers;
 png_bytep    rowbuffer;
 png_structp  png_ptr;
 png_infop    info_ptr;
-png_colorp   palette;
+volatile png_colorp   palette;  /* volatile to get rid of gcc-4.2.1 warning that palette might be clobbered by longjmp or vfork */
 PIX         *pixt;
 PIXCMAP     *cmap;
 char        *text;

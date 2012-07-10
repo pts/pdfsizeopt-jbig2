@@ -5,10 +5,17 @@
 #define THIRD_PARTY_JBIG2ENC_JBIG2SEGMENTS_H__
 
 #include <vector>
-#ifdef _MSC_VER
-#include <winsock2.h>
-#else
+#ifdef __MINGW32__ 
+#define htons my_htons 
+#define htonl my_htons 
+unsigned short my_htons(unsigned short); 
+unsigned long my_htonl(unsigned long);   
+#else 
+#ifdef _MSC_VER 
+#include <winsock.h> 
+#else 
 #include <netinet/in.h>
+#endif
 #endif
 
 // -----------------------------------------------------------------------------

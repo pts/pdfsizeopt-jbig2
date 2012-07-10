@@ -42,6 +42,16 @@
 #include "jbig2structs.h"
 #include "jbig2segments.h"
 
+#ifdef __MINGW32__
+unsigned short my_htons(unsigned short x) {
+  return x >> 8 & 0xff | x << 8 & 0xff00;
+}
+unsigned long my_htonl(unsigned long x) {
+  return x >> 24 & 0xff | x >> 8 & 0xff00 | x << 8 & 0xff0000 |
+         x << 24 & 0xff000000ul;
+}
+#endif
+
 // -----------------------------------------------------------------------------
 // Removes spots which are less than size x size pixels
 //
