@@ -7,8 +7,11 @@ jbig2
 jbig2-big
 jbig2-small1
 jbig2-small2
+jbig2-small3
 jbig2.exe
 pts2.jbig2.dynamic
 pts2.jbig2.mingw
 pts2.jbig2.orig
 pts2.png
+noneed.sh
+noneed.out
