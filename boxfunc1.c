@@ -827,94 +827,6 @@ boxEqual(BOX      *box1,
 }
 
 
-/*!
- *  boxaEqual()
- *
- *      Input:  boxa1
- *              boxa2
- *              maxdist
- *              &naindex (<optional return> index array of correspondences
- *              &same (<return> 1 if equal; 0 otherwise)
- *      Return  0 if OK, 1 on error
- *
- *  Notes:
- *      (1) The two boxa are the "same" if they contain the same
- *          boxes and each box is within @maxdist of its counterpart
- *          in their positions within the boxa.  This allows for
- *          small rearrangements.  Use 0 for maxdist if the boxa
- *          must be identical.
- *      (2) This applies only to geometry and ordering; refcounts
- *          are not considered.
- *      (3) @maxdist allows some latitude in the ordering of the boxes.
- *          For the boxa to be the "same", corresponding boxes must
- *          be within @maxdist of each other.  Note that for large
- *          @maxdist, we should use a hash function for efficiency.
- *      (4) naindex[i] gives the position of the box in boxa2 that
- *          corresponds to box i in boxa1.  It is only returned if the
- *          boxa are equal.
- */
-l_int32
-boxaEqual(BOXA     *boxa1,
-          BOXA     *boxa2,
-          l_int32   maxdist,
-          NUMA    **pnaindex,
-          l_int32  *psame)
-{
-l_int32   i, j, n, jstart, jend, found, samebox;
-l_int32  *countarray;
-BOX      *box1, *box2;
-NUMA     *na;
-
-    PROCNAME("boxaEqual");
-
-    if (pnaindex) *pnaindex = NULL;
-    if (!psame)
-        return ERROR_INT("&same not defined", procName, 1);
-    *psame = 0;
-    if (!boxa1 || !boxa2)
-        return ERROR_INT("boxa1 and boxa2 not both defined", procName, 1);
-    n = boxaGetCount(boxa1);
-    if (n != boxaGetCount(boxa2))
-        return 0;
-
-    countarray = (l_int32 *)CALLOC(n, sizeof(l_int32));
-    na = numaMakeConstant(0.0, n);
-
-    for (i = 0; i < n; i++) {
-        box1 = boxaGetBox(boxa1, i, L_CLONE);
-        jstart = L_MAX(0, i - maxdist);
-        jend = L_MIN(n-1, i + maxdist);
-        found = FALSE;
-        for (j = jstart; j <= jend; j++) {
-            box2 = boxaGetBox(boxa2, j, L_CLONE);
-            boxEqual(box1, box2, &samebox);
-            if (samebox && countarray[j] == 0) {
-                countarray[j] = 1;
-                numaReplaceNumber(na, i, j);
-                found = TRUE;
-                boxDestroy(&box2);
-                break;
-            }
-            boxDestroy(&box2);
-        }
-        boxDestroy(&box1);
-        if (!found) {
-            numaDestroy(&na);
-            FREE(countarray);
-            return 0;
-        }
-    }
-
-    *psame = 1;
-    if (pnaindex)
-        *pnaindex = na;
-    else
-        numaDestroy(&na);
-    FREE(countarray);
-    return 0;
-}
-
-
 /*----------------------------------------------------------------------*
  *                          Boxa Combination                            *
  *----------------------------------------------------------------------*/
@@ -1391,38 +1303,6 @@ BOXA    *boxad;
         boxaAddBox(boxad, box, L_INSERT);
     }
 
-    return boxad;
-}
-
-
-/*!
- *  boxaPermutePseudorandom()
- *
- *      Input:  boxas (input boxa)
- *      Return: boxad (with boxes permuted), or null on error
- *
- *  Notes:
- *      (1) This does a pseudorandom in-place permutation of the boxes.
- *      (2) The result is guaranteed not to have any boxes in their
- *          original position, but it is not very random.  If you
- *          need randomness, use boxaPermuteRandom().
- */
-BOXA *
-boxaPermutePseudorandom(BOXA  *boxas)
-{
-l_int32  n;
-NUMA    *na;
-BOXA    *boxad;
-
-    PROCNAME("boxaPermutePseudorandom");
-
-    if (!boxas)
-        return (BOXA *)ERROR_PTR("boxa not defined", procName, NULL);
-
-    n = boxaGetCount(boxas);
-    na = numaPseudorandomSequence(n, 0);
-    boxad = boxaSortByIndex(boxas, na);
-    numaDestroy(&na);
     return boxad;
 }
 
