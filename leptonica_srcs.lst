@@ -81,4 +81,3 @@ shear.c
 stack.c
 textops.c
 utils.c
-writefile.c

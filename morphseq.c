@@ -160,7 +160,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -172,7 +174,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -181,7 +185,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixOpenBrick(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -190,7 +196,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixCloseSafeBrick(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -207,7 +215,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -219,7 +229,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -231,7 +243,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -340,7 +354,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -352,7 +368,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -361,7 +379,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixOpenCompBrick(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -370,7 +390,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixCloseSafeCompBrick(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -387,7 +409,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -399,7 +423,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -411,7 +437,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -501,7 +529,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -513,7 +543,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -522,7 +554,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixOpenBrickDwa(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -531,7 +565,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixCloseBrickDwa(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -548,7 +584,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -560,7 +598,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -572,7 +612,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -662,7 +704,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -674,7 +718,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -683,7 +729,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixOpenCompBrickDwa(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -692,7 +740,9 @@ SARRAY  *sa;
             sscanf(&op[1], "%d.%d", &w, &h);
             pixCloseCompBrickDwa(pixt1, pixt1, w, h);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -709,7 +759,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -721,7 +773,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -733,7 +787,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, y);
+#endif
                 x += dispsep;
             }
             break;
@@ -1039,7 +1095,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1051,7 +1109,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1063,7 +1123,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1075,7 +1137,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1090,7 +1154,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1227,7 +1293,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1239,7 +1307,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1251,7 +1321,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
@@ -1263,7 +1335,9 @@ SARRAY  *sa;
             pixt1 = pixClone(pixt2);
             pixDestroy(&pixt2);
             if (dispsep > 0) {
+#if 0
                 pixDisplay(pixt1, x, dispy);
+#endif
                 x += dispsep;
             }
             break;
