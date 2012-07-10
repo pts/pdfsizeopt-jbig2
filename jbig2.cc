@@ -191,6 +191,17 @@ segment_image(PIX *pixb, PIX *piximg) {
   return pixd1;
 }
 
+static int write_all(int fd, const void *buf, ssize_t count) {
+  const char *p = (const char*)buf;
+  while (count > 0) {
+    ssize_t got = write(fd, p, count);
+    if (got < 0) return -1;
+    p += got;
+    count -= got;
+  }
+  return 0;
+}
+
 int
 main(int argc, char **argv) {
   bool duplicate_line_removal = false;
@@ -406,7 +417,8 @@ main(int argc, char **argv) {
         if (verbose)
           pixInfo(graphics, "graphics image:");
         char *filename;
-        asprintf(&filename, "%s.%04d.%s", basename, pageno, img_ext);
+        if (0 > asprintf(&filename, "%s.%04d.%s", basename, pageno, img_ext))
+          abort();
         pixWrite(filename, graphics, img_fmt);
         free(filename);
       } else if (verbose) {
@@ -426,7 +438,8 @@ main(int argc, char **argv) {
       uint8_t *ret;
       ret = jbig2_encode_generic(pixt, !pdfmode, 0, 0, duplicate_line_removal,
                                  &length);
-      write(1, ret, length);
+      if (0 > write_all(1, ret, length))
+        abort();
       return 0;
     }
 
@@ -443,14 +456,17 @@ main(int argc, char **argv) {
   ret = jbig2_pages_complete(ctx, &length);
   if (pdfmode) {
     char *filename;
-    asprintf(&filename, "%s.sym", basename);
+    if (0 > asprintf(&filename, "%s.sym", basename))
+      abort();
     const int fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT | WINBINARY, 0600);
     free(filename);
     if (fd < 0) abort();
-    write(fd, ret, length);
+    if (0 > write_all(fd, ret, length))
+      abort();
     close(fd);
   } else {
-    write(1, ret, length);
+    if (0 > write_all(1, ret, length))
+      abort();
   }
   free(ret);
 
@@ -458,14 +474,17 @@ main(int argc, char **argv) {
     ret = jbig2_produce_page(ctx, i, -1, -1, &length);
     if (pdfmode) {
       char *filename;
-      asprintf(&filename, "%s.%04d", basename, i);
+      if (0 > asprintf(&filename, "%s.%04d", basename, i))
+        abort();
       const int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC | WINBINARY, 0600);
       free(filename);
       if (fd < 0) abort();
-      write(fd, ret, length);
+      if (0 > write_all(fd, ret, length))
+        abort();
       close(fd);
     } else {
-      write(1, ret, length);
+      if (0 > write_all(1, ret, length))
+        abort();
     }
     free(ret);
   }
