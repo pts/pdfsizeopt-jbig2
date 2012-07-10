@@ -372,19 +372,24 @@ main(int argc, char **argv) {
         fprintf(stderr, "Unable to get file format of \"%s\"", argv[i]);
         return 1;
       }
+#if HAVE_LIBTIFF
       if (filetype==IFF_TIFF && tiffGetCount(fp, &numsubimages)) {
         fprintf(stderr, "Cannot process TIFF with subimages: \"%s\"", argv[i]);
         return 1;
       }
+#endif
       fclose(fp);
     }
 
     PIX *source;
     if (numsubimages<=1) {
       source = pixRead(argv[i]);
-    } else {
+    }
+#if HAVE_LIBTIFF
+    else {
       source = pixReadTiff(argv[i], subimage++);
     }
+#endif
 
     if (!source) return 3;
     if (verbose)

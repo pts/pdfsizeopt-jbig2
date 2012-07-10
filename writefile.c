@@ -200,8 +200,10 @@ FILE  *fp;
         return ERROR_INT("pix not defined", procName, 1);
     if (!filename)
         return ERROR_INT("filename not defined", procName, 1);
+#if USE_JP2IO
     if (format == IFF_JP2)
         return ERROR_INT("jp2 not supported", procName, 1);
+#endif
 
     fname = genPathname(filename, NULL);
 
@@ -296,14 +298,17 @@ pixWriteStream(FILE    *fp,
         break;
 #endif
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:   /* default quality; baseline sequential */
         return pixWriteStreamJpeg(fp, pix, 75, 0);
         break;
+#endif
 
     case IFF_PNG:   /* no gamma value stored */
         return pixWriteStreamPng(fp, pix, 0.0);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:           /* uncompressed */
     case IFF_TIFF_PACKBITS:  /* compressed, binary only */
     case IFF_TIFF_RLE:       /* compressed, binary only */
@@ -313,14 +318,17 @@ pixWriteStream(FILE    *fp,
     case IFF_TIFF_ZIP:       /* compressed, all depths */
         return pixWriteStreamTiff(fp, pix, format);
         break;
+#endif
 
     case IFF_PNM:
         return pixWriteStreamPnm(fp, pix);
         break;
 
+#if HAVE_LIBGIF
     case IFF_GIF:
         return pixWriteStreamGif(fp, pix);
         break;
+#endif
 
 #if USE_PSIO
     case IFF_PS:
@@ -328,13 +336,17 @@ pixWriteStream(FILE    *fp,
         break;
 #endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return ERROR_INT("jp2 format not supported", procName, 1);
         break;
+#endif
 
+#if HAVE_LIBWEBP
     case IFF_WEBP:
         return pixWriteStreamWebP(fp, pix, 80);
         break;
+#endif
 
 #if USE_PDFIO
     case IFF_LPDF:
@@ -401,6 +413,7 @@ l_int32  format;
 #endif  /* _WIN32 */
     }
 
+#if HAVE_LIBJPEG
     if (format == IFF_JFIF_JPEG) {
         quality = L_MIN(quality, 100);
         quality = L_MAX(quality, 0);
@@ -413,6 +426,7 @@ l_int32  format;
         pixWriteJpeg (filename, pix, quality, progressive);
     }
     else
+#endif
         pixWrite(filename, pix, format);
 
     return 0;
@@ -602,18 +616,23 @@ l_int32  ret;
 
     switch(format)
     {
+#if USE_BMPIO
     case IFF_BMP:
         ret = pixWriteMemBmp(pdata, psize, pix);
         break;
+#endif
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:   /* default quality; baseline sequential */
         ret = pixWriteMemJpeg(pdata, psize, pix, 75, 0);
         break;
+#endif
 
     case IFF_PNG:   /* no gamma value stored */
         ret = pixWriteMemPng(pdata, psize, pix, 0.0);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:           /* uncompressed */
     case IFF_TIFF_PACKBITS:  /* compressed, binary only */
     case IFF_TIFF_RLE:       /* compressed, binary only */
@@ -623,26 +642,35 @@ l_int32  ret;
     case IFF_TIFF_ZIP:       /* compressed, all depths */
         ret = pixWriteMemTiff(pdata, psize, pix, format);
         break;
+#endif
 
     case IFF_PNM:
         ret = pixWriteMemPnm(pdata, psize, pix);
         break;
 
+#if USE_PSIO
     case IFF_PS:
         ret = pixWriteMemPS(pdata, psize, pix, NULL, 0, DEFAULT_SCALING);
         break;
+#endif
 
+#if HAVE_LIBGIF
     case IFF_GIF:
         ret = pixWriteMemGif(pdata, psize, pix);
         break;
+#endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return ERROR_INT("jp2 not supported", procName, 1);
         break;
+#endif
 
+#if USE_SPIXIO
     case IFF_SPIX:
         ret = pixWriteMemSpix(pdata, psize, pix);
         break;
+#endif
 
     default:
         return ERROR_INT("unknown format", procName, 1);

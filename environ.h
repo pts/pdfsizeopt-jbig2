@@ -133,7 +133,7 @@ typedef void *L_TIMER;
 #define  USE_PSIO         0
 #define  USE_PDFIO        0
 #define  USE_SPIXIO       0
-
+#define  USE_JP2IO        0
 
 /*--------------------------------------------------------------------*
  *                          Built-in types                            *

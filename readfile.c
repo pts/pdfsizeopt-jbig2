@@ -304,17 +304,20 @@ PIX     *pix;
         break;
 #endif
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:
         if ((pix = pixReadStreamJpeg(fp, READ_24_BIT_COLOR, 1, NULL, hint))
                 == NULL)
             return (PIX *)ERROR_PTR( "jpeg: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_PNG:
         if ((pix = pixReadStreamPng(fp)) == NULL)
             return (PIX *)ERROR_PTR("png: no pix returned", procName, NULL);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:
     case IFF_TIFF_PACKBITS:
     case IFF_TIFF_RLE:
@@ -325,25 +328,32 @@ PIX     *pix;
         if ((pix = pixReadStreamTiff(fp, 0)) == NULL)  /* page 0 by default */
             return (PIX *)ERROR_PTR("tiff: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_PNM:
         if ((pix = pixReadStreamPnm(fp)) == NULL)
             return (PIX *)ERROR_PTR("pnm: no pix returned", procName, NULL);
         break;
 
+#if HAVE_LIBGIF
     case IFF_GIF:
         if ((pix = pixReadStreamGif(fp)) == NULL)
             return (PIX *)ERROR_PTR("gif: no pix returned", procName, NULL);
         break;
+#endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return (PIX *)ERROR_PTR("jp2: format not supported", procName, NULL);
         break;
+#endif
 
+#if HAVE_LIBWEBP
     case IFF_WEBP:
         if ((pix = pixReadStreamWebP(fp)) == NULL)
             return (PIX *)ERROR_PTR("webp: no pix returned", procName, NULL);
         break;
+#endif
 
 #if USE_SPIXIO
     case IFF_SPIX:
@@ -353,6 +363,7 @@ PIX     *pix;
 #endif
 
     case IFF_UNKNOWN:
+    default:
         return (PIX *)ERROR_PTR( "Unknown format: no pix returned",
                 procName, NULL);
         break;
@@ -426,12 +437,14 @@ PIX     *pix;
         spp = (d == 32) ? 3 : 1;
         break;
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:
         ret = readHeaderJpeg(filename, &w, &h, &spp, NULL, NULL);
         bps = 8;
         if (ret)
             return ERROR_INT( "jpeg: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_PNG:
         ret = readHeaderPng(filename, &w, &h, &bps, &spp, &iscmap);
@@ -439,6 +452,7 @@ PIX     *pix;
             return ERROR_INT( "png: no header info returned", procName, 1);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:
     case IFF_TIFF_PACKBITS:
     case IFF_TIFF_RLE:
@@ -452,6 +466,7 @@ PIX     *pix;
         if (ret)
             return ERROR_INT( "tiff: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_PNM:
         ret = readHeaderPnm(filename, NULL, &w, &h, &d, &type, &bps, &spp);
@@ -459,6 +474,7 @@ PIX     *pix;
             return ERROR_INT( "pnm: no header info returned", procName, 1);
         break;
 
+#if HAVE_LIBGIF
     case IFF_GIF:  /* cheating: reading the entire file */
         if ((pix = pixRead(filename)) == NULL)
             return ERROR_INT( "gif: pix not read", procName, 1);
@@ -468,11 +484,15 @@ PIX     *pix;
         spp = 1;
         bps = d;
         break;
+#endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return ERROR_INT("jp2: format not supported", procName, 1);
         break;
+#endif
 
+#if HAVE_LIBWEBP
     case IFF_WEBP:
         ret = readHeaderWebP(filename, &w, &h);
         bps = 8;
@@ -480,6 +500,7 @@ PIX     *pix;
         if (ret)
             return ERROR_INT( "pnm: no header info returned", procName, 1);
         break;
+#endif
 
 #if USE_SPIXIO
     case IFF_SPIX:
@@ -490,6 +511,7 @@ PIX     *pix;
 #endif
 
     case IFF_UNKNOWN:
+    default:
         L_ERROR_STRING("unknown format in file %s", procName, filename);
         return 1;
         break;
@@ -572,10 +594,12 @@ l_int32  format;
     rewind(fp);
 
     findFileFormatBuffer(firstbytes, &format);
+#if HAVE_LIBTIFF
     if (format == IFF_TIFF) {
         findTiffCompression(fp, &format);
         rewind(fp);
     }
+#endif
     *pformat = format;
     if (format == IFF_UNKNOWN)
         return 1;
@@ -764,22 +788,27 @@ PIX     *pix;
     findFileFormatBuffer(data, &format);
     switch (format)
     {
+#if USE_BMPIO
     case IFF_BMP:
         if ((pix = pixReadMemBmp(data, size)) == NULL )
             return (PIX *)ERROR_PTR( "bmp: no pix returned", procName, NULL);
         break;
+#endif
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:
         if ((pix = pixReadMemJpeg(data, size, READ_24_BIT_COLOR, 1, NULL, 0))
                 == NULL)
             return (PIX *)ERROR_PTR( "jpeg: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_PNG:
         if ((pix = pixReadMemPng(data, size)) == NULL)
             return (PIX *)ERROR_PTR("png: no pix returned", procName, NULL);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:
     case IFF_TIFF_PACKBITS:
     case IFF_TIFF_RLE:
@@ -791,20 +820,25 @@ PIX     *pix;
         if ((pix = pixReadMemTiff(data, size, 0)) == NULL)
             return (PIX *)ERROR_PTR("tiff: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_PNM:
         if ((pix = pixReadMemPnm(data, size)) == NULL)
             return (PIX *)ERROR_PTR("pnm: no pix returned", procName, NULL);
         break;
 
+#if HAVE_LIBGIF
     case IFF_GIF:
         if ((pix = pixReadMemGif(data, size)) == NULL)
             return (PIX *)ERROR_PTR("gif: no pix returned", procName, NULL);
         break;
+#endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return (PIX *)ERROR_PTR("jp2: format not supported", procName, NULL);
         break;
+#endif
 
 #if USE_SPIXIO
     case IFF_SPIX:
@@ -814,11 +848,13 @@ PIX     *pix;
 #endif
 
     case IFF_UNKNOWN:
+    default:
         return (PIX *)ERROR_PTR("Unknown format: no pix returned",
                 procName, NULL);
         break;
     }
 
+#if HAVE_LIBTIFF
         /* Set the input format.  For tiff reading from memory we lose
          * the actual input format; for 1 bpp, default to G4.  */
     if (pix) {
@@ -826,6 +862,7 @@ PIX     *pix;
             format = IFF_TIFF_G4;
         pixSetInputFormat(pix, format);
     }
+#endif
 
     return pix;
 }
@@ -885,6 +922,7 @@ PIX     *pix;
 
     switch (format)
     {
+#if USE_BMPIO
     case IFF_BMP:  /* cheating: read the pix */
         if ((pix = pixReadMemBmp(data, size)) == NULL)
             return ERROR_INT( "bmp: pix not read", procName, 1);
@@ -893,13 +931,16 @@ PIX     *pix;
         bps = (d == 32) ? 8 : d;
         spp = (d == 32) ? 3 : 1;
         break;
+#endif
 
+#if HAVE_LIBJPEG
     case IFF_JFIF_JPEG:
         ret = readHeaderMemJpeg(data, size, &w, &h, &spp, NULL, NULL);
         bps = 8;
         if (ret)
             return ERROR_INT( "jpeg: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_PNG:
         ret = sreadHeaderPng(data, &w, &h, &bps, &spp, &iscmap);
@@ -907,6 +948,7 @@ PIX     *pix;
             return ERROR_INT( "png: no header info returned", procName, 1);
         break;
 
+#if HAVE_LIBTIFF
     case IFF_TIFF:
     case IFF_TIFF_PACKBITS:
     case IFF_TIFF_RLE:
@@ -920,6 +962,7 @@ PIX     *pix;
         if (ret)
             return ERROR_INT( "tiff: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_PNM:
         ret = sreadHeaderPnm(data, size, &w, &h, &d, &type, &bps, &spp);
@@ -927,6 +970,7 @@ PIX     *pix;
             return ERROR_INT( "pnm: no header info returned", procName, 1);
         break;
 
+#if HAVE_LIBGIF
     case IFF_GIF:  /* cheating: read the pix */
         if ((pix = pixReadMemGif(data, size)) == NULL)
             return ERROR_INT( "gif: pix not read", procName, 1);
@@ -936,10 +980,13 @@ PIX     *pix;
         spp = 1;
         bps = d;
         break;
+#endif
 
+#if USE_JP2IO
     case IFF_JP2:
         return ERROR_INT("jp2: format not supported", procName, 1);
         break;
+#endif
 
 #if USE_SPIXIO
     case IFF_SPIX:
@@ -951,6 +998,7 @@ PIX     *pix;
 #endif
 
     case IFF_UNKNOWN:
+    default:
         return ERROR_INT("unknown format; no data returned", procName, 1);
         break;
     }

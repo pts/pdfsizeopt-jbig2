@@ -29,7 +29,6 @@ fmorphgen.1.c
 fmorphgenlow.1.c
 fpix1.c
 fpix2.c
-gifiostub.c
 gplot.c
 graphics.c
 graymorph.c
@@ -38,7 +37,6 @@ grayquant.c
 grayquantlow.c
 heap.c
 jbclass.c
-jpegiostub.c
 kernel.c
 morphapp.c
 morph.c
@@ -82,7 +80,5 @@ sel2.c
 shear.c
 stack.c
 textops.c
-tiffiostub.c
 utils.c
-webpiostub.c
 writefile.c
