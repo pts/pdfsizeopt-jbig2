@@ -342,9 +342,11 @@ pixWriteStream(FILE    *fp,
         break;
 #endif
 
+#if USE_SPIXIO
     case IFF_SPIX:
         return pixWriteStreamSpix(fp, pix);
         break;
+#endif
 
     default:
         return ERROR_INT("unknown format", procName, 1);

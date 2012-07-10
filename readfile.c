@@ -345,10 +345,12 @@ PIX     *pix;
             return (PIX *)ERROR_PTR("webp: no pix returned", procName, NULL);
         break;
 
+#if USE_SPIXIO
     case IFF_SPIX:
         if ((pix = pixReadStreamSpix(fp)) == NULL)
             return (PIX *)ERROR_PTR("spix: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_UNKNOWN:
         return (PIX *)ERROR_PTR( "Unknown format: no pix returned",
@@ -479,11 +481,13 @@ PIX     *pix;
             return ERROR_INT( "pnm: no header info returned", procName, 1);
         break;
 
+#if USE_SPIXIO
     case IFF_SPIX:
         ret = readHeaderSpix(filename, &w, &h, &bps, &spp, &iscmap);
         if (ret)
             return ERROR_INT( "spix: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_UNKNOWN:
         L_ERROR_STRING("unknown format in file %s", procName, filename);
@@ -802,10 +806,12 @@ PIX     *pix;
         return (PIX *)ERROR_PTR("jp2: format not supported", procName, NULL);
         break;
 
+#if USE_SPIXIO
     case IFF_SPIX:
         if ((pix = pixReadMemSpix(data, size)) == NULL)
             return (PIX *)ERROR_PTR("spix: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_UNKNOWN:
         return (PIX *)ERROR_PTR("Unknown format: no pix returned",
@@ -935,12 +941,14 @@ PIX     *pix;
         return ERROR_INT("jp2: format not supported", procName, 1);
         break;
 
+#if USE_SPIXIO
     case IFF_SPIX:
         ret = sreadHeaderSpix((l_uint32 *)data, &w, &h, &bps,
                                &spp, &iscmap);
         if (ret)
             return ERROR_INT( "pnm: no header info returned", procName, 1);
         break;
+#endif
 
     case IFF_UNKNOWN:
         return ERROR_INT("unknown format; no data returned", procName, 1);

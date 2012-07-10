@@ -80,7 +80,6 @@ seedfilllow.c
 sel1.c
 sel2.c
 shear.c
-spixio.c
 stack.c
 textops.c
 tiffiostub.c
