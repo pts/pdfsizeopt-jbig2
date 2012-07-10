@@ -1826,7 +1826,7 @@ SARRAY             *sa;
         snprintf(buf, sizeof(buf), 
                  "%d 0 obj\n"
                  "<<\n"
-                 "/Length %ld\n"
+                 "/Length %lu\n"
                  "/Subtype /Image\n"
                  "%s\n"  /* colorspace */
                  "/Width %d\n"
@@ -1835,7 +1835,7 @@ SARRAY             *sa;
                  "%s\n"  /* filter */
                  ">>\n"
                  "stream\n",
-                 6 + i, cid->nbytescomp, cstr, cid->w, cid->h, bstr, fstr);
+                 6 + i, (unsigned long)cid->nbytescomp, cstr, cid->w, cid->h, bstr, fstr);
         xstr = stringNew(buf);
         sarrayAddString(sa, xstr, L_INSERT);
         numaAddNumber(lpd->objsize,

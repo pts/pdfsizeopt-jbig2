@@ -785,7 +785,8 @@ PIXA     *pixa;
             /* Extract the selected square from pixd, and generate 
              * an image the size of the b.b. of the c.c., which
              * is then painted through the c.c. mask.  */
-        boxt = boxCreate(L_MAX(0, xc - dist / 2), L_MAX(0, yc - dist / 2),
+        boxt = boxCreate(xc < dist / 2 ? 0 : xc - dist / 2,
+                         yc < dist / 2 ? 0 : yc - dist / 2,
                          cctilesize, cctilesize);
         pixt = pixClipRectangle(pixd, boxt, NULL);
         pixc = pixMirroredTiling(pixt, bw, bh);

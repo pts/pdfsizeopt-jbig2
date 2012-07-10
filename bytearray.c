@@ -479,7 +479,7 @@ size_t    nbytes1, nbytes2;
         return ERROR_INT("ba1 not defined", procName, 1);
 
     data1 = l_byteaGetData(ba1, &nbytes1);
-    if (splitloc < 0 || splitloc >= nbytes1)
+    if (splitloc >= nbytes1)
         return ERROR_INT("splitloc invalid", procName, 1);
     nbytes2 = nbytes1 - splitloc;
 
