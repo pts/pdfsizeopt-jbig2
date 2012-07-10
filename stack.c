@@ -48,7 +48,7 @@
 #include <stdlib.h>
 #include "allheaders.h"
 
-static const l_int32  INITIAL_PTR_ARRAYSIZE = 20;
+static const l_int32  INITIAL_PTR_ARRAYSIZE7 = 20;
 
 
 /*---------------------------------------------------------------------*
@@ -68,7 +68,7 @@ L_STACK  *lstack;
     PROCNAME("lstackCreate");
 
     if (nalloc <= 0)
-        nalloc = INITIAL_PTR_ARRAYSIZE;
+        nalloc = INITIAL_PTR_ARRAYSIZE7;
 
     if ((lstack = (L_STACK *)CALLOC(1, sizeof(L_STACK))) == NULL)
         return (L_STACK *)ERROR_PTR("lstack not made", procName, NULL);

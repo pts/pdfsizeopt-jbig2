@@ -161,7 +161,7 @@
 #include <math.h>
 #include "allheaders.h"
 
-static const l_int32 INITIAL_PTR_ARRAYSIZE = 50;      /* n'importe quoi */
+static const l_int32 INITIAL_PTR_ARRAYSIZE1 = 50;      /* n'importe quoi */
 
 
 /*--------------------------------------------------------------------------*
@@ -181,7 +181,7 @@ NUMA  *na;
     PROCNAME("numaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE1;
 
     if ((na = (NUMA *)CALLOC(1, sizeof(NUMA))) == NULL)
         return (NUMA *)ERROR_PTR("na not made", procName, NULL);
@@ -1074,7 +1074,7 @@ NUMAA  *naa;
     PROCNAME("numaaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE1;
 
     if ((naa = (NUMAA *)CALLOC(1, sizeof(NUMAA))) == NULL)
         return (NUMAA *)ERROR_PTR("naa not made", procName, NULL);

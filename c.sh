@@ -5,7 +5,7 @@ rm -f *.o
 gcc -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
-    $(cat leptonica_srcs.lst)
+    leptonica.c
 
 g++ -fno-exceptions -fno-rtti -s -O2 -c \
     -ffunction-sections -fdata-sections \

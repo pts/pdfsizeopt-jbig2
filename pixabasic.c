@@ -90,7 +90,7 @@
 #include <string.h>
 #include "allheaders.h"
 
-static const l_int32  INITIAL_PTR_ARRAYSIZE = 20;   /* n'import quoi */
+static const l_int32  INITIAL_PTR_ARRAYSIZE3 = 20;   /* n'import quoi */
 
 
 /*---------------------------------------------------------------------*
@@ -110,7 +110,7 @@ PIXA  *pixa;
     PROCNAME("pixaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE3;
 
     if ((pixa = (PIXA *)CALLOC(1, sizeof(PIXA))) == NULL)
         return (PIXA *)ERROR_PTR("pixa not made", procName, NULL);
@@ -1121,7 +1121,7 @@ PIXAA  *pixaa;
     PROCNAME("pixaaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE3;
 
     if ((pixaa = (PIXAA *)CALLOC(1, sizeof(PIXAA))) == NULL)
         return (PIXAA *)ERROR_PTR("pixaa not made", procName, NULL);

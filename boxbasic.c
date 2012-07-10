@@ -103,7 +103,7 @@
 #include <string.h>
 #include "allheaders.h"
 
-static const l_int32  INITIAL_PTR_ARRAYSIZE = 20;   /* n'import quoi */
+static const l_int32  INITIAL_PTR_ARRAYSIZE2 = 20;   /* n'import quoi */
 
 
 /*---------------------------------------------------------------------*
@@ -362,7 +362,7 @@ BOXA  *boxa;
     PROCNAME("boxaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE2;
 
     if ((boxa = (BOXA *)CALLOC(1, sizeof(BOXA))) == NULL)
         return (BOXA *)ERROR_PTR("boxa not made", procName, NULL);
@@ -929,7 +929,7 @@ BOXAA  *baa;
     PROCNAME("boxaaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE2;
 
     if ((baa = (BOXAA *)CALLOC(1, sizeof(BOXAA))) == NULL)
         return (BOXAA *)ERROR_PTR("baa not made", procName, NULL);

@@ -130,9 +130,9 @@
 #include "allheaders.h"
 
     /* MS VC++ can't handle array initialization with static consts ! */
-#define L_BUF_SIZE      256
+#define L_BUF_SIZE5      256
 
-static const l_int32  INITIAL_PTR_ARRAYSIZE = 50;  /* n'import quoi */
+static const l_int32  INITIAL_PTR_ARRAYSIZE6 = 50;  /* n'import quoi */
 static const l_int32  MANY_SELS = 1000;
 
 static SEL *selCreateFromSArray(SARRAY *sa, l_int32 first, l_int32 last);
@@ -231,7 +231,7 @@ SELA  *sela;
     PROCNAME("selaCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE6;
     if (n > MANY_SELS)
         L_WARNING_INT("%d sels", procName, n);
 
@@ -933,7 +933,7 @@ selaGetCombName(SELA    *sela,
 		l_int32  direction)
 {
 char    *selname;
-char     combname[L_BUF_SIZE];
+char     combname[L_BUF_SIZE5];
 l_int32  i, nsels, sx, sy, found;
 SEL     *sel;
 
@@ -946,9 +946,9 @@ SEL     *sel;
 
         /* Derive the comb name we're looking for */
     if (direction == L_HORIZ)
-        snprintf(combname, L_BUF_SIZE, "sel_comb_%dh", size);
+        snprintf(combname, L_BUF_SIZE5, "sel_comb_%dh", size);
     else  /* direction == L_VERT */
-        snprintf(combname, L_BUF_SIZE, "sel_comb_%dv", size);
+        snprintf(combname, L_BUF_SIZE5, "sel_comb_%dv", size);
 
     found = FALSE;
     nsels = selaGetCount(sela);
@@ -994,7 +994,7 @@ static void
 selaComputeCompositeParameters(const char  *fileout)
 {
 char    *str, *nameh1, *nameh2, *namev1, *namev2;
-char     buf[L_BUF_SIZE];
+char     buf[L_BUF_SIZE5];
 l_int32  size, size1, size2, len;
 SARRAY  *sa;
 SELA    *selabasic, *selacomb;
@@ -1014,7 +1014,7 @@ SELA    *selabasic, *selacomb;
             nameh2 = stringNew("");
             namev2 = stringNew("");
         }
-        snprintf(buf, L_BUF_SIZE,
+        snprintf(buf, L_BUF_SIZE5,
                  "      { %d, %d, %d, \"%s\", \"%s\", \"%s\", \"%s\" },",
                  size, size1, size2, nameh1, nameh2, namev1, namev2);
 	sarrayAddString(sa, buf, L_COPY);
@@ -1353,7 +1353,7 @@ SEL  *
 selReadStream(FILE  *fp)
 {
 char    *selname;
-char     linebuf[L_BUF_SIZE];
+char     linebuf[L_BUF_SIZE5];
 l_int32  sy, sx, cy, cx, i, j, version, ignore;
 SEL     *sel;
 
@@ -1367,7 +1367,7 @@ SEL     *sel;
     if (version != SEL_VERSION_NUMBER)
         return (SEL *)ERROR_PTR("invalid sel version", procName, NULL);
 
-    if (fgets(linebuf, L_BUF_SIZE, fp) == NULL)
+    if (fgets(linebuf, L_BUF_SIZE5, fp) == NULL)
         return (SEL *)ERROR_PTR("error reading into linebuf", procName, NULL);
     selname = stringNew(linebuf);
     sscanf(linebuf, "  ------  %s  ------", selname);

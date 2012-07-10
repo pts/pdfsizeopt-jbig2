@@ -122,8 +122,8 @@
 #endif  /* ! _WIN32 */
 #include "allheaders.h"
 
-static const l_int32  INITIAL_PTR_ARRAYSIZE = 50;     /* n'importe quoi */
-static const l_int32  L_BUF_SIZE = 512;
+static const l_int32  INITIAL_PTR_ARRAYSIZE4 = 50;     /* n'importe quoi */
+static const l_int32  L_BUF_SIZE4 = 512;
 
 
 /*--------------------------------------------------------------------------*
@@ -144,7 +144,7 @@ SARRAY  *sa;
     PROCNAME("sarrayCreate");
 
     if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE;
+        n = INITIAL_PTR_ARRAYSIZE4;
 
     if ((sa = (SARRAY *)CALLOC(1, sizeof(SARRAY))) == NULL)
         return (SARRAY *)ERROR_PTR("sa not made", procName, NULL);
@@ -1460,7 +1460,7 @@ SARRAY  *sa;
 
     if ((sa = sarrayCreate(n)) == NULL)
         return (SARRAY *)ERROR_PTR("sa not made", procName, NULL);
-    bufsize = L_BUF_SIZE + 1;
+    bufsize = L_BUF_SIZE4 + 1;
     if ((stringbuf = (char *)CALLOC(bufsize, sizeof(char))) == NULL)
         return (SARRAY *)ERROR_PTR("stringbuf not made", procName, NULL);
 

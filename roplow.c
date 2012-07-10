@@ -73,6 +73,8 @@ static const l_uint32 lmask32[] = {0x0,
     0xffffff80, 0xffffffc0, 0xffffffe0, 0xfffffff0,
     0xfffffff8, 0xfffffffc, 0xfffffffe, 0xffffffff};
 
+#if !RMASK32_DEFINED
+#define RMASK32_DEFINED 1
 static const l_uint32 rmask32[] = {0x0,
     0x00000001, 0x00000003, 0x00000007, 0x0000000f,
     0x0000001f, 0x0000003f, 0x0000007f, 0x000000ff,
@@ -82,6 +84,7 @@ static const l_uint32 rmask32[] = {0x0,
     0x001fffff, 0x003fffff, 0x007fffff, 0x00ffffff,
     0x01ffffff, 0x03ffffff, 0x07ffffff, 0x0fffffff,
     0x1fffffff, 0x3fffffff, 0x7fffffff, 0xffffffff};
+#endif
 
 
 /*--------------------------------------------------------------------*
