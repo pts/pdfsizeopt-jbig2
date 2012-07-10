@@ -6,6 +6,7 @@ config_auto.h
 jbig2
 jbig2-big
 jbig2-small1
+jbig2-small2
 jbig2.exe
 pts2.jbig2.dynamic
 pts2.jbig2.mingw

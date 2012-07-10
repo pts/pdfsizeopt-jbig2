@@ -290,9 +290,11 @@ pixWriteStream(FILE    *fp,
 
     switch(format)
     {
+#if USE_BMPIO
     case IFF_BMP:
         pixWriteStreamBmp(fp, pix);
         break;
+#endif
 
     case IFF_JFIF_JPEG:   /* default quality; baseline sequential */
         return pixWriteStreamJpeg(fp, pix, 75, 0);
@@ -320,9 +322,11 @@ pixWriteStream(FILE    *fp,
         return pixWriteStreamGif(fp, pix);
         break;
 
+#if USE_PSIO
     case IFF_PS:
         return pixWriteStreamPS(fp, pix, NULL, 0, DEFAULT_SCALING);
         break;
+#endif
 
     case IFF_JP2:
         return ERROR_INT("jp2 format not supported", procName, 1);
@@ -332,9 +336,11 @@ pixWriteStream(FILE    *fp,
         return pixWriteStreamWebP(fp, pix, 80);
         break;
 
+#if USE_PDFIO
     case IFF_LPDF:
         return pixWriteStreamPdf(fp, pix, 0, NULL);
         break;
+#endif
 
     case IFF_SPIX:
         return pixWriteStreamSpix(fp, pix);

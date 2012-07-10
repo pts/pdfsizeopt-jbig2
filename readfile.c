@@ -297,10 +297,12 @@ PIX     *pix;
     findFileFormatStream(fp, &format);
     switch (format)
     {
+#if USE_BMPIO
     case IFF_BMP:
         if ((pix = pixReadStreamBmp(fp)) == NULL )
             return (PIX *)ERROR_PTR( "bmp: no pix returned", procName, NULL);
         break;
+#endif
 
     case IFF_JFIF_JPEG:
         if ((pix = pixReadStreamJpeg(fp, READ_24_BIT_COLOR, 1, NULL, hint))

@@ -7,3 +7,4 @@ TODO: remove std::sort from *.cc (reduce dependencies)
 TODO: remove std::map from *.cc (reduce dependencies)
       maybe https://github.com/paulhodge/EASTL/blob/community/include/EASTL/map.h
 TODO: remove std::vector from *.cc (reduce dependencies)
+TODO: use gcc-4.4 for MinGW Linux cross-compilation as well
