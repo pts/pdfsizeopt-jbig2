@@ -863,12 +863,10 @@ PIXCMAP   *cmap;
          * should not be overly sensitive to their actual values. */
     if (d == 8) {
         pixSetMasked(pixg, pixm, 0xff);
-        if (debug) pixWrite("junkpix8.png", pixg, IFF_PNG);
         pixNumSignificantGrayColors(pixg, 20, 236, 0.0001, 1, pncolors);
     }
     else {  /* d == 32 */
         pixSetMasked(pixsc, pixm, 0xffffffff);
-        if (debug) pixWrite("junkpix32.png", pixsc, IFF_PNG);
         pixNumberOccupiedOctcubes(pixsc, 4, 20, -1, pncolors);
     }
 

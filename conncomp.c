@@ -239,12 +239,6 @@ L_STACK  *lstack, *auxstack;
         ystart = y;
     }
 
-#if  DEBUG
-    pixCountPixels(pixt1, &iszero, NULL);
-    fprintf(stderr, "Number of remaining pixels = %d\n", iszero);
-    pixWrite("junkremain", pixt1, IFF_PNG);
-#endif  /* DEBUG */
-
         /* Remove old boxa of pixa and replace with a clone copy */
     boxaDestroy(&pixa->boxa);
     pixa->boxa = boxaCopy(boxa, L_CLONE);
@@ -320,12 +314,6 @@ L_STACK  *lstack, *auxstack;
         xstart = x;
         ystart = y;
     }
-
-#if  DEBUG
-    pixCountPixels(pixt, &iszero, NULL);
-    fprintf(stderr, "Number of remaining pixels = %d\n", iszero);
-    pixWrite("junkremain", pixt1, IFF_PNG);
-#endif  /* DEBUG */
 
         /* Cleanup, freeing the fillsegs on each stack */
     lstackDestroy(&lstack, TRUE);

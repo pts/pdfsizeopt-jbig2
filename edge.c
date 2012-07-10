@@ -450,27 +450,6 @@ PIXCMAP  *cmap;
         }
     }
 
-    if (debugfile) {
-        pixt = pixConvertTo8(pixs, TRUE);
-        cmap = pixGetColormap(pixt);
-        pixcmapAddColor(cmap, 255, 0, 0);
-        index = pixcmapGetCount(cmap) - 1;
-        n = numaGetCount(na);
-        if (side == L_FROM_LEFT || side == L_FROM_RIGHT) {
-            for (y = 0; y < h; y++) {
-                numaGetIValue(na, y, &ival);
-                pixSetPixel(pixt, ival, y, index);
-            }
-        } else {  /* L_FROM_TOP or L_FROM_BOTTOM */
-            for (x = 0; x < w; x++) {
-                numaGetIValue(na, x, &ival);
-                pixSetPixel(pixt, x, ival, index);
-            }
-        }
-        pixWrite(debugfile, pixt, IFF_PNG);
-        pixDestroy(&pixt);
-    }
-
     return na;
 }
 

@@ -939,16 +939,6 @@ PIXA     *pixa;
          * the alpha component is 0 ...  */
     pixm = pixThresholdToBinary(pixalpha, 1);
 
-    if (debugflag) {
-        pixa = pixaCreate(0);
-        pixSaveTiled(pixs, pixa, 1, 1, 20, 32);
-        pixSaveTiled(pixm, pixa, 1, 0, 20, 0);
-        pixSaveTiled(pixr, pixa, 1, 1, 20, 0);
-        pixSaveTiled(pixg, pixa, 1, 0, 20, 0);
-        pixSaveTiled(pixb, pixa, 1, 0, 20, 0);
-        pixSaveTiled(pixalpha, pixa, 1, 0, 20, 0);
-    }
-
         /* Clean each component and reassemble */
     extractRGBValues(val, &rval, &gval, &bval);
     pixSetMasked(pixr, pixm, rval);
@@ -956,17 +946,6 @@ PIXA     *pixa;
     pixSetMasked(pixb, pixm, bval);
     pixd = pixCreateRGBImage(pixr, pixg, pixb);
     pixSetRGBComponent(pixd, pixalpha, L_ALPHA_CHANNEL);
-
-    if (debugflag) {
-        pixSaveTiled(pixr, pixa, 1, 1, 20, 0);
-        pixSaveTiled(pixg, pixa, 1, 0, 20, 0);
-        pixSaveTiled(pixb, pixa, 1, 0, 20, 0);
-        pixSaveTiled(pixd, pixa, 1, 1, 20, 0);
-        pixt = pixaDisplay(pixa, 0, 0);
-        pixWriteTempfile("/tmp", "rgb.png", pixt, IFF_PNG, NULL);
-        pixDestroy(&pixt);
-        pixaDestroy(&pixa);
-    }
 
     pixDestroy(&pixr);
     pixDestroy(&pixg);

@@ -1747,13 +1747,6 @@ PIX       *pixt;
         return ERROR_INT("invalid color", procName, 1);
 
     pixGetRankColorArray(pixs, nbins, color, factor, &carray, 0);
-    if (debugflag) {
-        for (i = 0; i < nbins; i++)
-            fprintf(stderr, "c[%d] = %x\n", i, carray[i]);
-        pixt = pixDisplayColorArray(carray, nbins, 200, 5, 1);
-        pixDisplay(pixt, 100, 100);
-        pixDestroy(&pixt);
-    }
 
     extractRGBValues(carray[0], &rval, &gval, &bval);
     minval = rval;
@@ -1908,14 +1901,6 @@ PIXCMAP   *cmap;
         ret = 1;
         debugflag = 0;  /* make sure to skip the following */
     }
-    if (debugflag) {
-        pixd = pixDisplayColorArray(array, nbins, 200, 5, 1);
-        if (debugflag == 1)
-            pixDisplayWithTitle(pixd, 0, 500, "binned colors", 1);
-        else  /* debugflag == 2 */
-            pixWriteTempfile("/tmp", "rankhisto.png", pixd, IFF_PNG, NULL);
-        pixDestroy(&pixd);
-    }
 
     pixDestroy(&pixc);
     pixDestroy(&pixg);
@@ -2065,62 +2050,6 @@ l_float64  *rarray, *garray, *barray, *narray;
     FREE(narray);
     return 0;
 }
-
-
-/*!
- *  pixDisplayColorArray()
- *
- *      Input:  carray (array of colors: 0xrrggbb00)
- *              ncolors (size of array)
- *              side (size of each color square; suggest 200)
- *              ncols (number of columns in output color matrix)
- *              textflag (1 to label each square with text; 0 otherwise)
- *      Return: pixd (color array), or null on error
- */
-PIX *
-pixDisplayColorArray(l_uint32  *carray,
-                     l_int32    ncolors,
-                     l_int32    side,
-                     l_int32    ncols,
-                     l_int32    textflag)
-{
-char     textstr[256];
-l_int32  i, rval, gval, bval;
-L_BMF   *bmf6;
-PIX     *pixt, *pixd;
-PIXA    *pixa;
-
-    PROCNAME("pixDisplayColorArray");
-
-    if (!carray)
-        return (PIX *)ERROR_PTR("carray not defined", procName, NULL);
-
-    bmf6 = NULL;
-    if (textflag)
-        bmf6 = bmfCreate("./fonts", 6);
-
-    pixa = pixaCreate(ncolors);
-    for (i = 0; i < ncolors; i++) {
-        pixt = pixCreate(side, side, 32);
-        pixSetAllArbitrary(pixt, carray[i]);
-        if (textflag) {
-            extractRGBValues(carray[i], &rval, &gval, &bval);
-            snprintf(textstr, sizeof(textstr),
-                     "%d: (%d %d %d)", i, rval, gval, bval);
-            pixSaveTiledWithText(pixt, pixa, side, (i % ncols == 0) ? 1 : 0,
-                                 20, 2, bmf6, textstr, 0xff000000, L_ADD_BELOW);
-        }
-        else
-            pixSaveTiled(pixt, pixa, 1, (i % ncols == 0) ? 1 : 0, 20, 32);
-        pixDestroy(&pixt);
-    }
-    pixd = pixaDisplay(pixa, 0, 0);
-
-    pixaDestroy(&pixa);
-    bmfDestroy(&bmf6);
-    return pixd;
-}
-
 
 /*-------------------------------------------------------------*
  *                 Pixelwise aligned statistics                *

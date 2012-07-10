@@ -330,51 +330,6 @@ PIXA     *pixa;
 
 
 /*!
- *  pixaSaveFont()
- *
- *      Input:  indir (directory holding image of character set)
- *              outdir (directory into which the output pixa file
- *                      will be written)
- *              size (in pts, at 300 ppi)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This saves a font of a particular size.
- *      (2) prog/genfonts calls this function for each of the
- *          nine font sizes, to generate all the font pixa files.
- */
-l_int32
-pixaSaveFont(const char  *indir,
-             const char  *outdir,
-             l_int32      size)
-{
-char    *pathname;
-l_int32  bl1, bl2, bl3;
-PIXA    *pixa;
-
-    PROCNAME("pixaSaveFont");
-
-    if (size < 4 || size > 20 || (size % 2))
-        return ERROR_INT("size must be in {4, 6, ..., 20}", procName, 1);
-
-    if ((pixa = pixaGenerateFont(indir, size, &bl1, &bl2, &bl3)) == NULL)
-        return ERROR_INT("pixa not made", procName, 1);
-    pathname = genPathname(outdir, outputfonts[(size - 4) / 2]);
-    pixaWrite(pathname, pixa);
-
-#if  DEBUG_FONT_GEN
-    fprintf(stderr, "Found %d chars in font size %d\n",
-            pixaGetCount(pixa), size);
-    fprintf(stderr, "Baselines are at: %d, %d, %d\n", bl1, bl2, bl3);
-#endif  /* DEBUG_FONT_GEN */
-
-    FREE(pathname);
-    pixaDestroy(&pixa);
-    return 0;
-}
-
-
-/*!
  *  pixaGenerateFont()
  *
  *      Input:  dir (directory holding image of character set)
@@ -453,23 +408,6 @@ PIXA     *pixa;
         pixr = pixClipRectangle(pixs, box, NULL);  /* row of chars */
         pixGetTextBaseline(pixr, tab, &yval);
         baseline[i] = yval;
-
-#if DEBUG_BASELINE
-      { PIX *pixbl;
-        fprintf(stderr, "row %d, yval = %d, h = %d\n",
-                i, yval, pixGetHeight(pixr));
-        pixbl = pixCopy(NULL, pixr);
-        pixRenderLine(pixbl, 0, yval, pixGetWidth(pixbl), yval, 1,
-                      L_FLIP_PIXELS);
-        if (i == 0 )
-            pixWrite("junktl0", pixbl, IFF_PNG);
-        else if (i == 1)
-            pixWrite("junktl1", pixbl, IFF_PNG);
-        else
-            pixWrite("junktl2", pixbl, IFF_PNG);
-        pixDestroy(&pixbl);
-      }
-#endif  /* DEBUG_BASELINE */
 
         boxDestroy(&box);
         pixrc = pixCloseSafeBrick(NULL, pixr, 1, 35);
