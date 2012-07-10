@@ -92,7 +92,7 @@
  *  simple implementation.  This very fast correlation matcher was
  *  contributed by William Rucklidge.
  */
-l_float32
+LEPTONICA_EXPORT l_float32
 pixCorrelationScore(PIX       *pix1,
                     PIX       *pix2,
                     l_int32    area1,
@@ -383,7 +383,7 @@ l_float32  score;
  *
  *  This very fast correlation matcher was contributed by William Rucklidge.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCorrelationScoreThresholded(PIX       *pix1,
                                PIX       *pix2,
                                l_int32    area1,
@@ -683,7 +683,7 @@ l_int32    threshold;
  *      (1) This calculates exactly the same value as pixCorrelationScore().
  *          It is 2-3x slower, but much simpler to understand.
  */
-l_float32
+LEPTONICA_EXPORT l_float32
 pixCorrelationScoreSimple(PIX       *pix1,
                           PIX       *pix2,
                           l_int32    area1,

@@ -108,7 +108,7 @@ static const l_uint32 rmask32[] = {0x0,
  *  Action: scales width, performs clipping, checks alignment, and
  *          dispatches for the rasterop.
  */
-void
+LEPTONICA_EXPORT void
 rasteropUniLow(l_uint32  *datad,
                l_int32    dpixw,
                l_int32    dpixh,
@@ -472,7 +472,7 @@ l_int32    i, j;
  *
  *  Warning: the two images must have equal depth.  This is not checked.
  */
-void
+LEPTONICA_EXPORT void
 rasteropLow(l_uint32  *datad,
             l_int32    dpixw,
             l_int32    dpixh,

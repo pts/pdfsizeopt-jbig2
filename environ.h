@@ -78,6 +78,19 @@ typedef intptr_t l_intptr_t;
 typedef uintptr_t l_uintptr_t;
 typedef void *L_TIMER;
 
+/* Specified for functions etc. definitions (not declarations). */
+#ifndef LEPTONICA_EXPORT
+#define LEPTONICA_EXPORT
+#endif
+#ifndef LEPTONICA_REAL_EXPORT
+#define LEPTONICA_REAL_EXPORT
+#endif
+
+/* Specified for function declarations. */
+#ifndef LEPTONICA_EXTERN
+#define LEPTONICA_EXTERN extern
+#endif
+
 
 /*--------------------------------------------------------------------*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*

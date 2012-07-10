@@ -42,7 +42,7 @@ static  l_uint32 expandtab16[] = {
 /*!
  *  expandBinaryPower2Low()
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 expandBinaryPower2Low(l_uint32  *datad,
                       l_int32    wd,
                       l_int32    hd,
@@ -137,7 +137,7 @@ l_uint32  *lines, *lined;
 /*-------------------------------------------------------------------*
  *             Expansion tables for 2x, 4x and 8x expansion          *
  *-------------------------------------------------------------------*/
-l_uint16 *
+LEPTONICA_EXPORT l_uint16 *
 makeExpandTab2x(void)
 {
 l_uint16  *tab;
@@ -171,7 +171,7 @@ l_int32    i;
 }
 
 
-l_uint32 *
+LEPTONICA_EXPORT l_uint32 *
 makeExpandTab4x(void)
 {
 l_uint32  *tab;
@@ -205,7 +205,7 @@ l_int32    i;
 }
 
 
-l_uint32 *
+LEPTONICA_EXPORT l_uint32 *
 makeExpandTab8x(void)
 {
 l_uint32  *tab;

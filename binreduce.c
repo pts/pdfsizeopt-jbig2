@@ -43,7 +43,7 @@
  *                   and destroyed before exit)
  *      Return: pixd (2x subsampled), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReduceBinary2(PIX      *pixs,
                  l_uint8  *intab)
 {
@@ -104,7 +104,7 @@ PIX       *pixd;
  *      (1) This performs up to four cascaded 2x rank reductions.
  *      (2) Use level = 0 to truncate the cascade.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReduceRankBinaryCascade(PIX     *pixs,
                            l_int32  level1,
                            l_int32  level2,
@@ -173,7 +173,7 @@ l_uint8  *tab;
  *          pixels in each 2x2 region of pixs that are required to
  *          set the corresponding pixel ON in pixd.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReduceRankBinary2(PIX      *pixs,
                      l_int32   level,
                      l_uint8  *intab)

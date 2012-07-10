@@ -128,7 +128,7 @@ static void popFillseg(L_STACK *lstack, l_int32 *pxleft, l_int32 *pxright,
  *          a pixa of the components, and it can be used instead
  *          of either pixConnCompBB() or pixConnCompPixa(), rsp.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixConnComp(PIX     *pixs,
             PIXA   **ppixa,
             l_int32  connectivity)
@@ -172,7 +172,7 @@ pixConnComp(PIX     *pixs,
  *      (4) If the input is valid, this always returns a boxa and a pixa.
  *          If pixs is empty, the boxa and pixa will be empty.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixConnCompPixa(PIX     *pixs,
                 PIXA   **ppixa,
                 l_int32  connectivity)
@@ -266,7 +266,7 @@ L_STACK  *lstack, *auxstack;
  *         in raster order and erased one at a time.  In the process,
  *         the b.b. is computed and saved.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixConnCompBB(PIX     *pixs,
               l_int32  connectivity)
 {
@@ -337,7 +337,7 @@ L_STACK  *lstack, *auxstack;
  *     (2) It works on a copy of the input pix.  The c.c. are located
  *         in raster order and erased one at a time.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCountConnComp(PIX      *pixs,
                  l_int32   connectivity,
                  l_int32  *pcount)
@@ -400,7 +400,7 @@ L_STACK  *lstack, *auxstack;
  *              &x, &y  (<return> coord value of next ON pixel)
  *      Return: 1 if a pixel is found; 0 otherwise or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 nextOnPixelInRaster(PIX      *pixs,
                     l_int32   xstart,
                     l_int32   ystart,
@@ -424,7 +424,7 @@ l_uint32  *data;
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 nextOnPixelInRasterLow(l_uint32  *data,
                        l_int32    w,
                        l_int32    h,
@@ -499,7 +499,7 @@ l_uint32  *line, *pword;
  *      (1) This is the high-level interface to Paul Heckbert's
  *          stack-based seedfill algorithm.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 pixSeedfillBB(PIX      *pixs,
               L_STACK  *lstack,
               l_int32   x,
@@ -561,7 +561,7 @@ BOX  *box;
  *          stack for reuse.  It should be noted that the 
  *          overhead in the function calls (vs. macros) is negligible.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 pixSeedfill4BB(PIX      *pixs,
                L_STACK  *lstack,
                l_int32   x,
@@ -673,7 +673,7 @@ BOX       *box;
  *          the leak checks are changed for 8 connectivity.
  *          See comments on pixSeedfill4BB() for more details.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 pixSeedfill8BB(PIX      *pixs,
                L_STACK  *lstack,
                l_int32   x,
@@ -776,7 +776,7 @@ BOX       *box;
  *      (1) This removes the component from pixs with a fg pixel at (x,y).
  *      (2) See pixSeedfill4() and pixSeedfill8() for details.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSeedfill(PIX      *pixs,
             L_STACK  *lstack,
             l_int32   x,
@@ -818,7 +818,7 @@ l_int32  retval;
  *          The seed pixel at (x,y) must initially be ON.
  *      (3) Reference: see pixSeedFill4BB()
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSeedfill4(PIX      *pixs,
              L_STACK  *lstack,
              l_int32   x,
@@ -909,7 +909,7 @@ l_uint32  *data, *line;
  *          The seed pixel at (x,y) must initially be ON.
  *      (3) Reference: see pixSeedFill8BB()
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSeedfill8(PIX      *pixs,
              L_STACK  *lstack,
              l_int32   x,

@@ -102,7 +102,7 @@ static const l_int32  INITIAL_PTR_ARRAYSIZE3 = 20;   /* n'import quoi */
  *      Input:  n  (initial number of ptrs)
  *      Return: pixa, or null on error
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaCreate(l_int32  n)
 {
 PIXA  *pixa;
@@ -139,7 +139,7 @@ PIXA  *pixa;
  *  Note: for bpp = 1, we truncate each retrieved pix to
  *        the ON pixels, which we assume for now start at (0,0)
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaCreateFromPix(PIX     *pixs,
                   l_int32  n,
                   l_int32  cellw,
@@ -198,7 +198,7 @@ PIXA    *pixa;
  *      (3) pixad will have only the properly clipped elements, and
  *          the internal boxa will be correct.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaCreateFromBoxa(PIX      *pixs,
                    BOXA     *boxa,
                    l_int32  *pcropwarn)
@@ -270,7 +270,7 @@ PIXA    *pixad;
  *          be this color.  This avoids 1 pixel wide black stripes at the
  *          left and lower edges.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSplitPix(PIX      *pixs,
              l_int32   nx,
              l_int32   ny,
@@ -329,7 +329,7 @@ PIXA    *pixa;
  *      (1) Decrements the ref count and, if 0, destroys the pixa.
  *      (2) Always nulls the input ptr.
  */
-void
+LEPTONICA_REAL_EXPORT void
 pixaDestroy(PIXA  **ppixa)
 {
 l_int32  i;
@@ -373,7 +373,7 @@ PIXA    *pixa;
  *
  *  Note: see pix.h for description of the copy types.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaCopy(PIXA    *pixa,
          l_int32  copyflag)
 {
@@ -426,7 +426,7 @@ PIXA    *pixac;
  *              copyflag (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaAddPix(PIXA    *pixa,
            PIX     *pix,
            l_int32  copyflag)
@@ -471,7 +471,7 @@ PIX     *pixc;
  *  Notes:
  *      (1) Doubles the size of the pixa and boxa ptr arrays.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaExtendArray(PIXA  *pixa)
 {
     PROCNAME("pixaExtendArray");
@@ -493,7 +493,7 @@ pixaExtendArray(PIXA  *pixa)
  *      (1) If necessary, reallocs new pixa and boxa ptrs arrays to @size.
  *          The pixa and boxa ptr arrays must always be equal in size.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaExtendArrayToSize(PIXA    *pixa,
                       l_int32  size)
 {
@@ -521,7 +521,7 @@ pixaExtendArrayToSize(PIXA    *pixa,
  *              copyflag (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaAddBox(PIXA    *pixa,
            BOX     *box,
            l_int32  copyflag)
@@ -550,7 +550,7 @@ pixaAddBox(PIXA    *pixa,
  *      Input:  pixa
  *      Return: count, or 0 if no pixa
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaGetCount(PIXA  *pixa)
 {
     PROCNAME("pixaGetCount");
@@ -568,7 +568,7 @@ pixaGetCount(PIXA  *pixa)
  *      Input:  pixa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaChangeRefcount(PIXA    *pixa,
                    l_int32  delta)
 {
@@ -590,7 +590,7 @@ pixaChangeRefcount(PIXA    *pixa,
  *              accesstype  (L_COPY or L_CLONE)
  *      Return: pix, or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixaGetPix(PIXA    *pixa,
            l_int32  index,
            l_int32  accesstype)
@@ -619,7 +619,7 @@ pixaGetPix(PIXA    *pixa,
  *              &w, &h, &d (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaGetPixDimensions(PIXA     *pixa,
                      l_int32   index,
                      l_int32  *pw,
@@ -650,7 +650,7 @@ PIX  *pix;
  *              accesstype  (L_COPY, L_CLONE, L_COPY_CLONE)
  *      Return: boxa, or null on error
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixaGetBoxa(PIXA    *pixa,
             l_int32  accesstype)
 {
@@ -674,7 +674,7 @@ pixaGetBoxa(PIXA    *pixa,
  *      Input:  pixa
  *      Return: count, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaGetBoxaCount(PIXA  *pixa)
 {
     PROCNAME("pixaGetBoxaCount");
@@ -704,7 +704,7 @@ pixaGetBoxaCount(PIXA  *pixa)
  *          If the caller expects to get a box, it is an error; see, e.g.,
  *          pixaGetBoxGeometry().
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 pixaGetBox(PIXA    *pixa,
            l_int32  index,
            l_int32  accesstype)
@@ -742,7 +742,7 @@ BOX  *box;
  *              &x, &y, &w, &h (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaGetBoxGeometry(PIXA     *pixa,
                    l_int32   index,
                    l_int32  *px,
@@ -779,7 +779,7 @@ BOX  *box;
  *      (2) The caller should always check if the return value is NULL
  *          before accessing any of the pix ptrs in this array!
  */
-PIX **
+LEPTONICA_EXPORT PIX **
 pixaGetPixArray(PIXA  *pixa)
 {
     PROCNAME("pixaGetPixArray");
@@ -808,7 +808,7 @@ pixaGetPixArray(PIXA  *pixa)
  *      (1) In-place replacement of one pix.
  *      (2) The previous pix at that location is destroyed.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaReplacePix(PIXA    *pixa,
                l_int32  index,
                PIX     *pix,
@@ -856,7 +856,7 @@ BOXA  *boxa;
  *          because the function is O(n).
  *      (4) To append a pix to a pixa, it's easier to use pixaAddPix().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaInsertPix(PIXA    *pixa,
               l_int32  index,
               PIX     *pixs,
@@ -904,7 +904,7 @@ l_int32  i, n;
  *          because the function is O(n).
  *      (3) The corresponding box is removed as well, if it exists.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaRemovePix(PIXA    *pixa,
               l_int32  index)
 {
@@ -971,7 +971,7 @@ PIX    **array;
  *          The initialization allows the pixa to always be properly
  *          filled, even if all pix (and boxes) are not later replaced.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaInitFull(PIXA  *pixa,
              PIX   *pix,
              BOX   *box)
@@ -1010,7 +1010,7 @@ PIX     *pixt;
  *          all boxes in the boxa.  The ptrs in the pix ptr array
  *          are all null'd.  The number of allocated pix, n, is set to 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaClear(PIXA  *pixa)
 {
 l_int32  i, n;
@@ -1045,7 +1045,7 @@ l_int32  i, n;
  *      (2) istart < 0 is taken to mean 'read from the start' (istart = 0)
  *      (3) iend <= 0 means 'read to the end'
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaJoin(PIXA    *pixad,
          PIXA    *pixas,
          l_int32  istart,
@@ -1113,7 +1113,7 @@ PIX     *pix;
  *          be used to get the absolute position of the textlines on
  *          the page.
  */
-PIXAA *
+LEPTONICA_EXPORT PIXAA *
 pixaaCreate(l_int32  n)
 {
 PIXAA  *pixaa;
@@ -1154,7 +1154,7 @@ PIXAA  *pixaa;
  *          aggregating pix[0], pix[n], pix[2*n], etc.
  *      (3) The copyflag specifies if each new pix is a copy or a clone.
  */
-PIXAA *
+LEPTONICA_EXPORT PIXAA *
 pixaaCreateFromPixa(PIXA    *pixa,
                     l_int32  n,
                     l_int32  type,
@@ -1217,7 +1217,7 @@ PIXAA   *pixaa;
  *      Input:  &pixaa <to be nulled>
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 pixaaDestroy(PIXAA  **ppixaa)
 {
 l_int32  i;
@@ -1261,7 +1261,7 @@ PIXAA   *pixaa;
  *                    all pix and boxes
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaaAddPixa(PIXAA   *pixaa,
              PIXA    *pixa,
              l_int32  copyflag)
@@ -1302,7 +1302,7 @@ PIXA    *pixac;
  *      Input:  pixaa
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaaExtendArray(PIXAA  *pixaa)
 {
     PROCNAME("pixaaExtendArray");
@@ -1332,7 +1332,7 @@ pixaaExtendArray(PIXAA  *pixaa)
  *      (1) The box can be used, for example, to hold the support region
  *          of a pixa that is being added to the pixaa.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaaAddBox(PIXAA   *pixaa,
             BOX     *box,
             l_int32  copyflag)
@@ -1361,7 +1361,7 @@ pixaaAddBox(PIXAA   *pixaa,
  *      Input:  pixaa
  *      Return: count, or 0 if no pixaa
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaaGetCount(PIXAA  *pixaa)
 {
     PROCNAME("pixaaGetCount");
@@ -1391,7 +1391,7 @@ pixaaGetCount(PIXAA  *pixaa)
  *          and box
  *      (4) In all cases, you must invoke pixaDestroy() on the returned pixa
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaaGetPixa(PIXAA   *pixaa,
              l_int32  index,
              l_int32  accesstype)
@@ -1425,7 +1425,7 @@ PIXA  *pixa;
  *      (1) L_COPY returns a copy; L_CLONE returns a new reference to the boxa.
  *      (2) In both cases, invoke boxaDestroy() on the returned boxa.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixaaGetBoxa(PIXAA   *pixaa,
              l_int32  accesstype)
 {
@@ -1457,7 +1457,7 @@ pixaaGetBoxa(PIXAA   *pixaa,
  *      (1) The pix are stored in the file as png.
  *          If the png library is not linked, this will fail.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaRead(const char  *filename)
 {
 FILE  *fp;
@@ -1494,7 +1494,7 @@ PIXA  *pixa;
  *      (1) The pix are stored in the file as png.
  *          If the png library is not linked, this will fail.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaReadStream(FILE  *fp)
 {
 l_int32  n, i, xres, yres, version;
@@ -1555,7 +1555,7 @@ PIXA    *pixa;
  *      (1) The pix are stored in the file as png.
  *          If the png library is not linked, this will fail.
  */
-PIXAA *
+LEPTONICA_EXPORT PIXAA *
 pixaaRead(const char  *filename)
 {
 FILE   *fp;
@@ -1592,7 +1592,7 @@ PIXAA  *pixaa;
  *      (1) The pix are stored in the file as png.
  *          If the png library is not linked, this will fail.
  */
-PIXAA *
+LEPTONICA_EXPORT PIXAA *
 pixaaReadStream(FILE  *fp)
 {
 l_int32  n, i, version;

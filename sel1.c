@@ -223,7 +223,7 @@ static const struct CompParameterMap  comp_parameter_map[] =
  *      Input:  n (initial number of sel ptrs; use 0 for default)
  *      Return: sela, or null on error
  */
-SELA *
+LEPTONICA_EXPORT SELA *
 selaCreate(l_int32  n)
 {
 SELA  *sela;
@@ -255,7 +255,7 @@ SELA  *sela;
  *      Input:  &sela (<to be nulled>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 selaDestroy(SELA  **psela)
 {
 SELA    *sela;
@@ -287,7 +287,7 @@ l_int32  i;
  *          assigned.  If a text name is not assigned here, it will
  *          be needed later when the sel is put into a sela.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreate(l_int32      height,
           l_int32      width,
           const char  *name)
@@ -315,7 +315,7 @@ SEL  *sel;
  *      Input:  &sel (<to be nulled>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 selDestroy(SEL  **psel)
 {
 l_int32  i;
@@ -348,7 +348,7 @@ SEL     *sel;
  *      Input:  sel
  *      Return: a copy of the sel, or null on error
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCopy(SEL  *sel)
 {
 l_int32  sx, sy, cx, cy, i, j;
@@ -392,7 +392,7 @@ SEL     *csel;
  *  Notes:
  *      (1) This is a rectangular sel of all hits, misses or don't cares.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateBrick(l_int32  h,
                l_int32  w,
                l_int32  cy,
@@ -432,7 +432,7 @@ SEL     *sel;
  *      (1) This generates a comb Sel of hits with the origin as
  *          near the center as possible.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateComb(l_int32  factor1,
               l_int32  factor2,
               l_int32  direction)
@@ -486,7 +486,7 @@ SEL     *sel;
  *      (1) The array[sy][sx] is indexed in standard "matrix notation",
  *          with the row index first.
  */
-l_int32 **
+LEPTONICA_EXPORT l_int32 **
 create2dIntArray(l_int32  sy,
                  l_int32  sx)
 {
@@ -527,7 +527,7 @@ l_int32  **array;
  *          the input name if necessary.  You can input NULL for
  *          selname if the sel already has a name.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaAddSel(SELA        *sela,
            SEL         *sel,
            const char  *selname,
@@ -570,7 +570,7 @@ SEL     *csel;
  *      Input:  sela
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaExtendArray(SELA  *sela)
 {
     PROCNAME("selaExtendArray");
@@ -598,7 +598,7 @@ selaExtendArray(SELA  *sela)
  *      Input:  sela
  *      Return: count, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaGetCount(SELA  *sela)
 {
     PROCNAME("selaGetCount");
@@ -621,7 +621,7 @@ selaGetCount(SELA  *sela)
  *      (1) This returns a ptr to the sel, not a copy, so the caller
  *          must not destroy it!
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selaGetSel(SELA    *sela,
            l_int32  i)
 {
@@ -642,7 +642,7 @@ selaGetSel(SELA    *sela,
  *      Input:  sel
  *      Return: sel name (not copied), or null if no name or on error
  */
-char *
+LEPTONICA_EXPORT char *
 selGetName(SEL  *sel)
 {
     PROCNAME("selGetName");
@@ -665,7 +665,7 @@ selGetName(SEL  *sel)
  *      (1) Always frees the existing sel name, if defined.
  *      (2) If name is not defined, just clears any existing sel name.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selSetName(SEL         *sel,
            const char  *name)
 {
@@ -687,7 +687,7 @@ selSetName(SEL         *sel,
  *              &sel  (<optional, return> sel (not a copy))
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaFindSelByName(SELA        *sela, 
                   const char  *name,
                   l_int32     *pindex,
@@ -736,7 +736,7 @@ SEL     *sel;
  *              &type  (<return> SEL_HIT, SEL_MISS, SEL_DONT_CARE)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selGetElement(SEL      *sel,
               l_int32   row,
               l_int32   col,
@@ -774,7 +774,7 @@ selGetElement(SEL      *sel,
  *          (and the type of operation) determine the actual
  *          direction of the rasterop.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selSetElement(SEL     *sel,
               l_int32  row,
               l_int32  col,
@@ -803,7 +803,7 @@ selSetElement(SEL     *sel,
  *              &sy, &sx, &cy, &cx (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selGetParameters(SEL      *sel,
                  l_int32  *psy,
                  l_int32  *psx,
@@ -833,7 +833,7 @@ selGetParameters(SEL      *sel,
  *              cy, cx
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selSetOrigin(SEL     *sel,
              l_int32  cy,
              l_int32  cx)
@@ -855,7 +855,7 @@ selSetOrigin(SEL     *sel,
  *              &type  (<return> SEL_HIT, SEL_MISS, SEL_DONT_CARE)
  *      Return: 0 if OK; 1 on error or if origin is not found
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selGetTypeAtOrigin(SEL      *sel,
                    l_int32  *ptype)
 {
@@ -890,7 +890,7 @@ l_int32  sx, sy, cx, cy, i, j;
  *              hsize, vsize (of brick sel)
  *      Return: sel name (new string), or null if no name or on error
  */
-char *
+LEPTONICA_EXPORT char *
 selaGetBrickName(SELA    *sela,
                  l_int32  hsize,
                  l_int32  vsize)
@@ -927,7 +927,7 @@ SEL     *sel;
  *      (1) Combs are by definition 1-dimensional, either horiz or vert.
  *      (2) Use this with comb Sels; e.g., from selaAddDwaCombs().
  */
-char *
+LEPTONICA_EXPORT char *
 selaGetCombName(SELA    *sela,
                 l_int32  size,
 		l_int32  direction)
@@ -1052,7 +1052,7 @@ SELA    *selabasic, *selacomb;
  *      (1) This uses the big lookup table at the top of this file.
  *      (2) All returned strings are copies that must be freed.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 getCompositeParameters(l_int32   size,
                        l_int32  *psize1,
                        l_int32  *psize2,
@@ -1096,7 +1096,7 @@ l_int32  index;
  *      Input:  sela
  *      Return: sa (of all sel names), or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 selaGetSelnames(SELA  *sela)
 {
 char    *selname;
@@ -1138,7 +1138,7 @@ SARRAY  *sa;
  *        For example, when j < cx, the shift of the image
  *        is +x to the cx.  This is a positive xp shift.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selFindMaxTranslations(SEL      *sel,
                        l_int32  *pxp,
                        l_int32  *pyp,
@@ -1188,7 +1188,7 @@ l_int32  maxxp, maxyp, maxxn, maxyn;
  *              quads (0 - 4; number of 90 degree cw rotations)
  *      Return: seld, or null on error
  */
-SEL  *
+LEPTONICA_EXPORT SEL  *
 selRotateOrth(SEL     *sel,
               l_int32  quads)
 {
@@ -1255,7 +1255,7 @@ SEL     *seld;
  *      Input:  filename
  *      Return: sela, or null on error
  */
-SELA  *
+LEPTONICA_EXPORT SELA  *
 selaRead(const char  *fname)
 {
 FILE  *fp;
@@ -1282,7 +1282,7 @@ SELA  *sela;
  *      Input:  stream
  *      Return: sela, or null on error
  */
-SELA  *
+LEPTONICA_EXPORT SELA  *
 selaReadStream(FILE  *fp)
 {
 l_int32  i, n, version;
@@ -1322,7 +1322,7 @@ SELA    *sela;
  *      Input:  filename
  *      Return: sel, or null on error
  */
-SEL  *
+LEPTONICA_EXPORT SEL  *
 selRead(const char  *fname)
 {
 FILE  *fp;
@@ -1349,7 +1349,7 @@ SEL   *sel;
  *      Input:  stream
  *      Return: sel, or null on error
  */
-SEL  *
+LEPTONICA_EXPORT SEL  *
 selReadStream(FILE  *fp)
 {
 char    *selname;
@@ -1400,7 +1400,7 @@ SEL     *sel;
  *              sela
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaWrite(const char  *fname,
           SELA        *sela)
 {
@@ -1429,7 +1429,7 @@ FILE  *fp;
  *              sela
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selaWriteStream(FILE  *fp,
                 SELA  *sela)
 {
@@ -1462,7 +1462,7 @@ SEL     *sel;
  *              sel
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selWrite(const char  *fname,
          SEL         *sel)
 {
@@ -1491,7 +1491,7 @@ FILE  *fp;
  *              sel
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selWriteStream(FILE  *fp,
                SEL   *sel)
 {
@@ -1546,7 +1546,7 @@ l_int32  sx, sy, cx, cy, i, j;
  *                                           "x    "
  *                                           "xxxxx";
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateFromString(const char  *text,
                     l_int32      h,
                     l_int32      w,
@@ -1620,7 +1620,7 @@ char     ch;
  *          them out with selaWrite().  They can then be read in
  *          with selaRead().
  */
-char *
+LEPTONICA_EXPORT char *
 selPrintToString(SEL  *sel)
 {
 char     is_center;
@@ -1693,7 +1693,7 @@ l_int32  sx, sy, cx, cy, x, y;
  *                    "   x "
  *                    "    x"
  */
-SELA *
+LEPTONICA_EXPORT SELA *
 selaCreateFromFile(const char  *filename)
 {
 char    *filestr, *line;
@@ -1868,7 +1868,7 @@ SEL     *sel;
  *  Notes:
  *      (1) The origin and all points in the pta must be positive.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateFromPta(PTA         *pta,
                  l_int32      cy,
                  l_int32      cx,
@@ -1916,7 +1916,7 @@ SEL     *sel;
  *  Notes:
  *      (1) The origin must be positive.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateFromPix(PIX         *pix,
                  l_int32      cy,
                  l_int32      cx,
@@ -1965,7 +1965,7 @@ l_uint32  val;
  *      (2) The sel name is taken from the pathname without the directory
  *          and extension.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selReadFromColorImage(const char  *pathname)
 {
 PIX   *pix;
@@ -2010,7 +2010,7 @@ char  *basename, *selname;
  *          If there is no such pixel, the origin defaults to the approximate
  *          center of the sel.
  */
-SEL *
+LEPTONICA_EXPORT SEL *
 selCreateFromColorPix(PIX   *pixs,
                       char  *selname)
 {

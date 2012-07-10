@@ -118,7 +118,7 @@ extern l_float32  AlphaMaskBorderVals[2];
  *
  *  *** Warning: implicit assumption about RGB component ordering ***
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleColor2xLI(PIX  *pixs)
 {
 l_int32    ws, hs, wpls, wpld;
@@ -161,7 +161,7 @@ PIX       *pixd;
  *          in analogy to scaleColor4xLILow(), and I leave this as
  *          an exercise for someone who really needs it.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleColor4xLI(PIX  *pixs)
 {
 PIX  *pixr, *pixg, *pixb;
@@ -206,7 +206,7 @@ PIX  *pixd;
  *      (2) The speed on intel hardware is about
  *          100 * 10^6 dest-pixels/sec/GHz
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGray2xLI(PIX  *pixs)
 {
 l_int32    ws, hs, wpls, wpld;
@@ -247,7 +247,7 @@ PIX       *pixd;
  *      (2) The speed on intel hardware is about
  *          160 * 10^6 dest-pixels/sec/GHz  (!!)
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGray4xLI(PIX  *pixs)
 {
 l_int32    ws, hs, wpls, wpld;
@@ -292,7 +292,7 @@ PIX       *pixd;
  *          subsampling (@scalex and/or @scaley < 1.0).
  *      (2) If @scalex == 1.0 and @scaley == 1.0, returns a copy.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleBySampling(PIX       *pixs,
                    l_float32  scalex,
                    l_float32  scaley)
@@ -339,7 +339,7 @@ PIX       *pixd;
  *          isotropic integer reduction.
  *      (2) If @factor == 1, returns a copy.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleByIntSubsampling(PIX     *pixs,
                          l_int32  factor)
 {
@@ -379,7 +379,7 @@ l_float32  scale;
  *          RGB image.  This would typically be used for image analysis.
  *      (3) The standard color byte order (RGBA) is assumed.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleRGBToGrayFast(PIX     *pixs,
                       l_int32  factor,
                       l_int32  color)
@@ -451,7 +451,7 @@ PIX       *pixd;
  *          RGB image.  This would typically be used for image analysis.
  *      (3) It uses the green channel to represent the RGB pixel intensity.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleRGBToBinaryFast(PIX     *pixs,
                         l_int32  factor,
                         l_int32  thresh)
@@ -514,7 +514,7 @@ PIX       *pixd;
  *          generating a downsized binary image from a higher resolution
  *          gray image.  This would typically be used for image analysis.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGrayToBinaryFast(PIX     *pixs,
                          l_int32  factor,
                          l_int32  thresh)
@@ -569,7 +569,7 @@ PIX       *pixd;
  *              rwt, gwt, bwt (must sum to 1.0)
  *      Return: pixd, (8 bpp, 2x reduced), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleRGBToGray2(PIX       *pixs,
                    l_float32  rwt,
                    l_float32  gwt,
@@ -626,7 +626,7 @@ PIX       *pixd;
  *          general area map scaling function, for the special cases
  *          of 2x, 4x, 8x and 16x reduction.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleAreaMap2(PIX  *pix)
 {
 l_int32    wd, hd, d, wpls, wpld;
@@ -685,7 +685,7 @@ PIX       *pixs, *pixd;
  *          filtering.  As a result, aliasing will occur for
  *          subsampling (scalex and scaley < 1.0).
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleBinary(PIX       *pixs,
                l_float32  scalex,
                l_float32  scaley)
@@ -730,7 +730,7 @@ PIX       *pixd;
  *      Return: pixd (8 bpp), scaled down by 2x in each direction,
  *              or null on error.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray2(PIX  *pixs)
 {
 l_uint8   *valtab;
@@ -788,7 +788,7 @@ PIX       *pixd;
  *          in about 10 cycles.
  *      (2) The width of pixd is truncated is truncated to a factor of 8.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray3(PIX  *pixs)
 {
 l_uint8   *valtab;
@@ -843,7 +843,7 @@ PIX       *pixd;
  *  Notes:
  *      (1) The width of pixd is truncated is truncated to a factor of 2.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray4(PIX  *pixs)
 {
 l_uint8   *valtab;
@@ -899,7 +899,7 @@ PIX       *pixd;
  *  Notes:
  *      (1) The width of pixd is truncated is truncated to a factor of 8.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray6(PIX  *pixs)
 {
 l_uint8   *valtab;
@@ -950,7 +950,7 @@ PIX       *pixd;
  *      Return: pixd (8 bpp), scaled down by 8x in each direction,
  *              or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray8(PIX  *pixs)
 {
 l_uint8   *valtab;
@@ -1002,7 +1002,7 @@ PIX       *pixd;
  *      Return: pixd (8 bpp), scaled down by 16x in each direction,
  *              or null on error.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleToGray16(PIX  *pixs)
 {
 l_int32    ws, hs, wd, hd;
@@ -1060,7 +1060,7 @@ PIX       *pixd;
  *      (2) This function suffers from aliasing effects that are
  *          easily seen in document images.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleMipmap(PIX       *pixs1,
                PIX       *pixs2,
                l_float32  scale)
@@ -1118,7 +1118,7 @@ PIX       *pixd;
  *              factor (integer scale factor for replicative expansion)
  *      Return: pixd (scaled up), or null on error.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixExpandReplicate(PIX     *pixs,
                    l_int32  factor)
 {
@@ -1252,7 +1252,7 @@ PIX       *pixd;
  *          followed by thresholding to binary.
  *      (2) Buffers are used to avoid making a large grayscale image.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixScaleGray2xLIThresh(PIX     *pixs,
                        l_int32  thresh)
 {
@@ -1329,7 +1329,7 @@ PIX       *pixd;
  *            Two are filled with each 2xLI row operation; the third is
  *            needed because the upscale and dithering ops are out of sync.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGray2xLIDither(PIX  *pixs)
 {
 l_int32    i, ws, hs, hsm, wd, hd, wpls, wplb, wpld;
@@ -1441,7 +1441,7 @@ PIX       *pixd;
  *          a linear interpolation to a large grayscale image, followed
  *          by thresholding to binary.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixScaleGray4xLIThresh(PIX     *pixs,
                        l_int32  thresh)
 {
@@ -1527,7 +1527,7 @@ PIX       *pixd;
  *          a linear interpolation to a large grayscale image, followed
  *          by error-diffusion dithering to binary.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGray4xLIDither(PIX  *pixs)
 {
 l_int32    i, j, ws, hs, hsm, wd, hd, wpls, wplb, wpld;
@@ -1651,7 +1651,7 @@ PIX       *pixd;
  *      (4) For the special case of downscaling by 2x in both directions,
  *          pixScaleGrayMinMax2() is about 2x more efficient.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGrayMinMax(PIX     *pixs,
                    l_int32  xfact,
                    l_int32  yfact,
@@ -1756,7 +1756,7 @@ PIX       *pixd;
  *      (4) This runs at about 70 MPix/sec/GHz of source data for
  *          erosion and dilation.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGrayMinMax2(PIX     *pixs,
                     l_int32  type)
 {
@@ -1836,7 +1836,7 @@ PIX       *pixd;
  *      (1) This performs up to four cascaded 2x rank reductions.
  *      (2) Use level = 0 to truncate the cascade.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGrayRankCascade(PIX     *pixs,
                         l_int32  level1,
                         l_int32  level2,
@@ -1899,7 +1899,7 @@ PIX  *pixt1, *pixt2, *pixt3, *pixt4;
  *          which runs at about 70 MPix/sec/GHz of source data.
  *          For rank 2 and 3, this runs 3x slower, at about 25 MPix/sec/GHz.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixScaleGrayRank2(PIX     *pixs,
                   l_int32  rank)
 {

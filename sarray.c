@@ -136,7 +136,7 @@ static const l_int32  L_BUF_SIZE4 = 512;
  *              (use 0 for default)
  *      Return: sarray, or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayCreate(l_int32  n)
 {
 SARRAY  *sa;
@@ -165,7 +165,7 @@ SARRAY  *sa;
  *              initstr (string to be initialized on the full array)
  *      Return: sarray, or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayCreateInitialized(l_int32  n,
                         char    *initstr)
 {
@@ -196,7 +196,7 @@ SARRAY  *sa;
  *      (1) This finds the number of word substrings, creates an sarray
  *          of this size, and puts copies of each substring into the sarray.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayCreateWordsFromString(const char  *string)
 {
 char     separators[] = " \n\t";
@@ -245,7 +245,7 @@ SARRAY  *sa;
  *          in a new sarray.
  *      (2) The newline characters are removed from each substring.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayCreateLinesFromString(char    *string,
                             l_int32  blankflag)
 {
@@ -315,7 +315,7 @@ SARRAY  *sa;
  *      (1) Decrements the ref count and, if 0, destroys the sarray.
  *      (2) Always nulls the input ptr.
  */
-void
+LEPTONICA_EXPORT void
 sarrayDestroy(SARRAY  **psa)
 {
 l_int32  i;
@@ -353,7 +353,7 @@ SARRAY  *sa;
  *      Input:  sarray
  *      Return: copy of sarray, or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayCopy(SARRAY  *sa)
 {
 l_int32  i;
@@ -380,7 +380,7 @@ SARRAY  *csa;
  *      Input:  sarray
  *      Return: ptr to same sarray, or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayClone(SARRAY  *sa)
 {
     PROCNAME("sarrayClone");
@@ -407,7 +407,7 @@ sarrayClone(SARRAY  *sa)
  *          and will not change in the future.
  *      (2) See usage comments at the top of this file.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayAddString(SARRAY  *sa,
                 char    *string,
                 l_int32  copyflag)
@@ -443,7 +443,7 @@ l_int32  n;
  *      Input:  sarray
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayExtendArray(SARRAY  *sa)
 {
     PROCNAME("sarrayExtendArray");
@@ -468,7 +468,7 @@ sarrayExtendArray(SARRAY  *sa)
  *              index (of string within sarray)
  *      Return: removed string, or null on error
  */
-char *
+LEPTONICA_EXPORT char *
 sarrayRemoveString(SARRAY  *sa,
                    l_int32  index)
 {
@@ -517,7 +517,7 @@ l_int32  i, n, nalloc;
  *          never any holes (null ptrs) in the ptr array up to the
  *          current count.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayReplaceString(SARRAY  *sa,
                     l_int32  index,
                     char    *newstr,
@@ -554,7 +554,7 @@ l_int32  n;
  *      Input:  sarray
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayClear(SARRAY  *sa)
 {
 l_int32  i;
@@ -581,7 +581,7 @@ l_int32  i;
  *      Input:  sarray
  *      Return: count, or 0 if no strings or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayGetCount(SARRAY  *sa)
 {
     PROCNAME("sarrayGetCount");
@@ -604,7 +604,7 @@ sarrayGetCount(SARRAY  *sa)
  *      (1) Caution: the returned array is not a copy, so caller
  *          must not destroy it!
  */
-char **
+LEPTONICA_EXPORT char **
 sarrayGetArray(SARRAY   *sa,
                l_int32  *pnalloc,
                l_int32  *pn)
@@ -644,7 +644,7 @@ char  **array;
  *          The const values of L_NOCOPY and L_COPY are guaranteed not
  *          to change.
  */
-char *
+LEPTONICA_EXPORT char *
 sarrayGetString(SARRAY  *sa,
                 l_int32  index,
                 l_int32  copyflag)
@@ -671,7 +671,7 @@ sarrayGetString(SARRAY  *sa,
  *      Input:  sarray
  *      Return: refcount, or UNDEF on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayGetRefcount(SARRAY  *sa)
 {
     PROCNAME("sarrayGetRefcount");
@@ -689,7 +689,7 @@ sarrayGetRefcount(SARRAY  *sa)
  *              delta (change to be applied)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayChangeRefcount(SARRAY  *sa,
 		     l_int32  delta)
 {
@@ -724,7 +724,7 @@ sarrayChangeRefcount(SARRAY  *sa,
  *                     strcat(dest, sarrayGetString(sa, i, L_NOCOPY));
  *          Do you see why?
  */
-char *
+LEPTONICA_EXPORT char *
 sarrayToString(SARRAY  *sa,
                l_int32  addnlflag)
 {
@@ -757,7 +757,7 @@ sarrayToString(SARRAY  *sa,
  *      (3) If the sarray is empty, this returns a string with just
  *          the character corresponding to @addnlflag.
  */
-char *
+LEPTONICA_EXPORT char *
 sarrayToStringRange(SARRAY  *sa,
                     l_int32  first,
                     l_int32  nstrings,
@@ -838,7 +838,7 @@ l_int32  n, i, last, size, index, len;
  *  Notes:
  *      (1) Copies of the strings in sarray2 are added to sarray1.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayConcatenate(SARRAY  *sa1,
                   SARRAY  *sa2)
 {
@@ -875,7 +875,7 @@ l_int32  n, i;
  *      (1) Copies of the strings in sarray2 are added to sarray1.
  *      (2) The [start ... end] range is truncated if necessary.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayAppendRange(SARRAY  *sa1,
                   SARRAY  *sa2,
 		  l_int32  start,
@@ -924,7 +924,7 @@ l_int32  n, i;
  *          are being sequenced in parallel, and it is necessary to
  *          find a valid string at each index.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayPadToSameSize(SARRAY  *sa1,
                     SARRAY  *sa2,
                     char    *padstring)
@@ -982,7 +982,7 @@ l_int32  i, n1, n2;
  *  The text display program (e.g., text editor) will typically
  *  wrap the long "word" to fit in the window.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayConvertWordsToLines(SARRAY  *sa,
                           l_int32  linesize)
 {
@@ -1060,7 +1060,7 @@ SARRAY  *sal, *saout;
  *  Notes:
  *      (1) This uses strtokSafe().  See the notes there in utils.c.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarraySplitString(SARRAY      *sa,
                   const char  *str,
                   const char  *separators)
@@ -1104,7 +1104,7 @@ char  *cstr, *substr, *saveptr;
  *          a match to the substring anywhere within each filename.
  *      (2) If substr == NULL, returns a copy of the sarray.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarraySelectBySubstring(SARRAY      *sain,
                         const char  *substr)
 {
@@ -1148,7 +1148,7 @@ SARRAY  *saout;
  *          in the index set [first ... last].  Use @last == 0 to get all
  *          strings from @first to the last string in the sarray.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarraySelectByRange(SARRAY  *sain,
                     l_int32  first,
                     l_int32  last)
@@ -1215,7 +1215,7 @@ SARRAY  *saout;
  *                    "--", 0))
  *                 fprintf(stderr, "start = %d, end = %d\n", actstart, end);
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayParseRange(SARRAY      *sa,
                  l_int32      start,
                  l_int32     *pactualstart,
@@ -1307,7 +1307,7 @@ l_int32  n, i, offset, found;
  *      (2) Shell sort, modified from K&R, 2nd edition, p.62.
  *          Slow but simple O(n logn) sort.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarraySort(SARRAY  *saout,
            SARRAY  *sain,
            l_int32  sortorder)
@@ -1361,7 +1361,7 @@ l_int32  n, i, j, gap;
  *      (1) If the lexical values are identical, return a 0, to
  *          indicate that no swapping is required to sort the strings.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringCompareLexical(const char *str1,
                      const char *str2)
 {
@@ -1403,7 +1403,7 @@ l_int32  i, len1, len2, len;
  *      Input:  filename
  *      Return: sarray, or null on error
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayRead(const char  *filename)
 {
 FILE    *fp;
@@ -1439,7 +1439,7 @@ SARRAY  *sa;
  *          the entire string, as determined by its size, we are
  *          not affected by any number of embedded newlines.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 sarrayReadStream(FILE  *fp)
 {
 char    *stringbuf;
@@ -1496,7 +1496,7 @@ SARRAY  *sa;
  *              sarray
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayWrite(const char  *filename,
             SARRAY      *sa)
 {
@@ -1531,7 +1531,7 @@ FILE  *fp;
  *      (1) This appends a '\n' to each string, which is stripped
  *          off by sarrayReadStream().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayWriteStream(FILE    *fp,
                   SARRAY  *sa)
 {
@@ -1564,7 +1564,7 @@ l_int32  i, n, len;
  *              sarray
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sarrayAppend(const char  *filename,
              SARRAY      *sa)
 {
@@ -1628,7 +1628,7 @@ FILE  *fp;
  *          to make sure that an unrealistically large number is not
  *          accidentally used to determine the array sizes.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 getNumberedPathnamesInDirectory(const char  *dirname,
                                 const char  *substr,
                                 l_int32      numpre,
@@ -1702,7 +1702,7 @@ SARRAY  *sa, *saout;
  *          The full pathnames are returned for the requested sequence.
  *          If no files are found after filtering, returns an empty sarray.
  */
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 getSortedPathnamesInDirectory(const char  *dirname,
                               const char  *substr,
                               l_int32      firstpage,
@@ -1774,7 +1774,7 @@ SARRAY  *sa, *safiles, *saout;
 
 #ifndef _WIN32
 
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 getFilenamesInDirectory(const char  *dirname)
 {
 char           *name;
@@ -1819,7 +1819,7 @@ struct dirent  *pdirentry;
     /* http://msdn2.microsoft.com/en-us/library/aa365200(VS.85).aspx */
 #include <windows.h>
 
-SARRAY *
+LEPTONICA_EXPORT SARRAY *
 getFilenamesInDirectory(const char  *dirname)
 {
 char             *pszDir;

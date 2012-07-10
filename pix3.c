@@ -111,7 +111,7 @@ static l_int32 findTilePatchCenter(PIX *pixs, BOX *box, l_int32 dir,
  *      (7) Implementation details: see comments in pixPaintThroughMask()
  *          for when we use rasterop to do the painting.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetMasked(PIX      *pixd,
              PIX      *pixm,
              l_uint32  val)
@@ -248,7 +248,7 @@ l_uint32  *datad, *datam, *lined, *linem;
  *          image rasterops, rather than pixel peeking in pixm and poking
  *          in pixd.  It's somewhat baroque, but I found it amusing.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetMaskedGeneral(PIX      *pixd,
                     PIX      *pixm,
                     l_uint32  val,
@@ -324,7 +324,7 @@ PIX       *pixmu, *pixc;
  *          If the mask is relatively sparse, the byte-check method
  *          is actually faster!
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCombineMasked(PIX  *pixd,
                  PIX  *pixs,
                  PIX  *pixm)
@@ -442,7 +442,7 @@ PIX       *pixt;
  *             pixDestroy(&pixt);
  *             pixDestroy(&pixm8);
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCombineMaskedGeneral(PIX      *pixd,
                         PIX      *pixs,
                         PIX      *pixm,
@@ -565,7 +565,7 @@ PIX       *pixt;
  *          This is not the case, because the entrance is always the
  *          same and the compiler can correctly predict the jump.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixPaintThroughMask(PIX      *pixd,
                     PIX      *pixm,
                     l_int32   x,
@@ -699,7 +699,7 @@ l_uint32  *data, *datam, *line, *linem;
  *          is used to construct the pixels that are painted onto
  *          pixd through pixm.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixPaintSelfThroughMask(PIX      *pixd,
                         PIX      *pixm,
                         l_int32   x,
@@ -818,7 +818,7 @@ PIXA     *pixa;
  *          to a 1 in the LUT.
  *      (2) The LUT should be of size 256.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMakeMaskFromLUT(PIX      *pixs,
                    l_int32  *tab)
 {
@@ -900,7 +900,7 @@ PIX       *pixd;
  *          If you really want to set every pixel to the same value,
  *          use pixSetAllArbitrary().
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSetUnderTransparency(PIX      *pixs,
                         l_uint32  val,
                         l_int32   debugflag)
@@ -978,7 +978,7 @@ PIXA     *pixa;
  *           (b) pixInvert(pixs, pixs);
  *           (c) pixInvert(pixd, pixs);
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixInvert(PIX  *pixd,
           PIX  *pixs)
 {
@@ -1027,7 +1027,7 @@ pixInvert(PIX  *pixd,
  *          result: the copy puts pixs1 image data in pixs2, and
  *          the rasterop is then between pixs2 and pixs2 (a no-op).
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixOr(PIX  *pixd,
       PIX  *pixs1,
       PIX  *pixs2)
@@ -1089,7 +1089,7 @@ pixOr(PIX  *pixd,
  *          result: the copy puts pixs1 image data in pixs2, and
  *          the rasterop is then between pixs2 and pixs2 (a no-op).
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixAnd(PIX  *pixd,
        PIX  *pixs1,
        PIX  *pixs2)
@@ -1151,7 +1151,7 @@ pixAnd(PIX  *pixd,
  *          result: the copy puts pixs1 image data in pixs2, and
  *          the rasterop is then between pixs2 and pixs2 (a no-op).
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixXor(PIX  *pixd,
        PIX  *pixs1,
        PIX  *pixs2)
@@ -1214,7 +1214,7 @@ pixXor(PIX  *pixd,
  *      (5) The size of the result is determined by pixs1.
  *      (6) The depths of pixs1 and pixs2 must be equal.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSubtract(PIX  *pixd,
             PIX  *pixs1,
             PIX  *pixs2)
@@ -1275,7 +1275,7 @@ l_int32  w, h;
  *      (3) For an RGB image, if all 4 components in every pixel is 0,
  *          empty = 1. 
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixZero(PIX      *pix,
         l_int32  *pempty)
 {
@@ -1328,7 +1328,7 @@ l_uint32  *data, *line;
  *              tab8  (<optional> 8-bit pixel lookup table)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 pixCountPixels(PIX      *pix,
                l_int32  *pcount,
                l_int32  *tab8)
@@ -1394,7 +1394,7 @@ l_uint32  *data;
  *      Input:  pixa (array of 1 bpp pix)
  *      Return: na of ON pixels in each pix, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaCountPixels(PIXA  *pixa)
 {
 l_int32   d, i, n, count;
@@ -1440,7 +1440,7 @@ PIX      *pix;
  *              tab8  (<optional> 8-bit pixel lookup table)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCountPixelsInRow(PIX      *pix,
                     l_int32   row,
                     l_int32  *pcount,
@@ -1508,7 +1508,7 @@ l_uint32  *line;
  *              tab8  (<optional> 8-bit pixel lookup table)
  *      Return: na of counts, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixCountPixelsByRow(PIX      *pix,
                     l_int32  *tab8)
 {
@@ -1547,7 +1547,7 @@ NUMA     *na;
  *      Input:  pix (1 bpp)
  *      Return: na of counts in each column, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixCountPixelsByColumn(PIX  *pix)
 {
 l_int32     i, j, w, h, wpl;
@@ -1590,7 +1590,7 @@ NUMA       *na;
  *      (1) To resample for a bin size different from 1, use
  *          numaUniformSampling() on the result of this function.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixSumPixelsByRow(PIX      *pix,
                   l_int32  *tab8)
 {
@@ -1646,7 +1646,7 @@ NUMA      *na;
  *      (1) To resample for a bin size different from 1, use
  *          numaUniformSampling() on the result of this function.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixSumPixelsByColumn(PIX  *pix)
 {
 l_int32     i, j, w, h, d, wpl;
@@ -1706,7 +1706,7 @@ NUMA       *na;
  *          the 2 images) than using pixCountPixels(), which counts all
  *          pixels before returning.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixThresholdPixelSum(PIX      *pix,
                      l_int32   thresh,
                      l_int32  *pabove,
@@ -1783,7 +1783,7 @@ l_uint32  *line, *data;
  *      (1) This table of integers gives the number of 1 bits
  *          in the 8 bit index.
  */
-l_int32 *
+LEPTONICA_EXPORT l_int32 *
 makePixelSumTab8(void)
 {
 l_uint8   byte;
@@ -1827,7 +1827,7 @@ l_int32  *tab;
  *          MSB is considered to have position 0 and the LSB is considered
  *          to have position 7.
  */
-l_int32 *
+LEPTONICA_EXPORT l_int32 *
 makePixelCentroidTab8(void)
 {
 l_int32   i;
@@ -1877,7 +1877,7 @@ l_int32  *tab;
  *              &sum (<return> sum of pixel values in region)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSumPixelValues(PIX        *pix,
                   BOX        *box,
                   l_float64  *psum)
@@ -1965,7 +1965,7 @@ BOX       *boxc;
  *                  | TB   |  LR/TB |
  *                  -----------------
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMirroredTiling(PIX     *pixs,
                   l_int32  w,
                   l_int32  h)

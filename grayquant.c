@@ -114,7 +114,7 @@
  *  line buffers to avoid changing pixs.  It is about 2x faster
  *  than the implementation using LUTs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDitherToBinary(PIX  *pixs)
 {
     PROCNAME("pixDitherToBinary");
@@ -144,7 +144,7 @@ pixDitherToBinary(PIX  *pixs)
  *          clipped to black and white without propagating the excess.
  *          For that reason, lowerclip and upperclip should be small numbers.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDitherToBinarySpec(PIX     *pixs,
                       l_int32  lowerclip,
                       l_int32  upperclip)
@@ -208,7 +208,7 @@ PIX       *pixt, *pixd;
  *      (1) If the source pixel is less than the threshold value,
  *          the dest will be 1; otherwise, it will be 0
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixThresholdToBinary(PIX     *pixs,
                      l_int32  thresh)
 {
@@ -266,7 +266,7 @@ PIX       *pixt, *pixd;
  *      (1) If the pixel in pixs is less than the corresponding pixel
  *          in pixg, the dest will be 1; otherwise it will be 0.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixVarThresholdToBinary(PIX  *pixs,
                         PIX  *pixg)
 {
@@ -328,7 +328,7 @@ PIX       *pixd;
  *  generate the output pixel value and the excess or deficit
  *  carried over to the neighboring pixels.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDitherToBinaryLUT(PIX     *pixs,
                      l_int32  lowerclip,
                      l_int32  upperclip)
@@ -404,7 +404,7 @@ PIX       *pixt, *pixd;
  *          an approximate grayscale value for each pixel, and then looks
  *          for gray pixels with the value @val.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGenerateMaskByValue(PIX     *pixs,
                        l_int32  val,
                        l_int32  usecmap)
@@ -485,7 +485,7 @@ PIX       *pixg, *pixd;
  *          an approximate grayscale value for each pixel, and then looks
  *          for gray pixels with the value @val.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGenerateMaskByBand(PIX     *pixs,
                       l_int32  lower,
                       l_int32  upper,
@@ -592,7 +592,7 @@ PIX       *pixg, *pixd;
  *  The implementation uses 3 lookup tables for simplicity, and
  *  a pair of line buffers to avoid modifying pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDitherTo2bpp(PIX     *pixs,
                 l_int32  cmapflag)
 {
@@ -624,7 +624,7 @@ pixDitherTo2bpp(PIX     *pixs,
  *          clipped to black and white without propagating the excess.
  *          For that reason, lowerclip and upperclip should be small numbers.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDitherTo2bppSpec(PIX     *pixs,
                     l_int32  lowerclip,
                     l_int32  upperclip,
@@ -733,7 +733,7 @@ PIXCMAP   *cmap;
  *          quantization to 4 levels will remove the jpeg ringing in the
  *          background near character edges.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixThresholdTo2bpp(PIX     *pixs,
                    l_int32  nlevels,
                    l_int32  cmapflag)
@@ -831,7 +831,7 @@ PIXCMAP   *cmap;
  *          of text.  This filtering is partly responsible for the improved
  *          compression.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixThresholdTo4bpp(PIX     *pixs,
                    l_int32  nlevels,
                    l_int32  cmapflag)
@@ -903,7 +903,7 @@ PIXCMAP   *cmap;
  *      (4) If you don't want the thresholding to be equally spaced,
  *          first transform the input 8 bpp src using pixGammaTRC().
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixThresholdOn8bpp(PIX     *pixs,
                    l_int32  nlevels,
                    l_int32  cmapflag)
@@ -970,7 +970,7 @@ PIXCMAP   *cmap;
  *      (2) The table is typically used for quantizing 2, 4 and 8 bpp
  *          grayscale src pix, and generating a colormapped dest pix.
  */
-l_int32 *
+LEPTONICA_EXPORT l_int32 *
 makeGrayQuantIndexTable(l_int32  nlevels)
 {
 l_int32   *tab;
@@ -1020,7 +1020,7 @@ l_int32    i, j, thresh;
  *          If you want nlevels < the maximum number, you should always
  *          use a colormap.
  */
-l_int32 *
+LEPTONICA_EXPORT l_int32 *
 makeGrayQuantTargetTable(l_int32  nlevels,
                          l_int32  depth)
 {
@@ -1074,7 +1074,7 @@ l_int32    i, j, thresh, maxval, quantval;
  *          output colormap for the number of bins.  The number
  *          of bins must not exceed 2^outdepth.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 makeGrayQuantTableArb(NUMA      *na,
                       l_int32    outdepth,
                       l_int32  **ptab,
@@ -1145,7 +1145,7 @@ PIXCMAP  *cmap;
  *          output colormap for the number of bins.  The number
  *          of bins must not exceed 2^outdepth.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 makeGrayQuantColormapArb(PIX       *pixs,
                          l_int32   *tab,
                          l_int32    outdepth,
@@ -1237,7 +1237,7 @@ l_uint32  *line, *data;
  *          the fg pixels in the mask are those where each component
  *          is within -delm to +delp of the reference value.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGenerateMaskByBand32(PIX    *pixs,
                         l_uint32  refval,
                         l_int32   delm,
@@ -1307,7 +1307,7 @@ PIX       *pixd;
  *            - majority vote of the individual components
  *          Here, we have a choice of L1 or L2.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGenerateMaskByDiscr32(PIX      *pixs,
                          l_uint32  refval1,
                          l_uint32  refval2,
@@ -1384,7 +1384,7 @@ PIX       *pixd;
  *          If there is an existing colormap, a warning is issued and
  *          a copy of the input pixs is returned.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGrayQuantFromCmap(PIX      *pixs,
                      PIXCMAP  *cmap,
                      l_int32   mindepth)

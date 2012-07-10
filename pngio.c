@@ -140,7 +140,7 @@ static l_int32   var_ZLIB_COMPRESSION = Z_DEFAULT_COMPRESSION;
  *      (2) To do sequential reads of png format images from a stream,
  *          use pixReadStreamPng()
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadStreamPng(FILE  *fp)
 {
 l_uint8      rval, gval, bval;
@@ -343,7 +343,7 @@ PIXCMAP     *cmap;
  *  Notes:
  *      (1) If there is a colormap, iscmap is returned as 1; else 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 readHeaderPng(const char *filename,
               l_int32    *pwidth,
               l_int32    *pheight,
@@ -382,7 +382,7 @@ FILE    *fp;
  *  Notes:
  *      (1) If there is a colormap, iscmap is returned as 1; else 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 freadHeaderPng(FILE     *fp,
                l_int32  *pwidth,
                l_int32  *pheight,
@@ -427,7 +427,7 @@ l_uint8  *data;
  *  Notes:
  *      (1) If there is a colormap, iscmap is returned as 1; else 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 sreadHeaderPng(const l_uint8  *data,
                l_int32        *pwidth,
                l_int32        *pheight,
@@ -494,7 +494,7 @@ l_uint32  *pword;
  *          the returned resolution values are 0 (designating 'unknown').
  *      (2) Side-effect: this rewinds the stream.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 fgetPngResolution(FILE     *fp,
                   l_int32  *pxres,
                   l_int32  *pyres)
@@ -558,7 +558,7 @@ png_infop    info_ptr;
  *      (1) Special version for writing png with a specified gamma.
  *          When using pixWrite(), no field is given for gamma.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixWritePng(const char  *filename,
             PIX         *pix,
             l_float32    gamma)
@@ -648,7 +648,7 @@ FILE  *fp;
  *          because the alignment is wrong and you may erase part of the
  *          last pixel on each line.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixWriteStreamPng(FILE      *fp,
                   PIX       *pix,
                   l_float32  gamma)
@@ -878,7 +878,7 @@ char        *text;
  *      Input:  flag (1 for stripping 16 bpp to 8 bpp; 0 for leaving 16 bpp)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 l_pngSetStrip16To8(l_int32  flag)
 {
     var_PNG_STRIP_16_TO_8 = flag;
@@ -891,7 +891,7 @@ l_pngSetStrip16To8(l_int32  flag)
  *      Input:  flag (1 for stripping alpha channel on read; 0 for leaving it)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 l_pngSetStripAlpha(l_int32  flag)
 {
     var_PNG_STRIP_ALPHA = flag;
@@ -904,7 +904,7 @@ l_pngSetStripAlpha(l_int32  flag)
  *      Input:  flag (1 for writing alpha channel; 0 for just writing rgb)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 l_pngSetWriteAlpha(l_int32  flag)
 {
     var_PNG_WRITE_ALPHA = flag;
@@ -929,7 +929,7 @@ l_pngSetWriteAlpha(l_int32  flag)
  *      (2) If you use the defined constants in zlib.h instead of the
  *          compression integers given above, you must include zlib.h.
  */
-void
+LEPTONICA_EXPORT void
 l_pngSetZlibCompression(l_int32  val)
 {
     PROCNAME("l_pngSetZlibCompression");

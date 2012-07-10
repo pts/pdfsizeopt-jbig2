@@ -81,7 +81,7 @@
  *      Input:  depth (bpp, of pix)
  *      Return: cmap, or null on error
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapCreate(l_int32  depth)
 {
 RGBA_QUAD  *cta;
@@ -129,7 +129,7 @@ PIXCMAP    *cmap;
  *          bits, but older ones don't.  Here, we're just using rand()
  *          to choose colors for output.
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapCreateRandom(l_int32  depth,
                     l_int32  hasblack,
                     l_int32  haswhite)
@@ -173,7 +173,7 @@ PIXCMAP  *cmap;
  *      (1) Colormap has equally spaced gray color values
  *          from black (0, 0, 0) to white (255, 255, 255).
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapCreateLinear(l_int32  d,
                     l_int32  nlevels)
 {
@@ -203,7 +203,7 @@ PIXCMAP  *cmap;
  *      Input:  cmaps 
  *      Return: cmapd, or null on error
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapCopy(PIXCMAP  *cmaps)
 {
 l_int32   nbytes;
@@ -234,7 +234,7 @@ PIXCMAP  *cmapd;
  *      Input:  &cmap (<set to null>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 pixcmapDestroy(PIXCMAP  **pcmap)
 {
 PIXCMAP  *cmap;
@@ -267,7 +267,7 @@ PIXCMAP  *cmap;
  *
  *  Note: always adds the color if there is room.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapAddColor(PIXCMAP  *cmap,
                 l_int32   rval,
                 l_int32   gval,
@@ -307,7 +307,7 @@ RGBA_QUAD  *cta;
  *      (3) Returns 2 with a warning if unable to add this color;
  *          the caller should check the return value.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapAddNewColor(PIXCMAP  *cmap,
                    l_int32   rval,
                    l_int32   gval,
@@ -353,7 +353,7 @@ pixcmapAddNewColor(PIXCMAP  *cmap,
  *      (2) If it's not in the colormap and there is no room to add
  *          another color, this returns the index of the nearest color.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapAddNearestColor(PIXCMAP  *cmap,
                        l_int32   rval,
                        l_int32   gval,
@@ -398,7 +398,7 @@ pixcmapAddNearestColor(PIXCMAP  *cmap,
  *      (1) This checks if the color already exists or if there is
  *          room to add it.  It makes no change in the colormap.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapUsableColor(PIXCMAP  *cmap,
                    l_int32   rval,
                    l_int32   gval,
@@ -434,7 +434,7 @@ l_int32  index;
  *      Input:  cmap
  *      Return: count, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetCount(PIXCMAP  *cmap)
 {
     PROCNAME("pixcmapGetCount");
@@ -452,7 +452,7 @@ pixcmapGetCount(PIXCMAP  *cmap)
  *      Input:  cmap
  *      Return: free entries, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetFreeCount(PIXCMAP  *cmap)
 {
     PROCNAME("pixcmapGetFreeCount");
@@ -470,7 +470,7 @@ pixcmapGetFreeCount(PIXCMAP  *cmap)
  *      Input:  cmap
  *      Return: depth, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetDepth(PIXCMAP  *cmap)
 {
     PROCNAME("pixcmapGetDepth");
@@ -492,7 +492,7 @@ pixcmapGetDepth(PIXCMAP  *cmap)
  *  Notes:
  *      (1) On error, &mindepth is returned as 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetMinDepth(PIXCMAP  *cmap,
                    l_int32  *pmindepth)
 {
@@ -526,7 +526,7 @@ l_int32  ncolors;
  *
  *  Note: this removes the colors by setting the count to 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapClear(PIXCMAP  *cmap)
 {
     PROCNAME("pixcmapClear");
@@ -549,7 +549,7 @@ pixcmapClear(PIXCMAP  *cmap)
  *              &rval, &gval, &bval (<return> each color value in l_int32)
  *      Return: 0 if OK, 1 if not accessable (caller should check)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetColor(PIXCMAP  *cmap,
                 l_int32   index,
                 l_int32  *prval,
@@ -589,7 +589,7 @@ RGBA_QUAD  *cta;
  *      (1) The returned alpha channel value is zero, because it is
  *          not used in leptonica colormaps.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetColor32(PIXCMAP   *cmap,
                   l_int32    index,
                   l_uint32  *pval32)
@@ -622,7 +622,7 @@ l_int32  rval, gval, bval;
  *      (1) This resets sets the color of an entry that has already
  *          been set and included in the count of colors.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapResetColor(PIXCMAP  *cmap,
                   l_int32   index,
                   l_int32   rval,
@@ -656,7 +656,7 @@ RGBA_QUAD  *cta;
  *              &index (<return>)
  *      Return: 0 if found, 1 if not found (caller must check)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetIndex(PIXCMAP  *cmap,
                 l_int32   rval,
                 l_int32   gval,
@@ -694,7 +694,7 @@ RGBA_QUAD  *cta;
  *              &color (<return> TRUE if cmap has color; FALSE otherwise)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapHasColor(PIXCMAP  *cmap,
                 l_int32  *pcolor)
 {
@@ -736,7 +736,7 @@ l_int32  *rmap, *gmap, *bmap;
  *  Notes:
  *      (1) This counts the unique gray colors, including black and white.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapCountGrayColors(PIXCMAP  *cmap,
                        l_int32  *pngray)
 {
@@ -783,7 +783,7 @@ l_int32  *array;
  *      (2) Nearest color is that which is the least sum-of-squares distance
  *          from the target color.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetNearestIndex(PIXCMAP  *cmap,
                        l_int32   rval,
                        l_int32   gval,
@@ -839,7 +839,7 @@ RGBA_QUAD  *cta;
  *      (2) Returns the index of the exact color if possible, otherwise the
  *          index of the color closest to the target color.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetNearestGrayIndex(PIXCMAP  *cmap,
                            l_int32   val,
                            l_int32  *pindex)
@@ -891,7 +891,7 @@ RGBA_QUAD  *cta;
  *          (either min or max) of the color component that is
  *          found in the colormap.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetComponentRange(PIXCMAP  *cmap,
                          l_int32   color,
                          l_int32  *pminval,
@@ -938,7 +938,7 @@ pixcmapGetComponentRange(PIXCMAP  *cmap,
  *          (either min or max) of the color component that is
  *          found in the colormap.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapGetExtremeValue(PIXCMAP  *cmap,
                        l_int32   type,
                        l_int32  *prval,
@@ -1006,7 +1006,7 @@ l_int32  i, n, rval, gval, bval, extrval, extgval, extbval;
  *      (2) In use, this is simply attached to a grayscale pix
  *          to give it the input color.
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapGrayToColor(l_uint32  color)
 {
 l_int32   i, rval, gval, bval;
@@ -1036,7 +1036,7 @@ PIXCMAP  *cmap;
  *      (2) In use, attach the output gray colormap to the pix
  *          (or a copy of it) that provided the input colormap.
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapColorToGray(PIXCMAP   *cmaps,
                    l_float32  rwt,
                    l_float32  gwt,
@@ -1089,7 +1089,7 @@ PIXCMAP   *cmapd;
  *      Input:  stream
  *      Return: cmap, or null on error
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapReadStream(FILE  *fp)
 {
 l_int32   rval, gval, bval, ignore;
@@ -1129,7 +1129,7 @@ PIXCMAP  *cmap;
  *      Input:  stream, cmap
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapWriteStream(FILE     *fp,
                    PIXCMAP  *cmap)
 {
@@ -1171,7 +1171,7 @@ l_int32   i;
  *              &rmap, &gmap, &bmap  (<return> colormap arrays)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapToArrays(PIXCMAP   *cmap,
                 l_int32  **prmap,
                 l_int32  **pgmap,
@@ -1217,7 +1217,7 @@ RGBA_QUAD  *cta;
  *              &ncolors (<optional return> size of table)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapToRGBTable(PIXCMAP    *cmap,
                   l_uint32  **ptab,
                   l_int32    *pncolors)
@@ -1266,7 +1266,7 @@ l_uint32  *tab;
  *      (1) If @cpc == 4, we leave room for the alpha channel
  *          value in each color entry, but it is set to 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapSerializeToMemory(PIXCMAP   *cmap,
                          l_int32    cpc,
                          l_int32   *pncolors,
@@ -1314,7 +1314,7 @@ l_uint8  *data;
  *              nbytes (size of returned data)
  *      Return: cmap, or null on error
  */
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixcmapDeserializeFromMemory(l_uint8  *data,
                              l_int32   ncolors,
                              l_int32   nbytes)
@@ -1374,7 +1374,7 @@ PIXCMAP  *cmap;
  *      (3) This is used in pdf files to express the colormap as an
  *          array in ascii (human-readable) format.
  */
-char *
+LEPTONICA_EXPORT char *
 pixcmapConvertToHex(l_uint8 *data,
                     l_int32  nbytes,
                     l_int32  ncolors)
@@ -1436,7 +1436,7 @@ char     buf[4];
  *      - The equivalent transform can be accomplished with pixcmapGammaTRC(),
  *        but it is considerably more difficult (see numaGammaTRC()).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixcmapShiftIntensity(PIXCMAP   *cmap,
                       l_float32  fraction)
 {

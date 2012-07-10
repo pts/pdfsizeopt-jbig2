@@ -106,7 +106,7 @@
  *
  *  P3 speed is about 7 x 10^6 dst pixels/sec/GHz
  */
-void
+LEPTONICA_EXPORT void
 scaleColorLILow(l_uint32  *datad,
                l_int32    wd,
                l_int32    hd,
@@ -214,7 +214,7 @@ l_float32  scx, scy;
  *  by 256) associated with each of the four nearest src pixels,
  *  and weighting each pixel value by this fractional area.
  */
-void
+LEPTONICA_EXPORT void
 scaleGrayLILow(l_uint32  *datad,
                l_int32    wd,
                l_int32    hd,
@@ -336,7 +336,7 @@ l_float32  scx, scy;
  *
  *  P3 speed is about 5 x 10^7 dst pixels/sec/GHz
  */
-void
+LEPTONICA_EXPORT void
 scaleColor2xLILow(l_uint32  *datad,
                   l_int32    wpld,
                   l_uint32  *datas,
@@ -388,7 +388,7 @@ l_uint32  *lines, *lined;
  *
  *  *** Warning: implicit assumption about RGB component ordering ***
  */
-void
+LEPTONICA_EXPORT void
 scaleColor2xLILineLow(l_uint32  *lined,
                       l_int32    wpld,
                       l_uint32  *lines,
@@ -542,7 +542,7 @@ l_uint32  *linesp, *linedp;
  *  for each set of 4 dest pixels corresponding to that src
  *  pixel, caching pixels for the next src pixel whenever possible.
  */
-void
+LEPTONICA_EXPORT void
 scaleGray2xLILow(l_uint32  *datad,
                  l_int32    wpld,
                  l_uint32  *datas,
@@ -592,7 +592,7 @@ l_uint32  *lines, *lined;
  *              lastlineflag  (1 if last src line; 0 otherwise)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 scaleGray2xLILineLow(l_uint32  *lined,
                      l_int32    wpld,
                      l_uint32  *lines,
@@ -785,7 +785,7 @@ l_uint32   words, wordsp, wordd, worddp;
  *  for each set of 16 dest pixels corresponding to that src
  *  pixel, caching pixels for the next src pixel whenever possible.
  */
-void
+LEPTONICA_EXPORT void
 scaleGray4xLILow(l_uint32  *datad,
                  l_int32    wpld,
                  l_uint32  *datas,
@@ -833,7 +833,7 @@ l_uint32  *lines, *lined;
  *              lastlineflag  (1 if last src line; 0 otherwise)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 scaleGray4xLILineLow(l_uint32  *lined,
                      l_int32    wpld,
                      l_uint32  *lines,
@@ -968,7 +968,7 @@ l_uint32  *linesp, *linedp1, *linedp2, *linedp3;
  *          routine works directly, without conversion to full
  *          RGB color, for 2, 4 or 8 bpp palette color images.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 scaleBySamplingLow(l_uint32  *datad,
                    l_int32    wd,
                    l_int32    hd,
@@ -1107,7 +1107,7 @@ l_float32  wratio, hratio;
  *          It is correlated with the reduction ratio, being the
  *          nearest integer such that size is approximately equal to hs / hd.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 scaleSmoothLow(l_uint32  *datad,
                l_int32    wd,
                l_int32    hd,
@@ -1206,7 +1206,7 @@ l_float32  wratio, hratio, norm;
  *  Note: This function is called with 32 bpp RGB src and 8 bpp,
  *        half-resolution dest.  The weights should add to 1.0.
  */
-void
+LEPTONICA_EXPORT void
 scaleRGBToGray2Low(l_uint32  *datad,
                    l_int32    wd,
                    l_int32    hd,
@@ -1268,7 +1268,7 @@ l_uint32   pixel;
  *  the dest pixel.  This is about 2x slower than scaleSmoothLow(),
  *  but the results are significantly better on small text.
  */
-void
+LEPTONICA_EXPORT void
 scaleColorAreaMapLow(l_uint32  *datad,
                     l_int32    wd,
                     l_int32    hd,
@@ -1426,7 +1426,7 @@ l_float32  scx, scy;
  *  into 256 sub-pixels, and are weighted by the number of
  *  sub-pixels covered by the dest pixel.
  */
-void
+LEPTONICA_EXPORT void
 scaleGrayAreaMapLow(l_uint32  *datad,
                     l_int32    wd,
                     l_int32    hd,
@@ -1533,7 +1533,7 @@ l_float32  scx, scy;
  *  Note: This function is called with either 8 bpp gray or 32 bpp RGB.
  *        The result is a 2x reduced dest.
  */
-void
+LEPTONICA_EXPORT void
 scaleAreaMapLow2(l_uint32  *datad,
                  l_int32    wd,
                  l_int32    hd,
@@ -1605,7 +1605,7 @@ l_uint32   pixel;
  *          possible for upscaling; downscaling is done by
  *          strict subsampling.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 scaleBinaryLow(l_uint32  *datad,
                l_int32    wd,
                l_int32    hd,
@@ -1696,7 +1696,7 @@ l_float32  wratio, hratio;
  *  an 8 bpp grayscale value between 0 (for 4 bits ON)
  *  and 255 (for 0 bits ON).
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray2Low(l_uint32  *datad,
                 l_int32    wd,
                 l_int32    hd,
@@ -1755,7 +1755,7 @@ l_uint32  *lines, *lined;
  *  adjacent scanlines are then added and transformed to
  *  output four 8 bpp pixel values, using makeValTabSG2().
  */
-l_uint32  *
+LEPTONICA_EXPORT l_uint32  *
 makeSumTabSG2(void)
 {
 l_int32    i;
@@ -1787,7 +1787,7 @@ l_uint32  *tab;
  *
  *  where sum is in set {0,1,2,3,4}
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeValTabSG2(void)
 {
 l_int32   i;
@@ -1836,7 +1836,7 @@ l_uint8  *tab;
  *        24 x 3 pixels, the process clips the input height to
  *        (h - h % 3) and the input width to (w - w % 24).
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray3Low(l_uint32  *datad,
                 l_int32    wd,
                 l_int32    hd,
@@ -1912,7 +1912,7 @@ l_uint32  *lines, *lined;
  *  be added and then transformed to output 8 bpp pixel values,
  *  using makeValTabSG3().
  */
-l_uint32  *
+LEPTONICA_EXPORT l_uint32  *
 makeSumTabSG3(void)
 {
 l_int32    i;
@@ -1941,7 +1941,7 @@ l_uint32  *tab;
  *      val = 255 - (255 * sum)/9
  *  where sum is in set {0, ... ,9}
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeValTabSG3(void)
 {
 l_int32   i;
@@ -1980,7 +1980,7 @@ l_uint8  *tab;
  *  an 8 bpp grayscale value between 0 (for 16 bits ON)
  *  and 255 (for 0 bits ON).
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray4Low(l_uint32  *datad,
                 l_int32    wd,
                 l_int32    hd,
@@ -2028,7 +2028,7 @@ l_uint32  *lines, *lined;
  *  adjacent scanlines are then added and transformed to
  *  output 8 bpp pixel values, using makeValTabSG4().
  */
-l_uint32  *
+LEPTONICA_EXPORT l_uint32  *
 makeSumTabSG4(void)
 {
 l_int32    i;
@@ -2059,7 +2059,7 @@ l_uint32  *tab;
  *
  *  where sum is in set {0, ... ,16}
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeValTabSG4(void)
 {
 l_int32   i;
@@ -2108,7 +2108,7 @@ l_uint8  *tab;
  *        (h - h % 6) and the input width to (w - w % 24).
  *
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray6Low(l_uint32  *datad,
                 l_int32    wd,
                 l_int32    hd,
@@ -2203,7 +2203,7 @@ l_uint32  *lines, *lined;
  *      val = 255 - (255 * sum)/36
  *  where sum is in set {0, ... ,36}
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeValTabSG6(void)
 {
 l_int32   i;
@@ -2240,7 +2240,7 @@ l_uint8  *tab;
  *  value (which is between 0 and 64) to an 8 bpp grayscale
  *  value between 0 (for all 64 bits ON) and 255 (for 0 bits ON).
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray8Low(l_uint32  *datad,
                 l_int32    wd,
                 l_int32    hd,
@@ -2291,7 +2291,7 @@ l_uint32  *lines, *lined;
  *      val = 255 - (255 * sum)/64
  *  where sum is in set {0, ... ,64}
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeValTabSG8(void)
 {
 l_int32   i;
@@ -2327,7 +2327,7 @@ l_uint8  *tab;
  *  to an 8 bpp grayscale value between 0 (for 255 or 256 bits ON)
  *  and 255 (for 0 bits ON).
  */
-void
+LEPTONICA_EXPORT void
 scaleToGray16Low(l_uint32  *datad,
                   l_int32    wd,
                  l_int32    hd,
@@ -2403,7 +2403,7 @@ l_uint32  *lines, *lined;
  *  is here for pedagogical reasons.  It gives poor results on document
  *  images because of aliasing.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 scaleMipmapLow(l_uint32  *datad,
                l_int32    wd,
                l_int32    hd,

@@ -153,7 +153,7 @@
  *      (5) Typically you should not use make a colormap for 1 bpp dest.
  *      (6) This is not dithering.  Each pixel is treated independently.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixThreshold8(PIX     *pixs,
               l_int32  d,
               l_int32  nlevels,
@@ -219,7 +219,7 @@ PIXCMAP   *cmap;
  *          of RGB values, and always return an 8 bpp pix, regardless
  *          of whether the input pixs depth is 2, 4 or 8 bpp.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixRemoveColormap(PIX     *pixs,
                   l_int32  type)
 {
@@ -488,7 +488,7 @@ PIX       *pixd;
  *  Notes:
  *      (1) If pixs has a colormap, this is a no-op.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixAddGrayColormap8(PIX  *pixs)
 {
 PIXCMAP  *cmap;
@@ -517,7 +517,7 @@ PIXCMAP  *cmap;
  *          that has the same number of colormap entries as the
  *          input image has unique gray levels.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixAddMinimalGrayColormap8(PIX  *pixs)
 {
 l_int32    ncolors, w, h, i, j, wplt, wpld, index, val;
@@ -604,7 +604,7 @@ PIXCMAP   *cmap;
  *  Notes:
  *      (1) Use a standard luminance conversion.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertRGBToLuminance(PIX *pixs)
 {
   return pixConvertRGBToGray(pixs, 0.0, 0.0, 0.0);
@@ -622,7 +622,7 @@ pixConvertRGBToLuminance(PIX *pixs)
  *  Notes:
  *      (1) Use a weighted average of the RGB values.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertRGBToGray(PIX       *pixs,
                     l_float32  rwt,
                     l_float32  gwt,
@@ -697,7 +697,7 @@ PIX       *pixd;
  *      (2) To combine RGB to gray conversion with subsampling,
  *          use pixScaleRGBToGrayFast() instead.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixConvertRGBToGrayFast(PIX  *pixs)
 {
 l_int32    i, j, w, h, wpls, wpld, val;
@@ -747,7 +747,7 @@ PIX       *pixd;
  *          deviation of a single component, it is more sensitive
  *          than using a weighted average.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertRGBToGrayMinMax(PIX     *pixs,
                           l_int32  type)
 {
@@ -818,7 +818,7 @@ PIX       *pixd;
  *          levels: 4 levels for d = 2 and 16 levels for d = 4.
  *      (5) In all cases, the depth of the dest is the same as the src. 
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertGrayToColormap(PIX  *pixs)
 {
 l_int32    d;
@@ -870,7 +870,7 @@ PIXCMAP   *cmap;
  *          the depth of pixd will be 2 if ngray <= 4 and 4 if ngray > 4
  *          but <= 16.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertGrayToColormap8(PIX     *pixs,
                           l_int32  mindepth)
 {
@@ -963,7 +963,7 @@ PIXCMAP   *cmap;
  *      (2) If pixs already has a colormap, it is removed to gray
  *          before colorizing.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixColorizeGray(PIX      *pixs,
                 l_uint32  color,
                 l_int32   cmapflag)
@@ -1049,7 +1049,7 @@ PIXCMAP   *cmap;
  *          is about twice as slow and results in significantly larger
  *          files when losslessly compressed (e.g., into png).
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertRGBToColormap(PIX     *pixs,
                         l_int32  ditherflag)
 {
@@ -1123,7 +1123,7 @@ PIX     *pixd;
  *          @octlevel = 4.
  *      (4) If the image already has a colormap, it returns a clone.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixQuantizeIfFewColors(PIX     *pixs,
                        l_int32  maxcolors,
                        l_int32  mingraycolors,
@@ -1220,7 +1220,7 @@ PIX     *pixg, *pixd;
  *  Notes:
  *      (1) For each dest pixel, use either the MSB or LSB of each src pixel.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert16To8(PIX     *pixs,
                 l_int32  whichbyte)
 {
@@ -1288,7 +1288,7 @@ PIX       *pixd;
  *          adds the colormap.
  *      (3) The colormap is modeled after the Matlab "jet" configuration.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertGrayToFalseColor(PIX       *pixs,
                            l_float32  gamma)
 {
@@ -1383,7 +1383,7 @@ PIXCMAP   *cmap;
  *      (1) This function calls special cases of pixConvert1To*(),
  *          for 2, 4, 8, 16 and 32 bpp destinations.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixUnpackBinary(PIX     *pixs,
                 l_int32  depth,
                 l_int32  invert)
@@ -1449,7 +1449,7 @@ PIX  *pixd;
  *      (2) If pixd is not null, it must be of equal width and height
  *          as pixs.  It is always returned.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To16(PIX      *pixd,
                 PIX      *pixs,
                 l_uint16  val0,
@@ -1523,7 +1523,7 @@ l_uint32  *tab, *datas, *datad, *lines, *lined;
  *      (2) If pixd is not null, it must be of equal width and height
  *          as pixs.  It is always returned.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To32(PIX      *pixd,
                 PIX      *pixs,
                 l_uint32  val0,
@@ -1584,7 +1584,7 @@ l_uint32  *datas, *datad, *lines, *lined;
  *  Notes:
  *      (1) Input 0 is mapped to (255, 255, 255); 1 is mapped to (0, 0, 0)
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To2Cmap(PIX  *pixs)
 {
 PIX      *pixd;
@@ -1624,7 +1624,7 @@ PIXCMAP  *cmap;
  *      (3) A simple unpacking might use val0 = 0 and val1 = 3.
  *      (4) If you want a colormapped pixd, use pixConvert1To2Cmap().
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To2(PIX     *pixd,
                PIX     *pixs,
                l_int32  val0,
@@ -1702,7 +1702,7 @@ l_uint32  *datas, *datad, *lines, *lined;
  *  Notes:
  *      (1) Input 0 is mapped to (255, 255, 255); 1 is mapped to (0, 0, 0)
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To4Cmap(PIX  *pixs)
 {
 PIX      *pixd;
@@ -1742,7 +1742,7 @@ PIXCMAP  *cmap;
  *      (3) A simple unpacking might use val0 = 0 and val1 = 15, or v.v.
  *      (4) If you want a colormapped pixd, use pixConvert1To4Cmap().
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To4(PIX     *pixd,
                PIX     *pixs,
                l_int32  val0,
@@ -1834,7 +1834,7 @@ l_uint32  *tab, *datas, *datad, *lines, *lined;
  *             pixcmapAddColor(cmap, 0, 0, 0);
  *             pixSetColormap(pixd, cmap);
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert1To8(PIX     *pixd,
                PIX     *pixs,
                l_uint8  val0,
@@ -1923,7 +1923,7 @@ l_uint32  *tab, *datas, *datad, *lines, *lined;
  *          - If pixs does not have a colormap, the input values are
  *            used to populate the 8 bpp image.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert2To8(PIX     *pixs,
                l_uint8  val0,
                l_uint8  val1,
@@ -2038,7 +2038,7 @@ PIXCMAP   *cmaps, *cmapd;
  *          - If pixs does not have a colormap, the pixel values in pixs
  *            are used, with shift replication, to populate pixd.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert4To8(PIX     *pixs,
                l_int32  cmapflag)
 {
@@ -2126,7 +2126,7 @@ PIXCMAP   *cmaps, *cmapd;
  *          proportional mapping, with a correct map from 8 bpp white
  *          (0xff) to 16 bpp white (0xffff).
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert8To16(PIX     *pixs,
                 l_int32  leftshift)
 {
@@ -2190,7 +2190,7 @@ PIX       *pixt, *pixd;
  *      (3) If the input image has 1 bpp and no colormap, the operation is
  *          lossless and a copy is returned.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo1(PIX     *pixs,
               l_int32  threshold)
 {
@@ -2244,7 +2244,7 @@ PIXCMAP  *cmap;
  *      (1) This is a fast, quick/dirty, top-level converter.
  *      (2) See pixConvertTo1() for default values.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo1BySampling(PIX     *pixs,
                         l_int32  factor,
                         l_int32  threshold)
@@ -2293,7 +2293,7 @@ PIX       *pixt, *pixd;
  *          to do color quantization, you must specify the type
  *          explicitly, using the color quantization code.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo8(PIX     *pixs,
               l_int32  cmapflag)
 {
@@ -2364,7 +2364,7 @@ PIXCMAP  *cmap;
  *      (1) This is a fast, quick/dirty, top-level converter.
  *      (2) See pixConvertTo8() for default values.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo8BySampling(PIX     *pixs,
                         l_int32  factor,
                         l_int32  cmapflag)
@@ -2402,7 +2402,7 @@ PIX       *pixt, *pixd;
  *      8 bpp:  replicates the 8 bit value in both the MSB and LSB
  *              of the 16 bit pixel.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo16(PIX  *pixs)
 {
 l_int32  d;
@@ -2449,7 +2449,7 @@ l_int32  d;
  *  Notes:
  *      (1) Implicit assumption about RGB component ordering.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo32(PIX  *pixs)
 {
 l_int32  d;
@@ -2504,7 +2504,7 @@ PIX     *pixt, *pixd;
  *      (1) This is a fast, quick/dirty, top-level converter.
  *      (2) See pixConvertTo32() for default values.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo32BySampling(PIX     *pixs,
                          l_int32  factor)
 {
@@ -2538,7 +2538,7 @@ PIX       *pixt, *pixd;
  *          into the 3 MSB of the dest pixel.
  *      (2) Implicit assumption about RGB component ordering.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert8To32(PIX  *pixs)
 {
 l_int32    i, j, w, h, wpls, wpld, val;
@@ -2605,7 +2605,7 @@ PIX       *pixd;
  *      (3) Otherwise, the pix is converted to 8 bpp grayscale.
  *          In all cases, pixd does not have a colormap.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertTo8Or32(PIX     *pixs,
                   l_int32  copyflag,
                   l_int32  warnflag)
@@ -2661,7 +2661,7 @@ PIX     *pixd;
  *          in png, jpeg and tiff, as well as to convert between 24 and
  *          32 bpp in memory.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert24To32(PIX  *pixs)
 {
 l_uint8   *lines;
@@ -2717,7 +2717,7 @@ PIX       *pixd;
  *          (b) write the 24 bpp pix as a png and verify that it is
  *              identical to the file obtained by writing the 32 bpp pix.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvert32To24(PIX  *pixs)
 {
 l_uint8   *rgbdata8;
@@ -2772,7 +2772,7 @@ PIX       *pixd;
  *           - if d > ds, does the unpacking conversion
  *      (2) If pixs has a colormap, this is an error.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertLossless(PIX     *pixs,
                    l_int32  d)
 {
@@ -2859,7 +2859,7 @@ PIX       *pixd;
  *      (3) Images without colormaps, that are not 1 bpp or 32 bpp,
  *          are converted to 8 bpp gray.
  */     
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertForPSWrap(PIX  *pixs)
 {
 l_int32   d;
@@ -2936,7 +2936,7 @@ PIXCMAP  *cmap;
  *      (3) See pixConvertGrayToSubpixelRGB() and
  *          pixConvertColorToSubpixelRGB() for further details.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertToSubpixelRGB(PIX       *pixs,
                         l_float32  scalex,
                         l_float32  scaley,
@@ -3004,7 +3004,7 @@ PIXCMAP   *cmap;
  *          in the display that make the pixel color appear to emerge
  *          from the entire pixel.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertGrayToSubpixelRGB(PIX       *pixs,
                             l_float32  scalex,
                             l_float32  scaley,
@@ -3108,7 +3108,7 @@ PIXCMAP   *cmap;
  *          and likewise for g and b.  Vertical subpixel splitting is
  *          handled similarly.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixConvertColorToSubpixelRGB(PIX       *pixs,
                              l_float32  scalex,
                              l_float32  scaley,

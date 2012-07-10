@@ -60,7 +60,7 @@ static const l_int32  INITIAL_PTR_ARRAYSIZE7 = 20;
  *      Input:  nalloc (initial ptr array size; use 0 for default)
  *      Return: lstack, or null on error
  */
-L_STACK *
+LEPTONICA_EXPORT L_STACK *
 lstackCreate(l_int32  nalloc)
 {
 L_STACK  *lstack;
@@ -100,7 +100,7 @@ L_STACK  *lstack;
  *      (3) To destroy the lstack, we destroy the ptr array, then
  *          the lstack, and then null the contents of the input ptr.
  */
-void
+LEPTONICA_EXPORT void
 lstackDestroy(L_STACK  **plstack,
               l_int32    freeflag)
 {
@@ -146,7 +146,7 @@ L_STACK  *lstack;
  *              item to be added to the lstack
  *      Return: 0 if OK; 1 on error.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lstackAdd(L_STACK  *lstack,
           void     *item)
 {
@@ -176,7 +176,7 @@ lstackAdd(L_STACK  *lstack,
  *      Return: ptr to item popped from the top of the lstack,
  *              or null if the lstack is empty or on error
  */
-void *
+LEPTONICA_EXPORT void *
 lstackRemove(L_STACK  *lstack)
 {
 void  *item;
@@ -202,7 +202,7 @@ void  *item;
  *      Input:  lstack
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lstackExtendArray(L_STACK  *lstack)
 {
     PROCNAME("lstackExtendArray");
@@ -226,7 +226,7 @@ lstackExtendArray(L_STACK  *lstack)
  *      Input:  lstack
  *      Return: count, or 0 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lstackGetCount(L_STACK  *lstack)
 {
     PROCNAME("lstackGetCount");
@@ -249,7 +249,7 @@ lstackGetCount(L_STACK  *lstack)
  *              lstack
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lstackPrint(FILE     *fp,
             L_STACK  *lstack)
 {

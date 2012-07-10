@@ -176,7 +176,7 @@
  *  in the second; and one of the remaining 2 pairs can go the the third.
  *  There is a total of 4*3*2 = 24 ways these pairs can be permuted.
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 pixRasterop(PIX     *pixd,
             l_int32  dx,
             l_int32  dy,
@@ -246,7 +246,7 @@ l_int32  dd;
  *      - the operation clips to the smallest pix; if the width or height
  *        of pixd is larger than pixs, some pixels in pixd will be unchanged
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixRasteropFullImage(PIX     *pixd,
                      PIX     *pixs,
                      l_int32  op)

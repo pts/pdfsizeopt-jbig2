@@ -234,7 +234,7 @@ pix_free(void  *ptr)
  *          e.g., setPixMemoryManager(my_malloc, my_free).
  */
 #ifndef _MSC_VER
-void
+LEPTONICA_EXPORT void
 setPixMemoryManager(void  *(allocator(size_t)),
                     void  (deallocator(void *)))
 {
@@ -244,7 +244,7 @@ setPixMemoryManager(void  *(allocator(size_t)),
 }
 #else  /* _MSC_VER */
     /* MSVC++ wants type (*fun)(types...) syntax */
-void
+LEPTONICA_EXPORT void
 setPixMemoryManager(void  *((*allocator)(size_t)),
                     void  ((*deallocator)(void *)))
 {
@@ -265,7 +265,7 @@ setPixMemoryManager(void  *((*allocator)(size_t)),
  *      Return: pixd (with data allocated and initialized to 0),
  *                    or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreate(l_int32  width,
           l_int32  height,
           l_int32  depth)
@@ -292,7 +292,7 @@ PIX  *pixd;
  *      (1) Must set pad bits to avoid reading unitialized data, because
  *          some optimized routines (e.g., pixConnComp()) read from pad bits.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreateNoInit(l_int32  width,
                 l_int32  height,
                 l_int32  depth)
@@ -324,7 +324,7 @@ l_uint32  *data;
  *          data array allocated and initialized to 0.
  *      (2) Copies the other fields, including colormap if it exists.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreateTemplate(PIX  *pixs)
 {
 PIX  *pixd;
@@ -352,7 +352,7 @@ PIX  *pixd;
  *          the data array allocated but not initialized to 0.
  *      (2) Copies the other fields, including colormap if it exists.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreateTemplateNoInit(PIX  *pixs)
 {
 l_int32  w, h, d;
@@ -381,7 +381,7 @@ PIX     *pixd;
  *      Input:  width, height, depth
  *      Return: pixd (with no data allocated), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreateHeader(l_int32  width,
                 l_int32  height,
                 l_int32  depth)
@@ -436,7 +436,7 @@ PIX     *pixd;
  *              only destroys the pix when pixDestroy() has been
  *              called on all handles.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixClone(PIX  *pixs)
 {
     PROCNAME("pixClone");
@@ -462,7 +462,7 @@ pixClone(PIX  *pixs)
  *      (1) Decrements the ref count and, if 0, destroys the pix.
  *      (2) Always nulls the input ptr.
  */
-void
+LEPTONICA_REAL_EXPORT void
 pixDestroy(PIX  **ppix)
 {
 PIX  *pix;
@@ -544,7 +544,7 @@ char      *text;
  *      (4) This operation, like all others that may involve a pre-existing
  *          pixd, will side-effect any existing clones of pixd.
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixCopy(PIX  *pixd,   /* can be null */
         PIX  *pixs)
 {
@@ -601,7 +601,7 @@ l_uint32  *datas, *datad;
  *          allocates an uninitialized buffer that will hold the
  *          amount of image data that is in pixs.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixResizeImageData(PIX  *pixd,
                    PIX  *pixs)
 {
@@ -643,7 +643,7 @@ l_uint32  *data;
  *      (1) This always destroys any colormap in pixd (except if
  *          the operation is a no-op.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCopyColormap(PIX  *pixd,
                 PIX  *pixs)
 {
@@ -676,7 +676,7 @@ PIXCMAP  *cmaps, *cmapd;
  *      Input:  two pix
  *      Return: 1 if the two pix have same {h, w, d}; 0 otherwise.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSizesEqual(PIX  *pix1,
               PIX  *pix2)
 {
@@ -744,7 +744,7 @@ pixSizesEqual(PIX  *pix1,
  *              never destroy the input pix, because the calling function
  *              maintains an unchanged handle to it.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixTransferAllData(PIX     *pixd,
                    PIX    **ppixs,
                    l_int32  copytext,
@@ -799,7 +799,7 @@ PIX     *pixs;
 /*--------------------------------------------------------------------*
  *                                Accessors                           *
  *--------------------------------------------------------------------*/
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetWidth(PIX  *pix)
 {
     PROCNAME("pixGetWidth");
@@ -811,7 +811,7 @@ pixGetWidth(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetWidth(PIX     *pix,
             l_int32  width)
 {
@@ -829,7 +829,7 @@ pixSetWidth(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetHeight(PIX  *pix)
 {
     PROCNAME("pixGetHeight");
@@ -841,7 +841,7 @@ pixGetHeight(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetHeight(PIX     *pix,
              l_int32  height)
 {
@@ -859,7 +859,7 @@ pixSetHeight(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetDepth(PIX  *pix)
 {
     PROCNAME("pixGetDepth");
@@ -871,7 +871,7 @@ pixGetDepth(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetDepth(PIX     *pix,
             l_int32  depth)
 {
@@ -894,7 +894,7 @@ pixSetDepth(PIX     *pix,
  *              &w, &h, &d (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetDimensions(PIX      *pix,
                  l_int32  *pw,
                  l_int32  *ph,
@@ -921,7 +921,7 @@ pixGetDimensions(PIX      *pix,
  *              w, h, d (use 0 to skip the setting for any of these)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetDimensions(PIX     *pix,
                  l_int32  w,
                  l_int32  h,
@@ -945,7 +945,7 @@ pixSetDimensions(PIX     *pix,
  *              pixd
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCopyDimensions(PIX  *pixd,
                   PIX  *pixs)
 {
@@ -966,7 +966,7 @@ pixCopyDimensions(PIX  *pixd,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetWpl(PIX  *pix)
 {
     PROCNAME("pixGetWpl");
@@ -977,7 +977,7 @@ pixGetWpl(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetWpl(PIX     *pix,
           l_int32  wpl)
 {
@@ -991,7 +991,7 @@ pixSetWpl(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetRefcount(PIX  *pix)
 {
     PROCNAME("pixGetRefcount");
@@ -1002,7 +1002,7 @@ pixGetRefcount(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixChangeRefcount(PIX     *pix,
                   l_int32  delta)
 {
@@ -1016,7 +1016,7 @@ pixChangeRefcount(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetXRes(PIX  *pix)
 {
     PROCNAME("pixGetXRes");
@@ -1027,7 +1027,7 @@ pixGetXRes(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetXRes(PIX     *pix,
            l_int32  res)
 {
@@ -1041,7 +1041,7 @@ pixSetXRes(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetYRes(PIX  *pix)
 {
     PROCNAME("pixGetYRes");
@@ -1052,7 +1052,7 @@ pixGetYRes(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetYRes(PIX     *pix,
            l_int32  res)
 {
@@ -1073,7 +1073,7 @@ pixSetYRes(PIX     *pix,
  *              &xres, &yres (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetResolution(PIX      *pix,
                  l_int32  *pxres,
                  l_int32  *pyres)
@@ -1095,7 +1095,7 @@ pixGetResolution(PIX      *pix,
  *              xres, yres (use 0 to skip the setting for either of these)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetResolution(PIX     *pix,
                  l_int32  xres,
                  l_int32  yres)
@@ -1110,7 +1110,7 @@ pixSetResolution(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCopyResolution(PIX  *pixd,
                   PIX  *pixs)
 {
@@ -1129,7 +1129,7 @@ pixCopyResolution(PIX  *pixd,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixScaleResolution(PIX       *pix,
                    l_float32  xscale,
                    l_float32  yscale)
@@ -1147,7 +1147,7 @@ pixScaleResolution(PIX       *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetInputFormat(PIX  *pix)
 {
     PROCNAME("pixGetInputFormat");
@@ -1158,7 +1158,7 @@ pixGetInputFormat(PIX  *pix)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetInputFormat(PIX     *pix,
                   l_int32  informat)
 {
@@ -1172,7 +1172,7 @@ pixSetInputFormat(PIX     *pix,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCopyInputFormat(PIX  *pixd,
                    PIX  *pixs)
 {
@@ -1200,7 +1200,7 @@ pixCopyInputFormat(PIX  *pixd,
  *      (1) The text string belongs to the pix.  The caller must
  *          NOT free it!
  */
-char *
+LEPTONICA_EXPORT char *
 pixGetText(PIX  *pix)
 {
     PROCNAME("pixGetText");
@@ -1222,7 +1222,7 @@ pixGetText(PIX  *pix)
  *      (1) This removes any existing textstring and puts a copy of
  *          the input textstring there.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetText(PIX         *pix,
            const char  *textstring)
 {
@@ -1248,7 +1248,7 @@ pixSetText(PIX         *pix,
  *      (2) Either or both the existing text and the new text
  *          string can be null.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixAddText(PIX         *pix,
            const char  *textstring)
 {
@@ -1266,7 +1266,7 @@ char  *newstring;
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCopyText(PIX  *pixd,
             PIX  *pixs)
 {
@@ -1284,7 +1284,7 @@ pixCopyText(PIX  *pixd,
 }
 
 
-PIXCMAP *
+LEPTONICA_EXPORT PIXCMAP *
 pixGetColormap(PIX  *pix)
 {
     PROCNAME("pixGetColormap");
@@ -1308,7 +1308,7 @@ pixGetColormap(PIX  *pix)
  *          Because colormaps are not ref counted, it is important that
  *          the new colormap does not belong to any other pix.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetColormap(PIX      *pix,
                PIXCMAP  *colormap)
 {
@@ -1329,7 +1329,7 @@ pixSetColormap(PIX      *pix,
  *      Input:  pix
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixDestroyColormap(PIX  *pix)
 {
 PIXCMAP  *cmap;
@@ -1354,7 +1354,7 @@ PIXCMAP  *cmap;
  *      (1) This gives a new handle for the data.  The data is still
  *          owned by the pix, so do not call FREE() on it.
  */
-l_uint32 *
+LEPTONICA_EXPORT l_uint32 *
 pixGetData(PIX  *pix)
 {
     PROCNAME("pixGetData");
@@ -1372,7 +1372,7 @@ pixGetData(PIX  *pix)
  *      (1) This does not free any existing data.  To free existing
  *          data, use pixFreeData() before pixSetData().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetData(PIX       *pix,
            l_uint32  *data)
 {
@@ -1397,7 +1397,7 @@ pixSetData(PIX       *pix,
  *      (3) If refcount > 1, this simply returns a copy of the data,
  *          using the pix allocator, and leaving the input pix unchanged.
  */
-l_uint32 *
+LEPTONICA_EXPORT l_uint32 *
 pixExtractData(PIX  *pixs)
 {
 l_int32    count, bytes;
@@ -1434,7 +1434,7 @@ l_uint32  *data, *datas;
  *          you want to free any existing data before doing
  *          a subsequent assignment with pixSetData().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFreeData(PIX  *pix)
 {
 l_uint32  *data;
@@ -1523,7 +1523,7 @@ l_uint32  *data;
  *              }
  *              pixCleanupByteProcessing(pix, lineptrs);
  */
-void **
+LEPTONICA_EXPORT void **
 pixGetLinePtrs(PIX      *pix,
                l_int32  *psize)
 {

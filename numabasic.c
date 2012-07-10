@@ -173,7 +173,7 @@ static const l_int32 INITIAL_PTR_ARRAYSIZE1 = 50;      /* n'importe quoi */
  *      Input:  size of number array to be alloc'd (0 for default)
  *      Return: na, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaCreate(l_int32  n)
 {
 NUMA  *na;
@@ -211,7 +211,7 @@ NUMA  *na;
  *          input array into the numa.  The input array continues to be
  *          owned by the caller.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaCreateFromIArray(l_int32  *iarray,
                      l_int32   size)
 {
@@ -246,7 +246,7 @@ NUMA    *na;
  *          to the returned numa, and all @size elements are considered
  *          to be valid.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaCreateFromFArray(l_float32  *farray,
                      l_int32     size,
                      l_int32     copyflag)
@@ -288,7 +288,7 @@ NUMA    *na;
  *      (1) Decrements the ref count and, if 0, destroys the numa.
  *      (2) Always nulls the input ptr.
  */
-void
+LEPTONICA_EXPORT void
 numaDestroy(NUMA  **pna)
 {
 NUMA  *na;
@@ -322,7 +322,7 @@ NUMA  *na;
  *      Input:  na
  *      Return: copy of numa, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaCopy(NUMA  *na)
 {
 l_int32  i;
@@ -351,7 +351,7 @@ NUMA    *cna;
  *      Input:  na
  *      Return: ptr to same numa, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaClone(NUMA  *na)
 {
     PROCNAME("numaClone");
@@ -375,7 +375,7 @@ numaClone(NUMA  *na)
  *          It just clears the number of stored numbers, so that
  *          the array appears to be empty.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaEmpty(NUMA  *na)
 {
     PROCNAME("numaEmpty");
@@ -399,7 +399,7 @@ numaEmpty(NUMA  *na)
  *              val  (float or int to be added; stored as a float)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaAddNumber(NUMA      *na,
               l_float32  val)
 {
@@ -425,7 +425,7 @@ l_int32  n;
  *      Input:  na
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaExtendArray(NUMA  *na)
 {
     PROCNAME("numaExtendArray");
@@ -458,7 +458,7 @@ numaExtendArray(NUMA  *na)
  *          because the function is O(n).
  *
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaInsertNumber(NUMA      *na,
                  l_int32    index,
                  l_float32  val)
@@ -495,7 +495,7 @@ l_int32  i, n;
  *      (2) It should not be used repeatedly on large arrays,
  *          because the function is O(n).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaRemoveNumber(NUMA    *na,
                  l_int32  index)
 {
@@ -524,7 +524,7 @@ l_int32  i, n;
  *              val (new value to replace old one)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaReplaceNumber(NUMA      *na,
                   l_int32    index,
                   l_float32  val)
@@ -553,7 +553,7 @@ l_int32  n;
  *      Input:  na
  *      Return: count, or 0 if no numbers or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaGetCount(NUMA  *na)
 {
     PROCNAME("numaGetCount");
@@ -578,7 +578,7 @@ numaGetCount(NUMA  *na)
  *          to a size na->nalloc = newcount.
  *      (3) All the previously unused values in na are set to 0.0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaSetCount(NUMA    *na,
              l_int32  newcount)
 {
@@ -610,7 +610,7 @@ numaSetCount(NUMA    *na,
  *      (1) Caller may need to check the function return value to
  *          decide if a 0.0 in the returned ival is valid.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaGetFValue(NUMA       *na,
               l_int32     index,
               l_float32  *pval)
@@ -643,7 +643,7 @@ numaGetFValue(NUMA       *na,
  *      (1) Caller may need to check the function return value to
  *          decide if a 0 in the returned ival is valid.
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 numaGetIValue(NUMA     *na,
               l_int32   index,
               l_int32  *pival)
@@ -675,7 +675,7 @@ l_float32  val;
  *              val  (to set element)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaSetValue(NUMA      *na,
              l_int32    index,
              l_float32  val)
@@ -700,7 +700,7 @@ numaSetValue(NUMA      *na,
  *              diff  (increment if diff > 0 or decrement if diff < 0)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaShiftValue(NUMA      *na,
                l_int32    index,
                l_float32  diff)
@@ -734,7 +734,7 @@ numaShiftValue(NUMA      *na,
  *          calling accessors on the numa.  It is typically used
  *          on an array of size 256.
  */
-l_int32 *
+LEPTONICA_EXPORT l_int32 *
 numaGetIArray(NUMA  *na)
 {
 l_int32   i, n, ival;
@@ -777,7 +777,7 @@ l_int32  *array;
  *          BEFORE calling this function.  Creating with numaMakeConstant()
  *          is another way to insure full initialization.
  */
-l_float32 *
+LEPTONICA_EXPORT l_float32 *
 numaGetFArray(NUMA    *na,
               l_int32  copyflag)
 {
@@ -809,7 +809,7 @@ l_float32  *array;
  *      Input:  na
  *      Return: refcount, or UNDEF on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaGetRefcount(NUMA  *na)
 {
     PROCNAME("numaGetRefcount");
@@ -827,7 +827,7 @@ numaGetRefcount(NUMA  *na)
  *              delta (change to be applied)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaChangeRefcount(NUMA    *na,
                    l_int32  delta)
 {
@@ -848,7 +848,7 @@ numaChangeRefcount(NUMA    *na,
  *              &delx (<optional return> delx)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaGetXParameters(NUMA       *na,
                    l_float32  *pstartx,
                    l_float32  *pdelx)
@@ -874,7 +874,7 @@ numaGetXParameters(NUMA       *na,
  *                    function at equal intervals of size @delx)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaSetXParameters(NUMA      *na,
                    l_float32  startx,
                    l_float32  delx)
@@ -897,7 +897,7 @@ numaSetXParameters(NUMA      *na,
  *              nas (source Numa)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaCopyXParameters(NUMA  *nad,
                     NUMA  *nas)
 {
@@ -923,7 +923,7 @@ l_float32  start, binsize;
  *      Input:  filename
  *      Return: na, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaRead(const char  *filename)
 {
 FILE  *fp;
@@ -953,7 +953,7 @@ NUMA  *na;
  *      Input:  stream
  *      Return: numa, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaReadStream(FILE  *fp)
 {
 l_int32    i, n, index, ret, version;
@@ -996,7 +996,7 @@ NUMA      *na;
  *      Input:  filename, na
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaWrite(const char  *filename,
           NUMA        *na)
 {
@@ -1025,7 +1025,7 @@ FILE  *fp;
  *      Input:  stream, na
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaWriteStream(FILE  *fp,
                 NUMA  *na)
 {
@@ -1066,7 +1066,7 @@ l_float32  startx, delx;
  *      Return: naa, or null on error
  *
  */
-NUMAA *
+LEPTONICA_EXPORT NUMAA *
 numaaCreate(l_int32  n)
 {
 NUMAA  *naa;
@@ -1094,7 +1094,7 @@ NUMAA  *naa;
  *      Input: &numaa <to be nulled if it exists>
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 numaaDestroy(NUMAA  **pnaa)
 {
 l_int32  i;
@@ -1132,7 +1132,7 @@ NUMAA   *naa;
  *              copyflag  (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaAddNuma(NUMAA   *naa,
              NUMA    *na,
              l_int32  copyflag)
@@ -1173,7 +1173,7 @@ NUMA    *nac;
  *      Input:  naa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaExtendArray(NUMAA  *naa)
 {
     PROCNAME("numaaExtendArray");
@@ -1200,7 +1200,7 @@ numaaExtendArray(NUMAA  *naa)
  *      Input:  naa
  *      Return: count (number of numa), or 0 if no numa or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaGetCount(NUMAA  *naa)
 {
     PROCNAME("numaaGetCount");
@@ -1218,7 +1218,7 @@ numaaGetCount(NUMAA  *naa)
  *              index (of numa in naa)
  *      Return: count of numbers in the referenced numa, or 0 on error.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaGetNumaCount(NUMAA   *naa,
                   l_int32  index)
 {
@@ -1239,7 +1239,7 @@ numaaGetNumaCount(NUMAA   *naa,
  *      Return: count (total number of numbers in the numaa),
  *                     or 0 if no numbers or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaGetNumberCount(NUMAA  *naa)
 {
 NUMA    *na;
@@ -1286,7 +1286,7 @@ l_int32  n, sum, i;
  *             With the bare array, there are no protections.  If the
  *             allocated size is n, array[n] is an error.
  */
-NUMA **
+LEPTONICA_EXPORT NUMA **
 numaaGetPtrArray(NUMAA  *naa)
 {
     PROCNAME("numaaGetPtrArray");
@@ -1307,7 +1307,7 @@ numaaGetPtrArray(NUMAA  *naa)
  *              accessflag   (L_COPY or L_CLONE)
  *      Return: numa, or null on error
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaaGetNuma(NUMAA   *naa,
              l_int32  index,
              l_int32  accessflag)
@@ -1341,7 +1341,7 @@ numaaGetNuma(NUMAA   *naa,
  *          is inserted in its place.
  *      (2) If the index is invalid, return 1 (error)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaReplaceNuma(NUMAA   *naa,
                  l_int32  index,
                  NUMA    *na)
@@ -1373,7 +1373,7 @@ l_int32  n;
  *              val (<return> float value)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaGetValue(NUMAA      *naa,
               l_int32     i,
               l_int32     j,
@@ -1411,7 +1411,7 @@ NUMA    *na;
  *  Notes:
  *      (1) Adds to an existing numa only.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaAddNumber(NUMAA     *naa,
                l_int32    index,
                l_float32  val)
@@ -1443,7 +1443,7 @@ NUMA    *na;
  *      Input:  filename
  *      Return: naa, or null on error
  */
-NUMAA *
+LEPTONICA_EXPORT NUMAA *
 numaaRead(const char  *filename)
 {
 FILE   *fp;
@@ -1473,7 +1473,7 @@ NUMAA  *naa;
  *      Input:  stream
  *      Return: naa, or null on error
  */
-NUMAA *
+LEPTONICA_EXPORT NUMAA *
 numaaReadStream(FILE  *fp)
 {
 l_int32    i, n, index, ret, version;
@@ -1513,7 +1513,7 @@ NUMAA     *naa;
  *      Input:  filename, naa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaWrite(const char  *filename,
            NUMAA       *naa)
 {
@@ -1542,7 +1542,7 @@ FILE  *fp;
  *      Input:  stream, naa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaaWriteStream(FILE   *fp,
                  NUMAA  *naa)
 {
@@ -1588,7 +1588,7 @@ NUMA    *na;
  *      (3) The numas are created only when a number is to be stored
  *          at an index (i,j) for which a numa has not yet been made.
  */
-NUMA2D *
+LEPTONICA_EXPORT NUMA2D *
 numa2dCreate(l_int32  nrows,
              l_int32  ncols,
              l_int32  initsize)
@@ -1625,7 +1625,7 @@ NUMA2D  *na2d;
  *      Input:  &numa2d (<to be nulled if it exists>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 numa2dDestroy(NUMA2D  **pna2d)
 {
 l_int32  i, j;
@@ -1667,7 +1667,7 @@ NUMA2D  *na2d;
  *              val  (float or int to be added; stored as a float)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numa2dAddNumber(NUMA2D    *na2d,
                 l_int32    row,
                 l_int32    col,
@@ -1702,7 +1702,7 @@ NUMA  *na;
  *      Return: size of numa at [row][col], or 0 if the numa doesn't exist
  *              or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numa2dGetCount(NUMA2D  *na2d,
                l_int32  row,
                l_int32  col)
@@ -1735,7 +1735,7 @@ NUMA  *na;
  *  Notes:
  *      (1) This does not give an error if the index is out of bounds.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numa2dGetNuma(NUMA2D     *na2d,
               l_int32     row,
               l_int32     col)
@@ -1764,7 +1764,7 @@ NUMA  *na;
  *              &val (<return> float value)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numa2dGetFValue(NUMA2D     *na2d,
                 l_int32     row,
                 l_int32     col,
@@ -1802,7 +1802,7 @@ NUMA  *na;
  *              &val (<return> integer value)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numa2dGetIValue(NUMA2D   *na2d,
                 l_int32   row,
                 l_int32   col,
@@ -1843,7 +1843,7 @@ NUMA  *na;
  *
  *  Note: actual numa are created only as required by numaHashAdd()
  */
-NUMAHASH *
+LEPTONICA_EXPORT NUMAHASH *
 numaHashCreate(l_int32  nbuckets,
                l_int32  initsize)
 {
@@ -1872,7 +1872,7 @@ NUMAHASH  *nahash;
  *      Input:  &nahash (<to be nulled, if it exists>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 numaHashDestroy(NUMAHASH **pnahash)
 {
 NUMAHASH  *nahash;
@@ -1906,7 +1906,7 @@ l_int32    i;
  *              key  (key to be hashed into a bucket number)
  *      Return: ptr to numa
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 numaHashGetNuma(NUMAHASH  *nahash,
                 l_uint32   key)
 {
@@ -1933,7 +1933,7 @@ NUMA    *na;
  *              value  (float value to be appended to the specific numa)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 numaHashAdd(NUMAHASH  *nahash,
             l_uint32   key,
             l_float32  value)

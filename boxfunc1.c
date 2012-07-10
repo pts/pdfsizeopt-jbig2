@@ -68,7 +68,7 @@
  *                       box1, and 0 otherwise)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxContains(BOX     *box1,
             BOX     *box2,
             l_int32 *presult)
@@ -98,7 +98,7 @@ boxContains(BOX     *box1,
  *                      in box1, and 0 otherwise)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxIntersects(BOX      *box1,
               BOX      *box2,
               l_int32  *presult)
@@ -138,7 +138,7 @@ l_int32  left1, left2, top1, top2, right1, right2, bot1, bot2;
  *  Notes:
  *      (1) All boxes in boxa that are entirely outside box are removed.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaContainedInBox(BOXA  *boxas,
                    BOX   *box)
 {
@@ -180,7 +180,7 @@ BOXA    *boxad;
  *      (1) All boxes in boxa that intersect with box (i.e., are completely
  *          or partially contained in box) are retained.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaIntersectsBox(BOXA  *boxas,
                   BOX   *box)
 {
@@ -222,7 +222,7 @@ BOXA    *boxad;
  *      (1) All boxes in boxa not intersecting with box are removed, and
  *          the remaining boxes are clipped to box.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaClipToBox(BOXA  *boxas,
               BOX   *box)
 {
@@ -271,7 +271,7 @@ BOXA    *boxad;
  *          is still faster than painting each rectangle and finding
  *          the connected components, even for thousands of rectangles.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaCombineOverlaps(BOXA  *boxas)
 {
 l_int32  i, j, n1, n2, inter, interfound, niters;
@@ -341,7 +341,7 @@ BOXA    *boxat1, *boxat2;
  *      Return: box (of overlap region between input boxes),
  *              or null if no overlap or on error
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxOverlapRegion(BOX  *box1,
                  BOX  *box2)
 {
@@ -381,7 +381,7 @@ l_int32  x, y, w, h, left1, left2, top1, top2, right1, right2, bot1, bot2;
  *      Return: box (of bounding region containing the input boxes),
  *              or null on error
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxBoundingRegion(BOX  *box1,
                   BOX  *box2)
 {
@@ -417,7 +417,7 @@ l_int32  left, top, right1, right2, right, bot1, bot2, bot;
  *      (1) The result depends on the order of the input boxes,
  *          because the overlap is taken as a fraction of box2.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxOverlapFraction(BOX        *box1,
                    BOX        *box2,
                    l_float32  *pfract)
@@ -454,7 +454,7 @@ BOX     *boxo;
  *              &contains (<return> 1 if box contains point; 0 otherwise)
  *      Return: 0 if OK, 1 on error.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxContainsPt(BOX       *box,
               l_float32  x,
               l_float32  y,
@@ -487,7 +487,7 @@ l_int32  bx, by, bw, bh;
  *  Notes:
  *      (1) Uses euclidean distance between centroid and point.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxaGetNearestToPt(BOXA    *boxa,
                    l_int32  x,
                    l_int32  y)
@@ -529,7 +529,7 @@ BOX       *box;
  *              &cx, &cy (<return> location of center of box)
  *      Return  0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxGetCenter(BOX        *box,
              l_float32  *pcx,
              l_float32  *pcy)
@@ -567,7 +567,7 @@ l_int32  x, y, w, h;
  *          coordinates are returned in (x1, y1).
  *      (2) Represent a vertical line by one with a large but finite slope.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxIntersectByLine(BOX       *box,
                    l_int32    x,
                    l_int32    y,
@@ -664,7 +664,7 @@ PTA       *pta;
  *          The clipping rectangle is assumed to have a UL corner at (0, 0),
  *          and a LR corner at (wi - 1, hi - 1).
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxClipToRectangle(BOX     *box,
                    l_int32  wi,
                    l_int32  hi)
@@ -715,7 +715,7 @@ BOX  *boxd;
  *               boxRelocateOneSide(boxs, boxs, ...);          // in-place
  *               boxRelocateOneSide(boxd, boxs, ...);          // other
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxRelocateOneSide(BOX     *boxd,
                    BOX     *boxs,
                    l_int32  loc,
@@ -765,7 +765,7 @@ l_int32  x, y, w, h;
  *      (2) For example, to expand in-place by 20 pixels on each side, use
  *             boxAdjustSides(box, box, -20, 20, -20, 20);
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxAdjustSides(BOX     *boxd,
                BOX     *boxs,
                l_int32  delleft,
@@ -808,7 +808,7 @@ l_int32  x, y, w, h, xl, xr, yt, yb, wnew, hnew;
  *              &same (<return> 1 if equal; 0 otherwise)
  *      Return  0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxEqual(BOX      *box1,
          BOX      *box2,
          l_int32  *psame)
@@ -844,7 +844,7 @@ boxEqual(BOX      *box1,
  *      (2) istart < 0 is taken to mean 'read from the start' (istart = 0)
  *      (3) iend <= 0 means 'read to the end'
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaJoin(BOXA    *boxad,
          BOXA    *boxas,
          l_int32  istart,
@@ -902,7 +902,7 @@ BOX     *box;
  *      (2) If there are no boxes, returned w and h are 0 and
  *          all parameters in the returned box are 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaGetExtent(BOXA     *boxa,
               l_int32  *pw,
               l_int32  *ph,
@@ -962,7 +962,7 @@ l_int32  i, n, x, y, w, h, xmax, ymax, xmin, ymin;
  *          * The results are the same when none of the boxes overlap
  *            within the wc x hc region.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaGetCoverage(BOXA       *boxa,
                 l_int32     wc,
                 l_int32     hc,
@@ -1022,7 +1022,7 @@ PIX     *pixt;
  *                                          dimensions of box in the array)
  *      Return: 0 if OK, 1 on error
  */
-l_int32  
+LEPTONICA_EXPORT l_int32  
 boxaSizeRange(BOXA     *boxa,
               l_int32  *pminw,
               l_int32  *pminh,
@@ -1070,7 +1070,7 @@ l_int32  minw, minh, maxw, maxh, i, n, w, h;
  *                                          UL corner positions)
  *      Return: 0 if OK, 1 on error
  */
-l_int32  
+LEPTONICA_EXPORT l_int32  
 boxaLocationRange(BOXA     *boxa,
                   l_int32  *pminx,
                   l_int32  *pminy,
@@ -1133,7 +1133,7 @@ l_int32  minx, miny, maxx, maxy, i, n, x, y;
  *          To keep large components, use relation = L_SELECT_IF_GT or
  *          L_SELECT_IF_GTE.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaSelectBySize(BOXA     *boxas,
                  l_int32   width,
                  l_int32   height,
@@ -1188,7 +1188,7 @@ NUMA  *na;
  *          To keep large components, use relation = L_SELECT_IF_GT or
  *          L_SELECT_IF_GTE.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 boxaMakeSizeIndicator(BOXA     *boxa,
                       l_int32   width,
                       l_int32   height,
@@ -1267,7 +1267,7 @@ NUMA    *na;
  *      (2) Uses box clones in the new boxa.
  *      (3) The indicator numa has values 0 (ignore) and 1 (accept).
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaSelectWithIndicator(BOXA     *boxas,
                         NUMA     *na,
                         l_int32  *pchanged)
@@ -1325,7 +1325,7 @@ BOXA    *boxad;
  *      (3) MSVC rand() has MAX_RAND = 2^15 - 1, so it will not do
  *          a proper permutation is the number of boxes exceeds this.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaPermuteRandom(BOXA  *boxad,
                   BOXA  *boxas)
 {
@@ -1361,7 +1361,7 @@ l_int32  i, n, index;
  *              i, j (two indices of boxes, that are to be swapped)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaSwapBoxes(BOXA    *boxa,
               l_int32  i,
               l_int32  j)
@@ -1400,7 +1400,7 @@ BOX     *box;
  *      (1) If ncorners == 2, we select the UL and LR corners.
  *          Otherwise we save all 4 corners in this order: UL, UR, LL, LR.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 boxaConvertToPta(BOXA    *boxa,
                  l_int32  ncorners)
 {
@@ -1446,7 +1446,7 @@ PTA     *pta;
  *          For 4 corners, the order of points is UL, UR, LL, LR.
  *      (2) Each derived box is the minimum szie containing all corners.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 ptaConvertToBoxa(PTA     *pta,
                  l_int32  ncorners)
 {

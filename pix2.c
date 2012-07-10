@@ -147,7 +147,7 @@ LEPT_DLL l_float32  AlphaMaskBorderVals[2] = {0.0, 0.5};
  *          If speed is important and you're doing random access into
  *          the pix, use pixGetLinePtrs() and the array access macros.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetPixel(PIX       *pix,
             l_int32    x,
             l_int32    y,
@@ -218,7 +218,7 @@ l_uint32  *line, *data;
  *            pixel value, and any (invalid) higher order bits are discarded.
  *      (2) See pixGetPixel() for information on performance.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetPixel(PIX      *pix,
             l_int32   x,
             l_int32   y,
@@ -282,7 +282,7 @@ l_uint32  *line, *data;
  *              &bval (<optional return> blue component)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetRGBPixel(PIX      *pix,
                l_int32   x,
                l_int32   y,
@@ -325,7 +325,7 @@ l_uint32  *data, *ppixel;
  *              bval (blue component)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetRGBPixel(PIX     *pix,
                l_int32  x,
                l_int32  y,
@@ -370,7 +370,7 @@ l_uint32  *data, *line;
  *  Notes:
  *      (1) If the pix is colormapped, it returns the rgb value.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetRandomPixel(PIX       *pix,
                   l_uint32  *pval,
                   l_int32   *px,
@@ -412,7 +412,7 @@ PIXCMAP  *cmap;
  *              (x,y) pixel coords
  *      Return: 0 if OK; 1 on error.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClearPixel(PIX     *pix,
               l_int32  x,
               l_int32  y)
@@ -469,7 +469,7 @@ l_uint32  *line, *data;
  *              (x,y) pixel coords
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFlipPixel(PIX     *pix,
              l_int32  x,
              l_int32  y)
@@ -545,7 +545,7 @@ l_uint32  *line, *data;
  *  Notes:
  *      (1) Caution: input variables are not checked!
  */
-void
+LEPTONICA_EXPORT void
 setPixelLow(l_uint32  *line,
             l_int32    x,
             l_int32    depth,
@@ -597,7 +597,7 @@ setPixelLow(l_uint32  *line,
  *      (2) Caution: for colormapped pix, this sets the color to the first
  *          one in the colormap.  Be sure that this is the intended color!
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClearAll(PIX  *pix)
 {
     PROCNAME("pixClearAll");
@@ -624,7 +624,7 @@ pixClearAll(PIX  *pix)
  *          maximum value supported by the colormap: 2^d - 1.  However, this
  *          color may not be defined, because the colormap may not be full.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetAll(PIX  *pix)
 {
 l_int32   n;
@@ -660,7 +660,7 @@ PIXCMAP  *cmap;
  *          color at the index equal to val.  Be sure that this index
  *          exists in the colormap and that it is the intended one!
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetAllArbitrary(PIX      *pix,
                    l_uint32  val)
 {
@@ -726,7 +726,7 @@ PIXCMAP   *cmap;
  *          is full, it finds the closest color in intensity.
  *          This index is written to all pixels.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetBlackOrWhite(PIX     *pixs,
                    l_int32  op)
 {
@@ -777,7 +777,7 @@ PIXCMAP  *cmap;
  *      (2) Caution: for colormapped pix, this sets the color to the first
  *          one in the colormap.  Be sure that this is the intended color!
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClearInRect(PIX  *pix,
                BOX  *box)
 {
@@ -810,7 +810,7 @@ l_int32  x, y, w, h;
  *          maximum value supported by the colormap: 2^d - 1.  However, this
  *          color may not be defined, because the colormap may not be full.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetInRect(PIX  *pix,
              BOX  *box)
 {
@@ -850,7 +850,7 @@ PIXCMAP  *cmap;
  *          rect to the color at the index equal to val.  Be sure that
  *          this index exists in the colormap and that it is the intended one!
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetInRectArbitrary(PIX      *pix,
                       BOX      *box,
                       l_uint32  val)
@@ -955,7 +955,7 @@ PIXCMAP   *cmap;
  *      (1) This is an in-place function.  It blends the input color @val
  *          with the pixels in pixs in the specified rectangle.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixBlendInRect(PIX       *pixs,
                BOX       *box,
                l_uint32   val,
@@ -1016,7 +1016,7 @@ l_uint32  *datas, *lines;
  *          32-bit word in each scanline.
  *      (3) For 32 bpp pix, there are no pad bits, so this is a no-op.
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 pixSetPadBits(PIX     *pix,
               l_int32  val)
 {
@@ -1075,7 +1075,7 @@ l_uint32  *data, *pword;
  *          band of raster lines.
  *      (3) For 32 bpp pix, there are no pad bits, so this is a no-op.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetPadBitsBand(PIX     *pix,
                   l_int32  by,
                   l_int32  bh,
@@ -1145,7 +1145,7 @@ l_uint32  *data, *pword;
  *      (3) For grayscale or color images, use PIX_SET for white
  *          and PIX_CLR for black.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetOrClearBorder(PIX     *pixs,
                     l_int32  left,
                     l_int32  right,
@@ -1192,7 +1192,7 @@ l_int32  w, h;
  *          to the appropriate number of least significant bits.
  *      (4) The code is easily generalized for 2 or 4 bpp.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetBorderVal(PIX      *pixs,
                 l_int32   left,
                 l_int32   right,
@@ -1296,7 +1296,7 @@ l_uint32  *datas, *lines;
  *          pixels at a given distance from the edge of the pix.
  *          This sets all pixels in a given ring to a value.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetBorderRingVal(PIX      *pixs,
                     l_int32   dist,
                     l_uint32  val)
@@ -1345,7 +1345,7 @@ l_int32  w, h, d, i, j, xend, yend;
  *      (3) The general pixRasterop() is used for an in-place operation here
  *          because there is no overlap between the src and dest rectangles.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetMirroredBorder(PIX     *pixs,
                      l_int32  left,
                      l_int32  right,
@@ -1392,7 +1392,7 @@ l_int32  i, j, w, h;
  *          pixels we can avoid having to copy all pixels in pixs into
  *          pixd as an initialization step for some operation.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCopyBorder(PIX     *pixd,
               PIX     *pixs,
               l_int32  left,
@@ -1446,7 +1446,7 @@ l_int32  w, h;
  *  Notes:
  *      (1) See pixAddBorderGeneral() for values of white & black pixels.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixAddBorder(PIX      *pixs,
              l_int32   npix,
              l_uint32  val)
@@ -1468,7 +1468,7 @@ pixAddBorder(PIX      *pixs,
  *              npix (number of pixels to be added to each side)
  *      Return: pixd (with the added exterior pixels), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixAddBlackBorder(PIX      *pixs,
                   l_int32   npix)
 {
@@ -1514,7 +1514,7 @@ PIXCMAP  *cmap;
  *             white: pixcmapGetRankIntensity(cmap, 1.0, &index);
  *             black: pixcmapGetRankIntensity(cmap, 0.0, &index);
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixAddBorderGeneral(PIX      *pixs,
                     l_int32   left,
                     l_int32   right,
@@ -1570,7 +1570,7 @@ PIX     *pixd;
  *              npix (number to be removed from each of the 4 sides)
  *      Return: pixd (with pixels removed around border), or null on error
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixRemoveBorder(PIX     *pixs,
                 l_int32  npix)
 {
@@ -1591,7 +1591,7 @@ pixRemoveBorder(PIX     *pixs,
  *              left, right, top, bot  (number of pixels added)
  *      Return: pixd (with pixels removed around border), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixRemoveBorderGeneral(PIX     *pixs,
                        l_int32  left,
                        l_int32  right,
@@ -1647,7 +1647,7 @@ PIX     *pixd;
  *      (3) The general pixRasterop() is used for an in-place operation here
  *          because there is no overlap between the src and dest rectangles.
  */
-PIX  *
+LEPTONICA_EXPORT PIX  *
 pixAddMirroredBorder(PIX      *pixs,
                       l_int32  left,
                       l_int32  right,
@@ -1697,7 +1697,7 @@ PIX     *pixd;
  *      (2) The general pixRasterop() is used for an in-place operation here
  *          because there is no overlap between the src and dest rectangles.
  */
-PIX  *
+LEPTONICA_EXPORT PIX  *
 pixAddRepeatedBorder(PIX      *pixs,
                      l_int32  left,
                      l_int32  right,
@@ -1751,7 +1751,7 @@ PIX     *pixd;
  *          operation here because there is no overlap between the
  *          src and dest rectangles.
  */
-PIX  *
+LEPTONICA_EXPORT PIX  *
 pixAddMixedBorder(PIX      *pixs,
                   l_int32  left,
                   l_int32  right,
@@ -1810,7 +1810,7 @@ PIX     *pixd;
  *          The reason is there are many more cache misses when reading
  *          from 3 input images simultaneously.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCreateRGBImage(PIX  *pixr,
                   PIX  *pixg,
                   PIX  *pixb)
@@ -1866,7 +1866,7 @@ PIX     *pixd;
  *          there are many more cache misses when writing to three
  *          output images simultaneously.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGetRGBComponent(PIX     *pixs,
                    l_int32  color)
 {
@@ -1923,7 +1923,7 @@ PIX           *pixd;
  *          specified color component (properly interleaved) in pixd.
  *      (2) The alpha channel component mostly ignored in leptonica.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixSetRGBComponent(PIX     *pixd,
                    PIX     *pixs,
                    l_int32  color)
@@ -1977,7 +1977,7 @@ l_uint32  *datas, *datad;
  *      Return: pixd  (the selected 8 bpp component image of the
  *                     input cmapped image), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGetRGBComponentCmap(PIX     *pixs,
                        l_int32  color)
 {
@@ -2059,7 +2059,7 @@ RGBA_QUAD  *cta;
  *            SET_DATA_BYTE(ppixel, COLOR_GREEN, gval);
  *            SET_DATA_BYTE(ppixel, COLOR_BLUE, bval);
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 composeRGBPixel(l_int32    rval,
                 l_int32    gval,
                 l_int32    bval,
@@ -2091,7 +2091,7 @@ composeRGBPixel(l_int32    rval,
  *             *pgval = GET_DATA_BYTE(&pixel, COLOR_GREEN);
  *             *pbval = GET_DATA_BYTE(&pixel, COLOR_BLUE);
  */
-void
+LEPTONICA_EXPORT void
 extractRGBValues(l_uint32  pixel,
                  l_int32  *prval,
                  l_int32  *pgval,
@@ -2111,7 +2111,7 @@ extractRGBValues(l_uint32  pixel,
  *              type (L_CHOOSE_MIN or L_CHOOSE_MAX)
  *      Return: componet (in range [0 ... 255], or null on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 extractMinMaxComponent(l_uint32  pixel,
                        l_int32   type)
 {
@@ -2144,7 +2144,7 @@ l_int32  rval, gval, bval, val;
  *      (1) This puts rgb components from the input line in pixs
  *          into the given buffers.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetRGBLine(PIX      *pixs,
               l_int32   row,
               l_uint8  *bufr,
@@ -2205,7 +2205,7 @@ l_int32    wpls;
  *          it is twice as fast to make a new pix in big-endian order,
  *          use it, and destroy it.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixEndianByteSwapNew(PIX  *pixs)
 {
 l_uint32  *datas, *datad;
@@ -2266,7 +2266,7 @@ PIX       *pixd;
  *          MSB-to-the-left word order has the bytes in raster
  *          order when serialized, so no byte flipping is required.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixEndianByteSwap(PIX  *pixs)
 {
 l_uint32  *data;
@@ -2322,7 +2322,7 @@ l_uint32   word;
  *          is addressed by bytes, the pixels are chosen sequentially
  *          from left to right in the image.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lineEndianByteSwap(l_uint32  *datad,
                    l_uint32  *datas,
                    l_int32    wpl)
@@ -2373,7 +2373,7 @@ l_uint32  word;
  *          to avoid having to swap twice in situations where the input
  *          pix must be restored to canonical little-endian order.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixEndianTwoByteSwapNew(PIX  *pixs)
 {
 l_uint32  *datas, *datad;
@@ -2424,7 +2424,7 @@ PIX       *pixd;
  *          by pixEndianByteSwap(), followed by byte swaps in
  *          each of the 16-bit entities separately.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixEndianTwoByteSwap(PIX  *pixs)
 {
 l_uint32  *data;
@@ -2476,7 +2476,7 @@ l_uint32   word;
  *          For rgb, the bytes are in (rgb) order.  This is the format
  *          required for flate encoding of pixels in a PostScript file.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixGetRasterData(PIX       *pixs,
                  l_uint8  **pdata,
                  size_t    *pnbytes)
@@ -2566,7 +2566,7 @@ l_uint32  *rline, *rdata;  /* data in pix raster */
  *              }
  *              pixCleanupByteProcessing(pix, lineptrs);
  */
-l_uint8 **
+LEPTONICA_EXPORT l_uint8 **
 pixSetupByteProcessing(PIX      *pix,
                        l_int32  *pw,
                        l_int32  *ph)
@@ -2602,7 +2602,7 @@ l_int32  w, h;
  *      (1) This must be called after processing that was initiated
  *          by pixSetupByteProcessing() has finished.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCleanupByteProcessing(PIX      *pix,
                          l_uint8 **lineptrs)
 {
@@ -2640,7 +2640,7 @@ pixCleanupByteProcessing(PIX      *pix,
  *      (3) The actual mask values are found by multiplying these
  *          normalized opacity values by 255.
  */
-void
+LEPTONICA_EXPORT void
 l_setAlphaMaskBorder(l_float32  val1,
                      l_float32  val2)
 {

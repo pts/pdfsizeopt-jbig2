@@ -94,7 +94,7 @@ static const l_uint32 rmask32[] = {0x0,
  *              &nah (<optional return> numa of pix heights)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaFindDimensions(PIXA   *pixa,
                    NUMA  **pnaw,
                    NUMA  **pnah)
@@ -135,7 +135,7 @@ PIX     *pixt;
  *      (1) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaFindAreaPerimRatio(PIXA  *pixa)
 {
 l_int32    i, n;
@@ -178,7 +178,7 @@ PIX       *pixt;
  *      (2) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFindAreaPerimRatio(PIX        *pixs,
                       l_int32    *tab,
                       l_float32  *pfract)
@@ -223,7 +223,7 @@ PIX      *pixt;
  *      (1) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaFindPerimSizeRatio(PIXA  *pixa)
 {
 l_int32    i, n;
@@ -266,7 +266,7 @@ PIX       *pixt;
  *          with highly irregular boundaries.
  *      (3) This is typically used for a single connected component.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFindPerimSizeRatio(PIX        *pixs,
                       l_int32    *tab,
                       l_float32  *pratio)
@@ -311,7 +311,7 @@ PIX      *pixt;
  *      (1) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaFindAreaFraction(PIXA  *pixa)
 {
 l_int32    i, n;
@@ -352,7 +352,7 @@ PIX       *pixt;
  *          size of the pix (w * h).  It is typically used for a
  *          single connected component.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFindAreaFraction(PIX        *pixs,
                     l_int32    *tab,
                     l_float32  *pfract)
@@ -393,7 +393,7 @@ l_int32  *tab8;
  *      (1) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaFindWidthHeightRatio(PIXA  *pixa)
 {
 l_int32  i, n, w, h;
@@ -427,7 +427,7 @@ PIX     *pixt;
  *      (1) This is typically used for a pixa consisting of
  *          1 bpp connected components.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixaFindWidthHeightProduct(PIXA  *pixa)
 {
 l_int32  i, n, w, h;
@@ -465,7 +465,7 @@ PIX     *pixt;
  *      (1) The UL corner of pixs2 is placed at (x2, y2) in pixs1.
  *      (2) This measure is similar to the correlation.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixFindOverlapFraction(PIX        *pixs1,
                        PIX        *pixs2,
                        l_int32     x2,
@@ -529,7 +529,7 @@ PIX      *pixt;
  *          given by @minsize and the slop in conforming to a rectangle
  *          determined by @dist.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 pixFindRectangleComps(PIX     *pixs,
                       l_int32  dist,
                       l_int32  minw,
@@ -608,7 +608,7 @@ PIXA    *pixa;
  *          It's easiest to fill from the boundary, and then verify that
  *          there are no filled pixels farther than @dist from the boundary.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixConformsToRectangle(PIX      *pixs,
                        BOX      *box,
                        l_int32   dist,
@@ -697,7 +697,7 @@ PIX     *pixt1, *pixt2;
  *  Accordingly, this function has a third (optional) argument, which is
  *  the input box clipped to the src pix.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixClipRectangle(PIX   *pixs,
                  BOX   *box,
                  BOX  **pboxc)
@@ -766,7 +766,7 @@ PIX     *pixd;
  *          (1) in pix1.  The function call looks like
  *             pixClipMasked(pix2, pixInvert(pix1, pix1), x, y, 1);
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixClipMasked(PIX      *pixs,
               PIX      *pixm,
               l_int32   x,
@@ -834,7 +834,7 @@ PIXCMAP  *cmap;
  *          than the dimension of pixs, replicate the outer row and
  *          column of pixels in pixs into pixd.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixResizeToMatch(PIX     *pixs,
                  PIX     *pixt,
                  l_int32  w,
@@ -895,7 +895,7 @@ PIX     *pixd;
  *      (1) At least one of {&pixd, &box} must be specified.
  *      (2) If there are no fg pixels, the returned ptrs are null.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClipToForeground(PIX   *pixs,
                     PIX  **ppixd,
                     BOX  **pbox)
@@ -995,7 +995,7 @@ maxx_found:
  *      (3) Do not use &pixs for the 3rd arg or &boxs for the 4th arg;
  *          this will leak memory.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClipBoxToForeground(PIX   *pixs,
                        BOX   *boxs,
                        PIX  **ppixd,
@@ -1059,7 +1059,7 @@ BOX     *boxt, *boxd;
  *          Caller must check the return value!
  *      (2) Use @box == NULL to scan from edge of pixs
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixScanForForeground(PIX      *pixs,
                      BOX      *box,
                      l_int32   scanflag,
@@ -1176,7 +1176,7 @@ BOX       *boxt;
  *      (7) If the low and high thresholds are both 1, this is equivalent
  *          to pixClipBoxToForeground().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixClipBoxToEdges(PIX     *pixs,
                   BOX     *boxs,
                   l_int32  lowthresh,
@@ -1304,7 +1304,7 @@ BOX     *boxt, *boxd;
  *      (4) The thresholds must be at least 1, and the low threshold
  *          cannot be larger than the high threshold.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixScanForEdge(PIX      *pixs,
                BOX      *box,
                l_int32   lowthresh,
@@ -1482,7 +1482,7 @@ BOX       *boxt;
  *      (3) Can be used with numaCountReverals(), for example, to
  *          characterize the intensity smoothness along a line.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixExtractOnLine(PIX     *pixs,
                  l_int32  x1,
                  l_int32  y1,
@@ -1603,7 +1603,7 @@ PTA       *pta;
  *          characterize the intensity smoothness along a line.
  *      (3) Input end points are clipped to the pix.
  */
-l_float32
+LEPTONICA_EXPORT l_float32
 pixAverageOnLine(PIX     *pixs,
                  l_int32  x1,
                  l_int32  y1,
@@ -1698,7 +1698,7 @@ l_float32  sum;
  *      (4) The averages are measured over the central @fract of the image.
  *          Use @fract == 1.0 to average across the entire width or height.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixAverageIntensityProfile(PIX       *pixs,
                            l_float32  fract,
                            l_int32    dir,
@@ -1810,7 +1810,7 @@ PIX       *pixr, *pixg;
  *      (6) The reversal profile is simply the number of reversals
  *          in a row or column, vs the row or column index.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixReversalProfile(PIX       *pixs,
                    l_float32  fract,
                    l_int32    dir,
@@ -1907,7 +1907,7 @@ PIX      *pixr, *pixg;
  *     (1) The time is O(n) in the number of pixels and runs about
  *         100 Mpixels/sec on a 3 GHz machine.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixRankRowTransform(PIX  *pixs)
 {
 l_int32    i, j, k, m, w, h, wpl, val;
@@ -1958,7 +1958,7 @@ PIX       *pixd;
  *     (1) The time is O(n) in the number of pixels and runs about
  *         50 Mpixels/sec on a 3 GHz machine.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixRankColumnTransform(PIX  *pixs)
 {
 l_int32    i, j, k, m, w, h, wpl, val; 

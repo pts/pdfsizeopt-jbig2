@@ -157,7 +157,7 @@ static const l_int32   MIN_COMPS_FOR_BIN_SORT = 500;
  *          To keep large components, use relation = L_SELECT_IF_GT or
  *          L_SELECT_IF_GTE.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSelectBySize(PIX      *pixs,
                 l_int32   width,
                 l_int32   height,
@@ -243,7 +243,7 @@ PIXA    *pixas, *pixad;
  *          To keep large components, use relation = L_SELECT_IF_GT or
  *          L_SELECT_IF_GTE.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSelectBySize(PIXA     *pixas,
                  l_int32   width,
                  l_int32   height,
@@ -301,7 +301,7 @@ PIXA    *pixad;
  *      (4) Use L_SELECT_IF_LT or L_SELECT_IF_LTE to save the thin
  *          components, and L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSelectByAreaPerimRatio(PIX       *pixs,
                          l_float32  thresh,
                          l_int32    connectivity,
@@ -378,7 +378,7 @@ PIXA    *pixas, *pixad;
  *      (4) Use L_SELECT_IF_LT or L_SELECT_IF_LTE to save the thin
  *          components, and L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSelectByAreaPerimRatio(PIXA      *pixas,
                            l_float32  thresh,
                            l_int32    type,
@@ -432,7 +432,7 @@ PIXA  *pixad;
  *          with less than the threshold fraction of foreground, and
  *          L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSelectByAreaFraction(PIX       *pixs,
                         l_float32  thresh,
                         l_int32    connectivity,
@@ -509,7 +509,7 @@ PIXA    *pixas, *pixad;
  *          with less than the threshold fraction of foreground, and
  *          L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSelectByAreaFraction(PIXA      *pixas,
                          l_float32  thresh,
                          l_int32    type,
@@ -562,7 +562,7 @@ PIXA  *pixad;
  *          with less than the threshold ratio, and
  *          L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSelectByWidthHeightRatio(PIX       *pixs,
                             l_float32  thresh,
                             l_int32    connectivity,
@@ -639,7 +639,7 @@ PIXA    *pixas, *pixad;
  *          with less than the threshold ratio, and
  *          L_SELECT_IF_GT or L_SELECT_IF_GTE to remove them.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSelectByWidthHeightRatio(PIXA      *pixas,
                              l_float32  thresh,
                              l_int32    type,
@@ -684,7 +684,7 @@ PIXA  *pixad;
  *      (2) Uses pix and box clones in the new pixa.
  *      (3) The indicator numa has values 0 (ignore) and 1 (accept).
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSelectWithIndicator(PIXA     *pixas,
                         NUMA     *na,
                         l_int32  *pchanged)
@@ -739,7 +739,7 @@ PIXA    *pixad;
  *      (1) This complements pixAddWithIndicator().   Here, the selected
  *          components are set subtracted from pixs.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixRemoveWithIndicator(PIX   *pixs,
                        PIXA  *pixa,
                        NUMA  *na)
@@ -790,7 +790,7 @@ PIX     *pix;
  *      (1) This complements pixRemoveWithIndicator().   Here, the selected
  *          components are added to pixs.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixAddWithIndicator(PIX   *pixs,
                     PIXA  *pixa,
                     NUMA  *na)
@@ -851,7 +851,7 @@ PIX     *pix;
  *          inserted into the sorted pixa.  These are either L_COPY
  *          or L_CLONE.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSort(PIXA    *pixas,
          l_int32  sorttype,
          l_int32  sortorder,
@@ -974,7 +974,7 @@ PIXA    *pixad;
  *      (4) Consequently, pixaSort() calls this function if it will
  *          likely go much faster.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaBinSort(PIXA    *pixas,
             l_int32  sorttype,
             l_int32  sortorder,
@@ -1059,7 +1059,7 @@ PIXA    *pixad;
  *              copyflag (L_COPY, L_CLONE)
  *      Return: pixad (sorted), or null on error
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaSortByIndex(PIXA    *pixas,
                 NUMA    *naindex,
                 l_int32  copyflag)
@@ -1100,7 +1100,7 @@ PIXA    *pixad;
  *              copyflag (L_CLONE or L_COPY)
  *      Return: pixaa (sorted), or null on error
  */
-PIXAA *
+LEPTONICA_EXPORT PIXAA *
 pixaSort2dByIndex(PIXA    *pixas,
                   NUMAA   *naa,
                   l_int32  copyflag)
@@ -1177,7 +1177,7 @@ PIXAA   *pixaa;
  *      (3) In both cases, the boxa has sides adjusted as if it were
  *          expanded by the border.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaAddBorderGeneral(PIXA     *pixad,
                      PIXA     *pixas,
                      l_int32   left,
@@ -1246,7 +1246,7 @@ PIX     *pixs, *pixd;
  *      (2) If &naindex is defined, we generate a Numa that gives, for
  *          each pix in the pixaa, the index of the pixa to which it belongs.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaaFlattenToPixa(PIXAA   *pixaa,
                    NUMA   **pnaindex,
                    l_int32  copyflag)
@@ -1298,7 +1298,7 @@ PIXA    *pixa, *pixat;
  *                                          dimensions of pix in the array)
  *      Return: 0 if OK, 1 on error
  */
-l_int32  
+LEPTONICA_EXPORT l_int32  
 pixaSizeRange(PIXA     *pixa,
               l_int32  *pminw,
               l_int32  *pminh,
@@ -1362,7 +1362,7 @@ PIX     *pix;
  *          mask component, along with the bounding box for
  *          the region.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaClipToPix(PIXA  *pixas,
               PIX   *pixs)
 {
@@ -1403,7 +1403,7 @@ PIXA    *pixad;
  *              &hascmap (<return> 1 if any pix has a colormap; 0 otherwise)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaAnyColormaps(PIXA     *pixa,
                  l_int32  *phascmap)
 {
@@ -1442,7 +1442,7 @@ PIXCMAP  *cmap;
  *              &same (<optional return> true if all depths are equal)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaGetDepthInfo(PIXA     *pixa,
                  l_int32  *pmaxdepth,
                  l_int32  *psame)
@@ -1503,7 +1503,7 @@ l_int32  maxd, same;  /* depth info */
  *          a large @maxdist is required for "equality", this should be
  *          implemented with a hash function for efficiency.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixaEqual(PIXA     *pixa1,
           PIXA     *pixa2,
           l_int32   maxdist,

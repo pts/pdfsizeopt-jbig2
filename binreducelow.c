@@ -56,7 +56,7 @@
  *  makeSubsampleTab2x().
  *
  */
-void
+LEPTONICA_EXPORT void
 reduceBinary2Low(l_uint32  *datad,
                  l_int32    wpld,
                  l_uint32  *datas,
@@ -103,7 +103,7 @@ l_uint32  *lines, *lined;
  *  Then these pixels are chosen in the 2x subsampling process,
  *  subsampled, as described above in reduceBinary2Low().
  */
-void
+LEPTONICA_EXPORT void
 reduceRankBinary2Low(l_uint32  *datad,
                      l_int32    wpld,
                      l_uint32  *datas,
@@ -233,7 +233,7 @@ l_uint32  *lines, *lined;
  *  to
  *      0 1 2 3 4 5 6 7
  */  
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 makeSubsampleTab2x(void)
 {
 l_uint8  *tab;

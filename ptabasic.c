@@ -79,7 +79,7 @@ static const l_int32  INITIAL_PTR_ARRAYSIZE = 20;   /* n'import quoi */
  *      Input:  n  (initial array sizes)
  *      Return: pta, or null on error.
  */
-PTA *
+LEPTONICA_REAL_EXPORT PTA *
 ptaCreate(l_int32  n)
 {
 PTA  *pta;
@@ -111,7 +111,7 @@ PTA  *pta;
  *              nay
  *      Return: pta, or null on error.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaCreateFromNuma(NUMA  *nax,
                   NUMA  *nay)
 {
@@ -152,7 +152,7 @@ PTA       *pta;
  *      - Decrements the ref count and, if 0, destroys the pta.
  *      - Always nulls the input ptr.
  */
-void
+LEPTONICA_REAL_EXPORT void
 ptaDestroy(PTA  **ppta)
 {
 PTA  *pta;
@@ -185,7 +185,7 @@ PTA  *pta;
  *      Input:  pta
  *      Return: copy of pta, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaCopy(PTA  *pta)
 {
 l_int32    i;
@@ -215,7 +215,7 @@ PTA       *npta;
  *      Input:  pta
  *      Return: ptr to same pta, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaClone(PTA  *pta)
 {
     PROCNAME("ptaClone");
@@ -236,7 +236,7 @@ ptaClone(PTA  *pta)
  *
  *  Note: this only resets the "n" field, for reuse
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaEmpty(PTA  *pta)
 {
     PROCNAME("ptaEmpty");
@@ -258,7 +258,7 @@ ptaEmpty(PTA  *pta)
  *              x, y
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 ptaAddPt(PTA       *pta,
          l_float32  x,
          l_float32  y)
@@ -287,7 +287,7 @@ l_int32  n;
  *      Input:  pta
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaExtendArrays(PTA  *pta)
 {
     PROCNAME("ptaExtendArrays");
@@ -312,7 +312,7 @@ ptaExtendArrays(PTA  *pta)
 /*---------------------------------------------------------------------*
  *                           Pta accessors                             *
  *---------------------------------------------------------------------*/
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetRefcount(PTA  *pta)
 {
     PROCNAME("ptaGetRefcount");
@@ -323,7 +323,7 @@ ptaGetRefcount(PTA  *pta)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaChangeRefcount(PTA     *pta,
                   l_int32  delta)
 {
@@ -342,7 +342,7 @@ ptaChangeRefcount(PTA     *pta,
  *      Input:  pta
  *      Return: count, or 0 if no pta
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetCount(PTA  *pta)
 {
     PROCNAME("ptaGetCount");
@@ -363,7 +363,7 @@ ptaGetCount(PTA  *pta)
  *              &y (<optional return> float y value)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetPt(PTA        *pta,
          l_int32     index,
          l_float32  *px,
@@ -393,7 +393,7 @@ ptaGetPt(PTA        *pta,
  *              &y (<optional return> integer y value)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetIPt(PTA      *pta,
           l_int32   index,
           l_int32  *px,
@@ -422,7 +422,7 @@ ptaGetIPt(PTA      *pta,
  *              x, y
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaSetPt(PTA       *pta,
          l_int32    index,
          l_float32  x,
@@ -452,7 +452,7 @@ ptaSetPt(PTA       *pta,
  *  Notes:
  *      (1) This copies the internal arrays into new Numas.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetArrays(PTA    *pta,
              NUMA  **pnax,
              NUMA  **pnay)
@@ -500,7 +500,7 @@ NUMA    *nax, *nay;
  *      Input:  filename
  *      Return: pta, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaRead(const char  *filename)
 {
 FILE  *fp;
@@ -529,7 +529,7 @@ PTA   *pta;
  *      Input:  stream
  *      Return: pta, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaReadStream(FILE  *fp)
 {
 char       typestr[128];
@@ -580,7 +580,7 @@ PTA       *pta;
  *              type  (0 for float values; 1 for integer values)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaWrite(const char  *filename,
          PTA         *pta,
          l_int32      type)
@@ -612,7 +612,7 @@ FILE  *fp;
  *              type  (0 for float values; 1 for integer values)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaWriteStream(FILE    *fp,
                PTA     *pta,
                l_int32  type)
@@ -657,7 +657,7 @@ l_float32  x, y;
  *      Input:  n  (initial number of ptrs)
  *      Return: ptaa, or null on error
  */
-PTAA *
+LEPTONICA_EXPORT PTAA *
 ptaaCreate(l_int32  n)
 {
 PTAA  *ptaa;
@@ -685,7 +685,7 @@ PTAA  *ptaa;
  *      Input:  &ptaa <to be nulled>
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 ptaaDestroy(PTAA  **pptaa)
 {
 l_int32  i;
@@ -722,7 +722,7 @@ PTAA    *ptaa;
  *              copyflag  (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaAddPta(PTAA    *ptaa,
            PTA     *pta,
            l_int32  copyflag)
@@ -766,7 +766,7 @@ PTA     *ptac;
  *      Input:  ptaa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaExtendArray(PTAA  *ptaa)
 {
     PROCNAME("ptaaExtendArray");
@@ -793,7 +793,7 @@ ptaaExtendArray(PTAA  *ptaa)
  *      Input:  ptaa
  *      Return: count, or 0 if no ptaa
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaGetCount(PTAA  *ptaa)
 {
     PROCNAME("ptaaGetCount");
@@ -813,7 +813,7 @@ ptaaGetCount(PTAA  *ptaa)
  *              accessflag  (L_COPY or L_CLONE)
  *      Return: pta, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaaGetPta(PTAA    *ptaa,
            l_int32  index,
            l_int32  accessflag)
@@ -844,7 +844,7 @@ ptaaGetPta(PTAA    *ptaa,
  *              &y (<optional return> float y value)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaGetPt(PTAA       *ptaa,
            l_int32     ipta,
            l_int32     jpt,
@@ -883,7 +883,7 @@ PTA  *pta;
  *      Input:  filename
  *      Return: ptaa, or null on error
  */
-PTAA *
+LEPTONICA_EXPORT PTAA *
 ptaaRead(const char  *filename)
 {
 FILE  *fp;
@@ -912,7 +912,7 @@ PTAA  *ptaa;
  *      Input:  stream
  *      Return: ptaa, or null on error
  */
-PTAA *
+LEPTONICA_EXPORT PTAA *
 ptaaReadStream(FILE  *fp)
 {
 l_int32  i, n, version;
@@ -951,7 +951,7 @@ PTAA    *ptaa;
  *              type  (0 for float values; 1 for integer values)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaWrite(const char  *filename,
           PTAA        *ptaa,
           l_int32      type)
@@ -983,7 +983,7 @@ FILE  *fp;
  *              type  (0 for float values; 1 for integer values)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaaWriteStream(FILE    *fp,
                 PTAA    *ptaa,
                 l_int32  type)

@@ -85,7 +85,7 @@
  *      (1) Extracts the fg or bg boundary pixels for each component.
  *          Components are assumed to end at the boundary of pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixExtractBoundary(PIX     *pixs,
                    l_int32  type)
 {
@@ -123,7 +123,7 @@ PIX  *pixd;
  *          changes in pixs for pixels under the background of pixm.
  *      (5) If pixm is NULL, this is just pixMorphSequence().
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphSequenceMasked(PIX         *pixs,
                        PIX         *pixm,
                        const char  *sequence,
@@ -168,7 +168,7 @@ PIX  *pixd;
  *          or exceed a minimum size for the operation to take place.
  *      (5) Use NULL for boxa to avoid returning the boxa.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphSequenceByComponent(PIX         *pixs,
                             const char  *sequence,
                             l_int32      connectivity,
@@ -236,7 +236,7 @@ PIXA    *pixas, *pixad;
  *      (4) The input pixa should have a boxa giving the locations
  *          of the pix components.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaMorphSequenceByComponent(PIXA        *pixas,
                              const char  *sequence,
                              l_int32      minw,
@@ -313,7 +313,7 @@ PIXA    *pixad;
  *          equal or exceed a minimum size for the operation to take place.
  *      (5) Use NULL for @pboxa to avoid returning the boxa.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphSequenceByRegion(PIX         *pixs,
                          PIX         *pixm,
                          const char  *sequence,
@@ -389,7 +389,7 @@ PIXA    *pixam, *pixad;
  *      (4) The input pixam should have a boxa giving the locations
  *          of the regions in pixs.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaMorphSequenceByRegion(PIX         *pixs,
                           PIXA        *pixam,
                           const char  *sequence,
@@ -461,7 +461,7 @@ PIXA    *pixad;
  *      Return: pixd (union of the specified morphological operation
  *                    on pixs for each Sel in the Sela), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixUnionOfMorphOps(PIX     *pixs,
                    SELA    *sela,
                    l_int32  type)
@@ -514,7 +514,7 @@ SEL     *sel;
  *      Return: pixd (intersection of the specified morphological operation
  *                    on pixs for each Sel in the Sela), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixIntersectionOfMorphOps(PIX     *pixs,
                           SELA    *sela,
                           l_int32  type)
@@ -572,7 +572,7 @@ SEL     *sel;
  *              minh  (minimum height to consider; use 0 or 1 for any height)
  *      Return: pix (with holes filled in selected c.c.), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSelectiveConnCompFill(PIX     *pixs,
                          l_int32  connectivity,
                          l_int32  minw,
@@ -642,7 +642,7 @@ PIXA    *pixa;
  *        (the appropriately dilated version of) pixp, with the center
  *        of the Sel used to align pixp with pixs.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixRemoveMatchedPattern(PIX     *pixs,
                         PIX     *pixp,
                         PIX     *pixe,
@@ -746,7 +746,7 @@ SEL     *sel;
  *        Alignment is done using the origin of the Sel and the
  *        centroid of the eroded image to place the stencil pixp.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDisplayMatchedPattern(PIX       *pixs,
                          PIX       *pixp,
                          PIX       *pixe,
@@ -855,7 +855,7 @@ PIXCMAP  *cmap;
  *        efficiency is any consideration -- use pixSeedfillBinary()!
  *    (2) We use a 3x3 brick SEL for 8-cc filling and a 3x3 plus SEL for 4-cc.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixSeedfillMorph(PIX     *pixs,
                  PIX     *pixm,
                  l_int32  connectivity)
@@ -925,7 +925,7 @@ SEL     *sel_3;
  *              maxsize  (size of largest runlength counted)
  *      Return: numa of run-lengths
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 pixRunHistogramMorph(PIX     *pixs,
                      l_int32  runtype,
                      l_int32  direction,
@@ -1028,7 +1028,7 @@ SEL       *sel_2a;
  *          The L_TOPHAT_WHITE tophat can be accomplished by doing a
  *          L_TOPHAT_BLACK tophat on the inverse, or v.v.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixTophat(PIX     *pixs,
           l_int32  hsize,
           l_int32  vsize,
@@ -1126,7 +1126,7 @@ PIX  *pixt, *pixd;
  *      (6) For segmentation, the resulting image, pixd, can be thresholded
  *          and used as a seed for another filling operation.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixHDome(PIX     *pixs,
          l_int32  height,
          l_int32  connectivity)
@@ -1181,7 +1181,7 @@ PIX  *pixsd, *pixd;
  *      (4) The L_TOPHAT_WHITE flag emphasizes small bright regions,
  *          whereas the L_TOPHAT_BLACK flag emphasizes small dark regions.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixFastTophat(PIX     *pixs,
               l_int32  xsize,
               l_int32  ysize,
@@ -1243,7 +1243,7 @@ PIX  *pixt1, *pixt2, *pixt3, *pixd;
  *                          The width is (2 * smoothing + 1), so 0 is no-op.
  *      Return: pixd, or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphGradient(PIX     *pixs,
                  l_int32  hsize,
                  l_int32  vsize,
@@ -1295,7 +1295,7 @@ PIX  *pixg, *pixd;
  *          than 1 bpp or 8 bpp depth, and the centroid from that pix
  *          is saved as (0, 0).
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 pixaCentroids(PIXA  *pixa)
 {
 l_int32    i, n;
@@ -1345,7 +1345,7 @@ PTA       *pta;
  *      (1) Any table not passed in will be made internally and destroyed
  *          after use.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixCentroid(PIX        *pix,
             l_int32    *centtab,
             l_int32    *sumtab,

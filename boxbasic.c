@@ -129,7 +129,7 @@ static const l_int32  INITIAL_PTR_ARRAYSIZE2 = 20;   /* n'import quoi */
  *      (3) If you want to create only valid boxes, use boxCreateValid(),
  *          which returns NULL if either w or h is 0.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxCreate(l_int32  x,
           l_int32  y,
           l_int32  w,
@@ -172,7 +172,7 @@ BOX  *box;
  *  Notes:
  *      (1) This returns NULL if either w = 0 or h = 0.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxCreateValid(l_int32  x,
                l_int32  y,
                l_int32  w,
@@ -192,7 +192,7 @@ boxCreateValid(l_int32  x,
  *      Input:  box
  *      Return: copy of box, or null on error
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxCopy(BOX  *box)
 {
 BOX  *boxc;
@@ -214,7 +214,7 @@ BOX  *boxc;
  *      Input:  box
  *      Return: ptr to same box, or null on error
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxClone(BOX  *box)
 {
 
@@ -238,7 +238,7 @@ boxClone(BOX  *box)
  *      (1) Decrements the ref count and, if 0, destroys the box.
  *      (2) Always nulls the input ptr.
  */
-void
+LEPTONICA_EXPORT void
 boxDestroy(BOX  **pbox)
 {
 BOX  *box;
@@ -270,7 +270,7 @@ BOX  *box;
  *              &x, &y, &w, &h (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxGetGeometry(BOX      *box,
                l_int32  *px,
                l_int32  *py,
@@ -300,7 +300,7 @@ boxGetGeometry(BOX      *box,
  *              x, y, w, h (use -1 to leave unchanged)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxSetGeometry(BOX     *box,
                l_int32  x,
                l_int32  y,
@@ -319,7 +319,7 @@ boxSetGeometry(BOX     *box,
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 boxGetRefcount(BOX  *box)
 {
     PROCNAME("boxGetRefcount");
@@ -331,7 +331,7 @@ boxGetRefcount(BOX  *box)
 }
 
 
-l_int32
+LEPTONICA_EXPORT l_int32
 boxChangeRefcount(BOX     *box,
                   l_int32  delta)
 {
@@ -354,7 +354,7 @@ boxChangeRefcount(BOX     *box,
  *      Input:  n  (initial number of ptrs)
  *      Return: boxa, or null on error
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaCreate(l_int32  n)
 {
 BOXA  *boxa;
@@ -388,7 +388,7 @@ BOXA  *boxa;
  *      (1) See pix.h for description of the copyflag.
  *      (2) The copy-clone makes a new boxa that holds clones of each box.
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaCopy(BOXA    *boxa,
          l_int32  copyflag)
 {
@@ -432,7 +432,7 @@ BOXA    *boxac;
  *      - Decrements the ref count and, if 0, destroys the boxa.
  *      - Always nulls the input ptr.
  */
-void
+LEPTONICA_EXPORT void
 boxaDestroy(BOXA  **pboxa)
 {
 l_int32  i;
@@ -470,7 +470,7 @@ BOXA    *boxa;
  *              copyflag (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaAddBox(BOXA    *boxa,
            BOX     *box,
            l_int32  copyflag)
@@ -515,7 +515,7 @@ BOX     *boxc;
  *  Notes:
  *      (1) Reallocs with doubled size of ptr array.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaExtendArray(BOXA  *boxa)
 {
     PROCNAME("boxaExtendArray");
@@ -537,7 +537,7 @@ boxaExtendArray(BOXA  *boxa)
  *  Notes:
  *      (1) If necessary, reallocs new boxa ptr array to @size.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaExtendArrayToSize(BOXA    *boxa,
                       l_int32  size)
 {
@@ -566,7 +566,7 @@ boxaExtendArrayToSize(BOXA    *boxa,
  *      Input:  boxa
  *      Return: count (of all boxes); 0 if no boxes or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaGetCount(BOXA  *boxa)
 {
     PROCNAME("boxaGetCount");
@@ -583,7 +583,7 @@ boxaGetCount(BOXA  *boxa)
  *      Input:  boxa
  *      Return: count (of valid boxes); 0 if no valid boxes or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaGetValidCount(BOXA  *boxa)
 {
 l_int32  n, i, w, h, count;
@@ -611,7 +611,7 @@ l_int32  n, i, w, h, count;
  *              accessflag  (L_COPY or L_CLONE)
  *      Return: box, or null on error
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxaGetBox(BOXA    *boxa,
            l_int32  index,
            l_int32  accessflag)
@@ -648,7 +648,7 @@ boxaGetBox(BOXA    *boxa,
  *          This is an atypical situation; usually you want to put only
  *          valid boxes in a boxa.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 boxaGetValidBox(BOXA    *boxa,
                 l_int32  index,
                 l_int32  accessflag)
@@ -678,7 +678,7 @@ BOX     *box;
  *              &x, &y, &w, &h (<optional return>; each can be null)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaGetBoxGeometry(BOXA     *boxa,
                    l_int32   index,
                    l_int32  *px,
@@ -722,7 +722,7 @@ BOX  *box;
  *      (1) In-place replacement of one box.
  *      (2) The previous box at that location is destroyed.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaReplaceBox(BOXA    *boxa,
                l_int32  index,
                BOX     *box)
@@ -758,7 +758,7 @@ boxaReplaceBox(BOXA    *boxa,
  *      (4) This should not be used repeatedly to insert into large arrays,
  *          because the function is O(n).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaInsertBox(BOXA    *boxa,
               l_int32  index,
               BOX     *box)
@@ -801,7 +801,7 @@ BOX    **array;
  *      (2) It should not be used repeatedly to remove boxes from
  *          large arrays, because the function is O(n).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaRemoveBox(BOXA    *boxa,
               l_int32  index)
 {
@@ -860,7 +860,7 @@ BOX    **array;
  *          w = 0 and/or h = 0.  Then boxaGetValidBox() will return
  *          NULL for the invalid boxes.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaInitFull(BOXA  *boxa,
              BOX   *box)
 {
@@ -894,7 +894,7 @@ BOX     *boxt;
  *      (1) This destroys all boxes in the boxa, setting the ptrs
  *          to null.  The number of allocated boxes, n, is set to 0.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaClear(BOXA  *boxa)
 {
 l_int32  i, n;
@@ -921,7 +921,7 @@ l_int32  i, n;
  *      Input:  size of boxa ptr array to be alloc'd (0 for default)
  *      Return: baa, or null on error
  */
-BOXAA *
+LEPTONICA_EXPORT BOXAA *
 boxaaCreate(l_int32  n)
 {
 BOXAA  *baa;
@@ -955,7 +955,7 @@ BOXAA  *baa;
  *      (1) L_COPY makes a copy of each boxa in baas.
  *          L_CLONE makes a clone of each boxa in baas.
  */
-BOXAA *
+LEPTONICA_EXPORT BOXAA *
 boxaaCopy(BOXAA   *baas,
           l_int32  copyflag)
 {
@@ -987,7 +987,7 @@ BOXAA   *baad;
  *      Input:  &boxaa (<will be set to null before returning>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 boxaaDestroy(BOXAA  **pbaa)
 {
 l_int32  i;
@@ -1025,7 +1025,7 @@ BOXAA   *baa;
  *              copyflag  (L_INSERT, L_COPY, L_CLONE)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaAddBoxa(BOXAA   *baa,
              BOXA    *ba,
              l_int32  copyflag)
@@ -1062,7 +1062,7 @@ BOXA    *bac;
  *      Input:  boxaa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaExtendArray(BOXAA  *baa)
 {
 
@@ -1090,7 +1090,7 @@ boxaaExtendArray(BOXAA  *baa)
  *      Input:  boxaa
  *      Return: count (number of boxa), or 0 if no boxa or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaGetCount(BOXAA  *baa)
 {
     PROCNAME("boxaaGetCount");
@@ -1107,7 +1107,7 @@ boxaaGetCount(BOXAA  *baa)
  *      Input:  boxaa
  *      Return: count (number of boxes), or 0 if no boxes or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaGetBoxCount(BOXAA  *baa)
 {
 BOXA    *boxa;
@@ -1137,7 +1137,7 @@ l_int32  n, sum, i;
  *              accessflag   (L_COPY or L_CLONE)
  *      Return: boxa, or null on error
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaaGetBoxa(BOXAA   *baa,
              l_int32  index,
              l_int32  accessflag)
@@ -1171,7 +1171,7 @@ l_int32  n;
  *          is inserted in its place.
  *      (2) If the index is invalid, return 1 (error)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaReplaceBoxa(BOXAA   *baa,
                  l_int32  index,
                  BOXA    *boxa)
@@ -1210,7 +1210,7 @@ l_int32  n;
  *      (4) This should not be used repeatedly to insert into large arrays,
  *          because the function is O(n).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaInsertBoxa(BOXAA   *baa,
                 l_int32  index,
                 BOXA    *boxa)
@@ -1254,7 +1254,7 @@ BOXA   **array;
  *      (2) This should not be used repeatedly on large arrays,
  *          because the function is O(n).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaRemoveBoxa(BOXAA   *baa,
                 l_int32  index)
 {
@@ -1292,7 +1292,7 @@ BOXA   **array;
  *  Notes:
  *      (1) Adds to an existing boxa only.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaAddBox(BOXAA   *baa,
             l_int32  index,
             BOX     *box,
@@ -1326,7 +1326,7 @@ BOXA    *boxa;
  *      Input:  filename
  *      Return: boxaa, or null on error
  */
-BOXAA *
+LEPTONICA_EXPORT BOXAA *
 boxaaRead(const char  *filename)
 {
 FILE   *fp;
@@ -1355,7 +1355,7 @@ BOXAA  *baa;
  *      Input:  stream
  *      Return: boxaa, or null on error
  */
-BOXAA *
+LEPTONICA_EXPORT BOXAA *
 boxaaReadStream(FILE  *fp)
 {
 l_int32  n, i, x, y, w, h, version;
@@ -1397,7 +1397,7 @@ BOXAA   *baa;
  *              boxaa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaWrite(const char  *filename,
            BOXAA       *baa)
 {
@@ -1427,7 +1427,7 @@ FILE  *fp;
  *             boxaa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaaWriteStream(FILE   *fp,
                  BOXAA  *baa)
 {
@@ -1470,7 +1470,7 @@ BOXA    *boxa;
  *      Input:  filename
  *      Return: boxa, or null on error
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaRead(const char  *filename)
 {
 FILE  *fp;
@@ -1499,7 +1499,7 @@ BOXA  *boxa;
  *      Input:  stream
  *      Return: boxa, or null on error
  */
-BOXA *
+LEPTONICA_EXPORT BOXA *
 boxaReadStream(FILE  *fp)
 {
 l_int32  n, i, x, y, w, h, version;
@@ -1542,7 +1542,7 @@ BOXA    *boxa;
  *              boxa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaWrite(const char  *filename,
           BOXA        *boxa)
 {
@@ -1572,7 +1572,7 @@ FILE  *fp;
  *             boxa
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxaWriteStream(FILE  *fp,
                 BOXA  *boxa)
 {
@@ -1615,7 +1615,7 @@ BOX     *box;
  *      (2) Use serialization functions to write to file if you want
  *          to read the data back.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 boxPrintStreamInfo(FILE  *fp,
                    BOX   *box)
 {

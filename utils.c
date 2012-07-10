@@ -182,7 +182,7 @@ static const char sepchar = '/';
  *              ival (return val)
  *      Return: ival (typically 1)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 returnErrorInt(const char  *msg, 
                const char  *procname, 
                l_int32      ival)
@@ -200,7 +200,7 @@ returnErrorInt(const char  *msg,
  *              fval (return val)
  *      Return: fval
  */
-l_float32
+LEPTONICA_EXPORT l_float32
 returnErrorFloat(const char  *msg, 
                  const char  *procname, 
                  l_float32    fval)
@@ -218,7 +218,7 @@ returnErrorFloat(const char  *msg,
  *              pval  (return val)
  *      Return: pval (typically null)
  */
-void *
+LEPTONICA_EXPORT void *
 returnErrorPtr(const char  *msg,
                const char  *procname, 
                void        *pval)
@@ -234,7 +234,7 @@ returnErrorPtr(const char  *msg,
  *      Input: msg (error message)
  *             procname
  */
-void
+LEPTONICA_EXPORT void
 l_error(const char  *msg,
         const char  *procname)
 {
@@ -250,7 +250,7 @@ l_error(const char  *msg,
  *             procname
  *             str (embedded in error message via %s)
  */
-void
+LEPTONICA_EXPORT void
 l_errorString(const char  *msg,
               const char  *procname,
               const char  *str)
@@ -285,7 +285,7 @@ char    *charbuf;
  *             procname
  *             ival (embedded in error message via %d)
  */
-void
+LEPTONICA_EXPORT void
 l_errorInt(const char  *msg,
            const char  *procname,
            l_int32      ival)
@@ -319,7 +319,7 @@ char    *charbuf;
  *             procname
  *             fval (embedded in error message via %f)
  */
-void
+LEPTONICA_EXPORT void
 l_errorFloat(const char  *msg,
              const char  *procname,
              l_float32    fval)
@@ -352,7 +352,7 @@ char    *charbuf;
  *      Input: msg (warning message)
  *             procname
  */
-void
+LEPTONICA_EXPORT void
 l_warning(const char  *msg,
           const char  *procname)
 {
@@ -368,7 +368,7 @@ l_warning(const char  *msg,
  *             procname
  *             str (embedded in warning message via %s)
  */
-void
+LEPTONICA_EXPORT void
 l_warningString(const char  *msg,
                 const char  *procname,
                 const char  *str)
@@ -403,7 +403,7 @@ char    *charbuf;
  *             procname
  *             ival (embedded in warning message via %d)
  */
-void
+LEPTONICA_EXPORT void
 l_warningInt(const char  *msg,
              const char  *procname,
              l_int32      ival)
@@ -437,7 +437,7 @@ char    *charbuf;
  *             procname
  *             ival1, ival2 (two args, embedded in message via %d)
  */
-void
+LEPTONICA_EXPORT void
 l_warningInt2(const char  *msg,
               const char  *procname,
               l_int32      ival1,
@@ -472,7 +472,7 @@ char    *charbuf;
  *             procname
  *             fval (embedded in warning message via %f)
  */
-void
+LEPTONICA_EXPORT void
 l_warningFloat(const char  *msg,
                const char  *procname,
                l_float32    fval)
@@ -506,7 +506,7 @@ char    *charbuf;
  *             procname
  *             fval1, fval2 (two args, embedded in message via %f)
  */
-void
+LEPTONICA_EXPORT void
 l_warningFloat2(const char  *msg,
                 const char  *procname,
                 l_float32    fval1,
@@ -540,7 +540,7 @@ char    *charbuf;
  *      Input: msg (info message)
  *             procname
  */
-void
+LEPTONICA_EXPORT void
 l_info(const char  *msg,
        const char  *procname)
 {
@@ -556,7 +556,7 @@ l_info(const char  *msg,
  *             procname
  *             str (embedded in warning message via %s)
  */
-void
+LEPTONICA_EXPORT void
 l_infoString(const char  *msg,
              const char  *procname,
              const char  *str)
@@ -590,7 +590,7 @@ char    *charbuf;
  *             procname
  *             ival (embedded in info message via %d)
  */
-void
+LEPTONICA_EXPORT void
 l_infoInt(const char  *msg,
           const char  *procname, 
           l_int32      ival)
@@ -624,7 +624,7 @@ char    *charbuf;
  *             procname
  *             ival1, ival2 (two args, embedded in info message via %d)
  */
-void
+LEPTONICA_EXPORT void
 l_infoInt2(const char  *msg,
            const char  *procname, 
            l_int32      ival1,
@@ -659,7 +659,7 @@ char    *charbuf;
  *             procname
  *             fval (embedded in info message via %f)
  */
-void
+LEPTONICA_EXPORT void
 l_infoFloat(const char  *msg,
             const char  *procname, 
             l_float32    fval)
@@ -693,7 +693,7 @@ char    *charbuf;
  *             procname
  *             fval1, fval2 (two args, embedded in info message via %f)
  */
-void
+LEPTONICA_EXPORT void
 l_infoFloat2(const char  *msg,
              const char  *procname, 
              l_float32    fval1,
@@ -731,7 +731,7 @@ char    *charbuf;
  *      Input:  src string
  *      Return: dest copy of src string, or null on error
  */
-char *
+LEPTONICA_EXPORT char *
 stringNew(const char  *src)
 {
 l_int32  len;
@@ -767,7 +767,7 @@ char    *dest;
  *      (3) We don't call strncpy() because valgrind complains about
  *          use of uninitialized values.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringCopy(char        *dest,
            const char  *src,
            l_int32      n)
@@ -802,7 +802,7 @@ l_int32  i;
  *      (2) Puts a copy of src string in the dest
  *      (3) If either or both strings are null, does something reasonable.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringReplace(char       **pdest,
               const char  *src)
 {
@@ -845,7 +845,7 @@ l_int32  len;
  *          If size bytes are checked without finding a NUL byte, then
  *          an error is indicated by returning size.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringLength(const char  *src,
              size_t       size)
 {
@@ -884,7 +884,7 @@ l_int32  i;
  *      (4) N.B. The order of 2nd and 3rd args is reversed from that in
  *          strncat, as in the Windows function strcat_s().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringCat(char        *dest,
           size_t       size,
           const char  *src)
@@ -930,7 +930,7 @@ l_int32  lendest, lensrc;
  *      (2) It is not an error if either or both of the strings
  *          are empty, or if either or both of the pointers are null.
  */
-char *
+LEPTONICA_EXPORT char *
 stringJoin(const char  *src1, 
            const char  *src2)
 {
@@ -960,7 +960,7 @@ l_int32  srclen1, srclen2, destlen;
  *      Input:  src (string)
  *      Return: dest (newly-allocated reversed string)
  */
-char *
+LEPTONICA_EXPORT char *
 stringReverse(const char  *src)
 {
 char    *dest;
@@ -1010,7 +1010,7 @@ l_int32  i, len;
  *            is used in all subsequent calls.
  *      (7) This is only slightly slower than strtok_k.
  */
-char *
+LEPTONICA_EXPORT char *
 strtokSafe(char        *cstr,
            const char  *seps,
            char       **psaveptr)
@@ -1100,7 +1100,7 @@ l_int32  istart, i, j, nchars;
  *      (5) If no separator token is found, 'head' contains a copy
  *          of the input string and 'tail' is null.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringSplitOnToken(char        *cstr,
                    const char  *seps,
                    char       **phead,
@@ -1137,7 +1137,7 @@ char  *saveptr;
  *              remchars  (string of chars to be removed from src)
  *      Return: dest (string with specified chars removed), or null on error
  */
-char *
+LEPTONICA_EXPORT char *
 stringRemoveChars(const char  *src,
                   const char  *remchars) 
 {
@@ -1180,7 +1180,7 @@ l_int32  nsrc, i, k;
  *      (3) If the substring is not found and loc is returned, it has
  *          the value -1.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 stringFindSubstr(const char  *src,
                  const char  *sub,
                  l_int32     *ploc)
@@ -1230,7 +1230,7 @@ char  *ptr;
  *      (5) N.B. If ploc is not null, loc must always be initialized.
  *          To search the string from the beginning, set loc = 0.
  */
-char *
+LEPTONICA_EXPORT char *
 stringReplaceSubstr(const char  *src,
                     const char  *sub1,
                     const char  *sub2,
@@ -1294,7 +1294,7 @@ l_int32  nsrc, nsub1, nsub2, len, npre, loc;
  *      (2) To only remove each instance of sub1, use "" for sub2
  *      (3) Returns NULL if sub1 and sub2 are the same.
  */
-char *
+LEPTONICA_EXPORT char *
 stringReplaceEachSubstr(const char  *src,
                         const char  *sub1,
                         const char  *sub2,
@@ -1348,7 +1348,7 @@ l_int32  loc;
  *          we must give the length of the array.
  *      (2) This finds every occurrence in @data of @sequence.
  */
-NUMA *
+LEPTONICA_EXPORT NUMA *
 arrayFindEachSequence(const l_uint8  *data,
                       l_int32         datalen,
                       const l_uint8  *sequence,
@@ -1405,7 +1405,7 @@ NUMA    *na;
  *          must not exceed the actual length of the @sequence byte array.
  *      (3) If the sequence is not found, the offset will be set to -1.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 arrayFindSequence(const l_uint8  *data,
                   l_int32         datalen,
                   const l_uint8  *sequence,
@@ -1473,7 +1473,7 @@ l_int32  i, j, found, lastpos;
  *          and it takes the address of the input ptr and
  *          nulls the handle.
  */
-void *
+LEPTONICA_EXPORT void *
 reallocNew(void   **pindata,
            l_int32  oldsize,
            l_int32  newsize)
@@ -1527,7 +1527,7 @@ void    *newdata;
  *              &nbytes (<return> number of bytes read)
  *      Return: data, or null on error
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 l_binaryRead(const char  *filename, 
              size_t      *pnbytes)
 {
@@ -1565,7 +1565,7 @@ FILE     *fp;
  *      (2) Side effect: this re-positions the stream ptr to the
  *          beginning of the file.
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 l_binaryReadStream(FILE    *fp, 
                    size_t  *pnbytes)
 {
@@ -1597,7 +1597,7 @@ l_uint8  *data;
  *              nbytes  (size of data array)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 l_binaryWrite(const char  *filename,
               const char  *operation,
               void        *data,
@@ -1639,7 +1639,7 @@ FILE  *fp;
  *      Input:  filename
  *      Return: nbytes in file; 0 on error
  */
-size_t
+LEPTONICA_EXPORT size_t
 nbytesInFile(const char  *filename)
 {
 size_t  nbytes;
@@ -1663,7 +1663,7 @@ FILE   *fp;
  *      Input:  file stream
  *      Return: nbytes in file; 0 on error
  */
-size_t
+LEPTONICA_EXPORT size_t
 fnbytesInFile(FILE  *fp)
 {
 size_t  nbytes, pos;
@@ -1697,7 +1697,7 @@ size_t  nbytes, pos;
  *          be null terminated.  This guarantees that after the memcpy,
  *          the result is automatically null terminated.
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 l_binaryCopy(l_uint8  *datas,
              size_t    size)
 {
@@ -1725,7 +1725,7 @@ l_uint8  *datad;
  *              newfile (to this file)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 fileCopy(const char  *srcfile,
          const char  *newfile)
 {
@@ -1755,7 +1755,7 @@ l_uint8  *data;
  *              destfile (file to add to)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 fileConcatenate(const char  *srcfile,
                 const char  *destfile)
 {
@@ -1783,7 +1783,7 @@ l_uint8  *data;
  *              str (string to append to file)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 fileAppendString(const char  *filename,
                  const char  *str)
 {
@@ -1815,7 +1815,7 @@ FILE  *fp;
  *              &same (<return> 1 if identical; 0 if different)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 filesAreIdentical(const char  *fname1,
                   const char  *fname2,
                   l_int32     *psame)
@@ -1869,13 +1869,13 @@ l_uint8  *array1, *array2;
  *--------------------------------------------------------------------*/
 #ifdef L_BIG_ENDIAN
 
-l_uint16
+LEPTONICA_EXPORT l_uint16
 convertOnBigEnd16(l_uint16  shortin)
 {
     return ((shortin << 8) | (shortin >> 8));
 }
 
-l_uint16
+LEPTONICA_EXPORT l_uint16
 convertOnLittleEnd16(l_uint16  shortin)
 {
     return  shortin;
@@ -1883,13 +1883,13 @@ convertOnLittleEnd16(l_uint16  shortin)
 
 #else     /* L_LITTLE_ENDIAN */
 
-l_uint16
+LEPTONICA_EXPORT l_uint16
 convertOnLittleEnd16(l_uint16  shortin)
 {
     return ((shortin << 8) | (shortin >> 8));
 }
 
-l_uint16
+LEPTONICA_EXPORT l_uint16
 convertOnBigEnd16(l_uint16  shortin)
 {
     return  shortin;
@@ -1903,14 +1903,14 @@ convertOnBigEnd16(l_uint16  shortin)
  *--------------------------------------------------------------------*/
 #ifdef L_BIG_ENDIAN
 
-l_uint32
+LEPTONICA_EXPORT l_uint32
 convertOnBigEnd32(l_uint32  wordin)
 {
     return ((wordin << 24) | ((wordin << 8) & 0x00ff0000) |
             ((wordin >> 8) & 0x0000ff00) | (wordin >> 24));
 }
 
-l_uint32
+LEPTONICA_EXPORT l_uint32
 convertOnLittleEnd32(l_uint32  wordin)
 {
     return wordin;
@@ -1918,14 +1918,14 @@ convertOnLittleEnd32(l_uint32  wordin)
 
 #else  /*  L_LITTLE_ENDIAN */
 
-l_uint32
+LEPTONICA_EXPORT l_uint32
 convertOnLittleEnd32(l_uint32  wordin)
 {
     return ((wordin << 24) | ((wordin << 8) & 0x00ff0000) |
             ((wordin >> 8) & 0x0000ff00) | (wordin >> 24));
 }
 
-l_uint32
+LEPTONICA_EXPORT l_uint32
 convertOnBigEnd32(l_uint32  wordin)
 {
     return wordin;
@@ -1949,7 +1949,7 @@ convertOnBigEnd32(l_uint32  wordin)
  *          It should be used whenever you want to run fopen() to
  *          read from a stream.
  */
-FILE *
+LEPTONICA_EXPORT FILE *
 fopenReadStream(const char  *filename)
 {
 char  *fname, *tail;
@@ -1989,7 +1989,7 @@ FILE  *fp;
  *          It should be used whenever you want to run fopen() to
  *          write or append to a stream.
  */
-FILE *
+LEPTONICA_EXPORT FILE *
 fopenWriteStream(const char  *filename,
                  const char  *modestring)
 {
@@ -2037,7 +2037,7 @@ FILE  *fp;
  *      (1) This must be used by any application that passes
  *          a file handle to a leptonica Windows DLL.
  */
-FILE *
+LEPTONICA_EXPORT FILE *
 lept_fopen(const char  *filename,
            const char  *mode)
 {
@@ -2065,7 +2065,7 @@ lept_fopen(const char  *filename,
  *      (1) This should be used by any application that accepts
  *          a file handle generated by a leptonica Windows DLL.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 lept_fclose(FILE *fp)
 {
     PROCNAME("lept_fclose");
@@ -2089,7 +2089,7 @@ lept_fclose(FILE *fp)
  *          with lept_free() to avoid C-runtime boundary problems.
  *          Just use these two functions throughout your application.
  */
-void *
+LEPTONICA_EXPORT void *
 lept_calloc(size_t  nmemb,
             size_t  size)
 {
@@ -2109,7 +2109,7 @@ lept_calloc(size_t  nmemb,
  *      (1) This should be used by any application that accepts
  *          heap data allocated by a leptonica Windows DLL.
  */
-void
+LEPTONICA_EXPORT void
 lept_free(void *ptr)
 {
     if (!ptr) return;
@@ -2144,7 +2144,7 @@ lept_free(void *ptr)
  *      (4) N.B. The input pathname must have unix directory separators
  *          for unix and windows directory separators for windows.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 splitPathAtDirectory(const char  *pathname,
                      char       **pdir,
                      char       **ptail)
@@ -2208,7 +2208,7 @@ char  *cpathname, *lastslash;
  *      (4) N.B. The input pathname must have unix directory separators
  *          for unix and windows directory separators for windows.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 splitPathAtExtension(const char  *pathname,
                      char       **pbasename,
                      char       **pextension)
@@ -2273,7 +2273,7 @@ char   empty[4] = "";
  *      (4) In all cases, the resulting pathname is not terminated with a slash
  *      (5) The caller is responsible for freeing the pathname.
  */
-char *
+LEPTONICA_EXPORT char *
 genPathname(const char  *dir,
             const char  *fname)
 {
@@ -2381,7 +2381,7 @@ l_int32  dirlen, namelen, size;
  *          (c) there is the possiblity of an attack where the intruder
  *              is logged onto the server and might try to guess filenames.
  */
-char *
+LEPTONICA_EXPORT char *
 genTempFilename(const char  *dir,
                 const char  *tail,
                 l_int32      usetime,
@@ -2472,7 +2472,7 @@ l_int32  ret;
  *          is found, this returns -1, without an error message.  The
  *          caller needs to check.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 extractNumberFromFilename(const char  *fname,
                           l_int32      numpre,
                           l_int32      numpost)
@@ -2521,7 +2521,7 @@ l_int32  len, nret, num;
  *      (1) For example, to choose a rand integer between 0 and 99,
  *          use @range = 100.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 genRandomIntegerInRange(l_int32   range,
                         l_int32   seed,
                         l_int32  *pval)
@@ -2552,7 +2552,7 @@ genRandomIntegerInRange(l_int32   range,
  *  Notes:
  *      (1) The caller has responsibility to free the memory.
  */
-char *
+LEPTONICA_EXPORT char *
 getLeptonicaVersion()
 {
     char *version = (char *)CALLOC(100, sizeof(char));
@@ -2609,13 +2609,13 @@ static struct rusage rusage_after;
  *      ....
  *      fprintf(stderr, "Elapsed time = %7.3f sec\n", stopTimer());
  */
-void
+LEPTONICA_EXPORT void
 startTimer(void)
 {
     getrusage(RUSAGE_SELF, &rusage_before);
 }
 
-l_float32
+LEPTONICA_EXPORT l_float32
 stopTimer(void)
 {
 l_int32  tsec, tusec;
@@ -2641,7 +2641,7 @@ l_int32  tsec, tusec;
  *      ....
  *      fprintf(stderr, "Elapsed time 1 = %7.3f sec\n", stopTimerNested(t1));
  */
-L_TIMER
+LEPTONICA_EXPORT L_TIMER
 startTimerNested(void)
 {
 struct rusage  *rusage_start;
@@ -2651,7 +2651,7 @@ struct rusage  *rusage_start;
     return rusage_start;
 }
 
-l_float32
+LEPTONICA_EXPORT l_float32
 stopTimerNested(L_TIMER  rusage_start)
 {
 l_int32        tsec, tusec;
@@ -2675,7 +2675,7 @@ struct rusage  rusage_stop;
  *              &usec (<optional return> in microseconds since birth of Unix)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 l_getCurrentTime(l_int32  *sec,
                  l_int32  *usec)
 {
@@ -2697,7 +2697,7 @@ struct timeval tv;
 static ULARGE_INTEGER utime_before;
 static ULARGE_INTEGER utime_after;
 
-void
+LEPTONICA_EXPORT void
 startTimer(void)
 {
 HANDLE    this_process;
@@ -2711,7 +2711,7 @@ FILETIME  start, stop, kernel, user;
     utime_before.HighPart = user.dwHighDateTime;
 }
 
-l_float32
+LEPTONICA_EXPORT l_float32
 stopTimer(void)
 {
 HANDLE     this_process;
@@ -2728,7 +2728,7 @@ ULONGLONG  hnsec;  /* in units of hecto-nanosecond (100 ns) intervals */
     return (l_float32)(signed)hnsec / 10000000.0;
 }
 
-L_TIMER
+LEPTONICA_EXPORT L_TIMER
 startTimerNested(void)
 {
 HANDLE           this_process;
@@ -2745,7 +2745,7 @@ ULARGE_INTEGER  *utime_start;
     return utime_start;
 }
 
-l_float32
+LEPTONICA_EXPORT l_float32
 stopTimerNested(L_TIMER  utime_start)
 {
 HANDLE          this_process;
@@ -2764,7 +2764,7 @@ ULONGLONG       hnsec;  /* in units of 100 ns intervals */
     return (l_float32)(signed)hnsec / 10000000.0;
 }
 
-void
+LEPTONICA_EXPORT void
 l_getCurrentTime(l_int32  *sec,
                  l_int32  *usec)
 {
@@ -2796,7 +2796,7 @@ LONGLONG        usecs;
  *      Input:  (none)
  *      Return: formatted date string, or null on error
  */
-char *
+LEPTONICA_EXPORT char *
 l_getFormattedDate()
 {
 char        buf[64];
@@ -2821,7 +2821,7 @@ struct tm  *tmp2;
  *              &nbytes (<return> number of bytes read)
  *      Return: array, or null on error
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 arrayRead(const char  *fname,
           l_int32     *pnbytes)
 {
@@ -2858,7 +2858,7 @@ FILE     *fp;
  *      (1) N.B.: as a side effect, this always re-positions the
  *          stream ptr to the beginning of the file.
  */
-l_uint8 *
+LEPTONICA_EXPORT l_uint8 *
 arrayReadStream(FILE     *fp,
                 l_int32  *pnbytes)
 {

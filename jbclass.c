@@ -276,7 +276,7 @@ static l_int32 finalPositioningForAlignment(PIX *pixs, l_int32 x, l_int32 y,
  *                    when using size = 2, 0.97 is a reasonable value)
  *      Return: jbclasser if OK; NULL on error
  */
-JBCLASSER *
+LEPTONICA_EXPORT JBCLASSER *
 jbRankHausInit(l_int32    components,
                l_int32    maxwidth,
                l_int32    maxheight,
@@ -334,7 +334,7 @@ JBCLASSER  *classer;
  *          a very high thresh (e.g., 0.95) will not cause a significant
  *          increase in the number of classes.
  */
-JBCLASSER *
+LEPTONICA_EXPORT JBCLASSER *
 jbCorrelationInit(l_int32    components,
                   l_int32    maxwidth,
                   l_int32    maxheight,
@@ -354,7 +354,7 @@ jbCorrelationInit(l_int32    components,
  *  Note: acts the same as jbCorrelationInit(), but the resulting
  *        object doesn't keep a list of all the components.
  */
-JBCLASSER *
+LEPTONICA_REAL_EXPORT JBCLASSER *
 jbCorrelationInitWithoutComponents(l_int32    components,
                                    l_int32    maxwidth,
                                    l_int32    maxheight,
@@ -425,7 +425,7 @@ JBCLASSER  *classer;
  *      (1) jbclasser makes a copy of the array of file names.
  *      (2) The caller is still responsible for destroying the input array.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbAddPages(JBCLASSER  *classer,
            SARRAY     *safiles)
 {
@@ -467,7 +467,7 @@ PIX     *pix;
  *              pixs (of input page)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 jbAddPage(JBCLASSER  *classer,
           PIX        *pixs)
 {
@@ -510,7 +510,7 @@ PIXA  *pixas;
  *      (1) If there are no components on the page, we don't require input
  *          of empty boxas or pixas, although that's the typical situation.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbAddPageComponents(JBCLASSER  *classer,
                     PIX        *pixs,
                     BOXA       *boxas,
@@ -572,7 +572,7 @@ l_int32  n;
  *              pixas (of new components for classification)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbClassifyRankHaus(JBCLASSER  *classer,
                    BOXA       *boxa,
                    PIXA       *pixas)
@@ -829,7 +829,7 @@ SEL        *sel;
  *  Checks are done in both direction.  A single pixel not
  *  contained in either direction results in failure of the test.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixHaustest(PIX       *pix1,
             PIX       *pix2,
             PIX       *pix3,
@@ -924,7 +924,7 @@ PIX     *pixt;
  *  Failure of the test in either direction results in failure
  *  of the test.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixRankHaustest(PIX       *pix1,
                 PIX       *pix2,
                 PIX       *pix3,
@@ -1011,7 +1011,7 @@ PIX     *pixt;
  *              pixas (of new components for classification)
  *      Return: 0 if OK; 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbClassifyCorrelation(JBCLASSER  *classer,
                       BOXA       *boxa,
                       PIXA       *pixas)
@@ -1288,7 +1288,7 @@ l_uint8     byte;
  *              &ppixa (<return> component items)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbGetComponents(PIX     *pixs,
                 l_int32  components,
                 l_int32  maxwidth,
@@ -1416,7 +1416,7 @@ PIXA      *pixa, *pixat;
  *          is advisable to use a larger maxsize, say between 10 and 14.
  *      (3) The best size for dilating to get word masks is optionally returned.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixWordMaskByDilation(PIX      *pixs,
                       l_int32   maxsize,
                       l_int32  *psize)
@@ -1518,7 +1518,7 @@ SEL     *sel;
  *                     or null on error
  *
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 jbAccumulateComposites(PIXAA  *pixaa,
                        NUMA  **pna,
                        PTA   **pptat)
@@ -1608,7 +1608,7 @@ PTA       *ptat, *pta;
  *      Return: pixad (8 bpp templates for each class), or null on error
  *
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 jbTemplatesFromComposites(PIXA  *pixac,
                           NUMA  *na)
 {
@@ -1653,7 +1653,7 @@ PIXA      *pixad;
  *              components (JB_CONN_COMPS, JB_CHARACTERS, JB_WORDS)
  *      Return: jbclasser, or null on error
  */
-JBCLASSER *
+LEPTONICA_EXPORT JBCLASSER *
 jbClasserCreate(l_int32  method,
                 l_int32  components)
 {
@@ -1693,7 +1693,7 @@ JBCLASSER  *classer;
  *      Input: &classer (<to be nulled>)
  *      Return: void
  */
-void
+LEPTONICA_REAL_EXPORT void
 jbClasserDestroy(JBCLASSER  **pclasser)
 {
 JBCLASSER  *classer;
@@ -1740,7 +1740,7 @@ JBCLASSER  *classer;
  *          be destroyed by the caller.
  *      (4) Input 0 to use the default values for latticew and/or latticeh,
  */
-JBDATA *
+LEPTONICA_EXPORT JBDATA *
 jbDataSave(JBCLASSER  *classer)
 {
 l_int32  maxw, maxh;
@@ -1781,7 +1781,7 @@ PIX     *pix;
  *      Input: &data (<to be nulled>)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 jbDataDestroy(JBDATA  **pdata)
 {
 JBDATA  *data;
@@ -1806,7 +1806,7 @@ JBDATA  *data;
  *      Input:  rootname (for template and data files)
  *      Return: jbdata, or NULL on error
  */
-JBDATA *
+LEPTONICA_EXPORT JBDATA *
 jbDataRead(const char  *rootname)
 {
 char      fname[L_BUF_SIZE];
@@ -1901,7 +1901,7 @@ SARRAY   *sa;
  *      Return: pixa (reconstruction of original images, using templates) or
  *              null on error
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 jbDataRender(JBDATA  *data,
              l_int32  debugflag)
 {
@@ -2006,7 +2006,7 @@ PTA      *ptaul;
  *          the appropriate integral difference.
  *      (3) The templates and stored instances are all bordered.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 jbGetULCorners(JBCLASSER  *classer,
                PIX        *pixs,
                BOXA       *boxa)
@@ -2094,7 +2094,7 @@ PTA       *ptac, *ptact, *ptaul;
  *          corner) because the difference between y-values
  *          of successive instances is typically close to zero.
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 jbGetLLCorners(JBCLASSER  *classer)
 {
 l_int32    i, iclass, n, x1, y1, h;

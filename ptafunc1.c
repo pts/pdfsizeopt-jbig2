@@ -74,7 +74,7 @@ static const l_int32  DEFAULT_SPREADING_FACTOR = 7500;
  *              subfactor (subsample factor, >= 1)
  *      Return: ptad (evenly sampled pt values from ptas, or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaSubsample(PTA     *ptas,
              l_int32  subfactor)
 {
@@ -114,7 +114,7 @@ PTA       *ptad;
  *      (1) istart < 0 is taken to mean 'read from the start' (istart = 0)
  *      (2) iend <= 0 means 'read to the end'
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaJoin(PTA     *ptad,
         PTA     *ptas,
         l_int32  istart,
@@ -156,7 +156,7 @@ l_int32  ns, i, x, y;
  *              type  (0 for float values; 1 for integer values)
  *      Return: ptad (reversed pta), or null on error
  */
-PTA  *
+LEPTONICA_EXPORT PTA  *
 ptaReverse(PTA     *ptas,
            l_int32  type)
 {
@@ -201,7 +201,7 @@ PTA       *ptad;
  *          resulting pta also starts and ends on the same point
  *          (which in this case is (xs, ys).
  */
-PTA  *
+LEPTONICA_EXPORT PTA  *
 ptaCyclicPerm(PTA     *ptas,
               l_int32  xs,
               l_int32  ys)
@@ -257,7 +257,7 @@ PTA     *ptad;
  *                      use 0 for default)
  *      Return: ptad (with duplicates removed), or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaRemoveDuplicates(PTA      *ptas,
                     l_uint32  factor)
 {
@@ -333,7 +333,7 @@ NUMAHASH  *nahash;
  *              naindex (na that maps from the new ptaa to the input ptaa)
  *      Return: ptaad (sorted), or null on error
  */
-PTAA *
+LEPTONICA_EXPORT PTAA *
 ptaaSortByIndex(PTAA  *ptaas,
                 NUMA  *naindex)
 {
@@ -377,7 +377,7 @@ PTAA    *ptaad;
  *          a two-dimensional image.  It returns the box of minimum
  *          size containing the pts in the pta.
  */
-BOX *
+LEPTONICA_EXPORT BOX *
 ptaGetBoundingRegion(PTA  *pta)
 {
 l_int32  n, i, x, y, minx, maxx, miny, maxy;
@@ -419,7 +419,7 @@ l_int32  n, i, x, y, minx, maxx, miny, maxy;
  *          are not necessarily tied to a two-dimension region.  For
  *          example, the pts can represent a general function y(x).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetRange(PTA        *pta,
             l_float32  *pminx,
             l_float32  *pmaxx,
@@ -469,7 +469,7 @@ l_float32  x, y, minx, maxx, miny, maxy;
  *              box
  *      Return: ptad (of pts in ptas that are inside the box), or null on error
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaGetInsideBox(PTA  *ptas,
                 BOX  *box)
 {
@@ -507,7 +507,7 @@ l_float32  x, y;
  *      (1) Finds the 4 corner-most pixels, as defined by a search
  *          inward from each corner, using a 45 degree line.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 pixFindCornerPixels(PIX  *pixs)
 {
 l_int32    i, j, x, y, w, h, wpl, mindim, found;
@@ -599,7 +599,7 @@ PTA       *pta;
  *              x, y  (point)
  *      Return: 1 if contained, 0 otherwise or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaContainsPt(PTA     *pta,
               l_int32  x,
               l_int32  y)
@@ -628,7 +628,7 @@ l_int32  i, n, ix, iy;
  *      Return: bval which is 1 if they have any elements in common;
  *              0 otherwise or on error.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaTestIntersection(PTA  *pta1,
                     PTA  *pta2)
 {
@@ -667,7 +667,7 @@ l_int32  i, j, n1, n2, x1, y1, x2, y2;
  *  Notes:
  *      (1) Shift first, then scale.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaTransform(PTA       *ptas,
              l_int32    shiftx,
              l_int32    shifty,
@@ -727,7 +727,7 @@ PTA     *ptad;
  *          Thus, just as you can plot the data in pta as nay vs. nax,
  *          you can plot the linear least square fit as nafit vs. nax.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 ptaGetLinearLSF(PTA        *pta,
                 l_float32  *pa,
                 l_float32  *pb,
@@ -803,7 +803,7 @@ l_float32  *xa, *ya;
  *             &y (<return> y = a * x + b)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 applyLinearFit(l_float32   a,
                   l_float32   b,
                   l_float32   x,
@@ -827,7 +827,7 @@ applyLinearFit(l_float32   a,
  *             &y (<return> y = a * x^2 + b * x + c)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 applyQuadraticFit(l_float32   a,
                   l_float32   b,
                   l_float32   c,
@@ -852,7 +852,7 @@ applyQuadraticFit(l_float32   a,
  *             &y (<return> y = a * x^3 + b * x^2  + c * x + d)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 applyCubicFit(l_float32   a,
               l_float32   b,
               l_float32   c,
@@ -878,7 +878,7 @@ applyCubicFit(l_float32   a,
  *             &y (<return> y = a * x^4 + b * x^3  + c * x^2 + d * x + e)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 applyQuarticFit(l_float32   a,
                 l_float32   b,
                 l_float32   c,
@@ -911,7 +911,7 @@ l_float32  x2;
  *      (1) Generates a pta of fg pixels in the pix, within the box.
  *          If box == NULL, it uses the entire pix.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaGetPixelsFromPix(PIX  *pixs,
                     BOX  *box)
 {
@@ -962,7 +962,7 @@ PTA       *pta;
  *      (2) Any points outside (w,h) are silently discarded.
  *      (3) Output 1 bpp pix has values 1 for each point in the pta.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGenerateFromPta(PTA     *pta,
                    l_int32  w,
                    l_int32  h)
@@ -999,7 +999,7 @@ PIX     *pix;
  *  Notes:
  *      (1) This generates a pta of either fg or bg boundary pixels.
  */
-PTA *
+LEPTONICA_EXPORT PTA *
 ptaGetBoundaryPixels(PIX     *pixs,
                      l_int32  type)
 {
@@ -1046,7 +1046,7 @@ PTA  *pta;
  *          special handling is required for bg pixels when the
  *          component touches the pix boundary.
  */
-PTAA *
+LEPTONICA_EXPORT PTAA *
 ptaaGetBoundaryPixels(PIX     *pixs,
                       l_int32  type,
                       l_int32  connectivity,
@@ -1127,7 +1127,7 @@ PTAA    *ptaa;
  *          To write on a new pix, set pixd == NULL and call:
  *             pixd = pixDisplayPta(NULL, pixs, pta);
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDisplayPta(PIX  *pixd,
               PIX  *pixs,
               PTA  *pta)

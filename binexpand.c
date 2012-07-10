@@ -39,7 +39,7 @@
  *              factor (integer scale factor for replicative expansion)
  *      Return: pixd (scaled up), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixExpandBinaryReplicate(PIX     *pixs,
                          l_int32  factor)
 {
@@ -101,7 +101,7 @@ PIX       *pixd;
  *              factor (expansion factor: 1, 2, 4, 8, 16)
  *      Return: pixd (expanded 1 bpp by replication), or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixExpandBinaryPower2(PIX     *pixs,
                       l_int32  factor)
 {

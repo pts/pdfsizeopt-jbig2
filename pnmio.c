@@ -92,7 +92,7 @@ static const l_int32  MAX_PNM_HEIGHT = 100000;
  *      Input:  stream opened for read
  *      Return: pix, or null on error
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadStreamPnm(FILE  *fp)
 {
 l_uint8    val8, rval8, gval8, bval8;
@@ -210,7 +210,7 @@ PIX       *pix;
  *              &spp (<optional return>, samples/pixel)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 readHeaderPnm(const char *filename,
               PIX     **ppix,
               l_int32  *pwidth,
@@ -250,7 +250,7 @@ FILE    *fp;
  *              &spp (<optional return>, samples/pixel)
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 freadHeaderPnm(FILE     *fp,
                PIX     **ppix,
                l_int32  *pwidth,
@@ -340,7 +340,7 @@ l_int32  maxval;
  *      (2) 24 bpp rgb are not supported in leptonica, but this will
  *          write them out as a packed array of bytes (3 to a pixel).
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixWriteStreamPnm(FILE  *fp,
                   PIX   *pix)
 {
@@ -460,7 +460,7 @@ PIX       *pixs;
  *      2, 4, 8, 16 bpp, no colormap or grayscale colormap --> pgm (P2)
  *      2, 4, 8 bpp with color-valued colormap, or rgb --> rgb ppm (P3)
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixWriteStreamAsciiPnm(FILE  *fp,
                        PIX   *pix)
 {

@@ -191,7 +191,7 @@ static PIX * processMorphArgs2(PIX *pixd, PIX *pixs, SEL *sel);
  *          (c) pixDilate(pixd, pixs, ...);
  *      (4) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDilate(PIX  *pixd,
           PIX  *pixs,
           SEL  *sel)
@@ -243,7 +243,7 @@ PIX     *pixt;
  *          (c) pixErode(pixd, pixs, ...);
  *      (4) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixErode(PIX  *pixd,
          PIX  *pixs,
          SEL  *sel)
@@ -316,7 +316,7 @@ PIX     *pixt;
  *          (c) pixHMT(pixd, pixs, ...);
  *      (4) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixHMT(PIX  *pixd,
        PIX  *pixs,
        SEL  *sel)
@@ -401,7 +401,7 @@ PIX     *pixt;
  *          (c) pixOpen(pixd, pixs, ...);
  *      (4) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixOpen(PIX  *pixd,
         PIX  *pixs,
         SEL  *sel)
@@ -446,7 +446,7 @@ PIX  *pixt;
  *          (c) pixClose(pixd, pixs, ...);
  *      (5) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixClose(PIX  *pixd,
          PIX  *pixs,
          SEL  *sel)
@@ -495,7 +495,7 @@ PIX  *pixt;
  *          (c) pixCloseSafe(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseSafe(PIX  *pixd,
              PIX  *pixs,
              SEL  *sel)
@@ -560,7 +560,7 @@ PIX     *pixt1, *pixt2;
  *          (c) pixOpenGeneralized(pixd, pixs, ...);
  *      (5) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixOpenGeneralized(PIX  *pixd,
                    PIX  *pixs,
                    SEL  *sel)
@@ -605,7 +605,7 @@ PIX  *pixt;
  *          (c) pixCloseGeneralized(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseGeneralized(PIX  *pixd,
                     PIX  *pixs,
                     SEL  *sel)
@@ -653,7 +653,7 @@ PIX  *pixt;
  *          (c) pixDilateBrick(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDilateBrick(PIX     *pixd,
                PIX     *pixs,
                l_int32  hsize,
@@ -716,7 +716,7 @@ SEL  *sel, *selh, *selv;
  *          (c) pixErodeBrick(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixErodeBrick(PIX     *pixd,
               PIX     *pixs,
               l_int32  hsize,
@@ -779,7 +779,7 @@ SEL  *sel, *selh, *selv;
  *          (c) pixOpenBrick(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixOpenBrick(PIX     *pixd,
              PIX     *pixs,
              l_int32  hsize,
@@ -844,7 +844,7 @@ SEL  *sel, *selh, *selv;
  *          (c) pixCloseBrick(pixd, pixs, ...);
  *      (6) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseBrick(PIX     *pixd,
               PIX     *pixs,
               l_int32  hsize,
@@ -914,7 +914,7 @@ SEL  *sel, *selh, *selv;
  *          (c) pixCloseBrick(pixd, pixs, ...);
  *      (7) The size of the result is determined by pixs.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseSafeBrick(PIX     *pixd,
                   PIX     *pixs,
                   l_int32  hsize,
@@ -1003,7 +1003,7 @@ SEL     *sel, *selh, *selv;
  *               144        |          1/6
  *               256        |          1/8
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selectComposableSels(l_int32  size,
                      l_int32  direction,
                      SEL    **psel1,
@@ -1056,7 +1056,7 @@ l_int32  factor1, factor2;
  *      (4) Returned values: factor1 >= factor2
  *          If size > 1, then factor1 > 1.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 selectComposableSizes(l_int32   size,
                       l_int32  *pfactor1,
                       l_int32  *pfactor2)
@@ -1166,7 +1166,7 @@ l_int32  diff[256];  /* diff between product (sel size) and input size */
  *          terms, 6 and 6, so that the net result is a dilation
  *          with hsize = 36.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixDilateCompBrick(PIX     *pixd,
                    PIX     *pixs,
                    l_int32  hsize,
@@ -1266,7 +1266,7 @@ SEL  *selh1, *selh2, *selv1, *selv2;
  *          terms, 6 and 6, so that the net result is a dilation
  *          with hsize = 36.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixErodeCompBrick(PIX     *pixd,
                   PIX     *pixs,
                   l_int32  hsize,
@@ -1357,7 +1357,7 @@ SEL  *selh1, *selh2, *selv1, *selv2;
  *          terms, 6 and 6, so that the net result is a dilation
  *          with hsize = 36.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixOpenCompBrick(PIX     *pixd,
                  PIX     *pixs,
                  l_int32  hsize,
@@ -1456,7 +1456,7 @@ SEL  *selh1, *selh2, *selv1, *selv2;
  *          terms, 6 and 6, so that the net result is a dilation
  *          with hsize = 36.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseCompBrick(PIX     *pixd,
                   PIX     *pixs,
                   l_int32  hsize,
@@ -1560,7 +1560,7 @@ SEL  *selh1, *selh2, *selv1, *selv2;
  *          terms, 6 and 6, so that the net result is a dilation
  *          with hsize = 36.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixCloseSafeCompBrick(PIX     *pixd,
                       PIX     *pixs,
                       l_int32  hsize,
@@ -1651,7 +1651,7 @@ SEL     *selh1, *selh2, *selv1, *selv2;
  *      Input:  bc (SYMMETRIC_MORPH_BC, ASYMMETRIC_MORPH_BC)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 resetMorphBoundaryCondition(l_int32  bc)
 {
     PROCNAME("resetMorphBoundaryCondition");
@@ -1672,7 +1672,7 @@ resetMorphBoundaryCondition(l_int32  bc)
  *              depth (of pix)
  *      Return: color of border pixels for this operation
  */
-l_uint32
+LEPTONICA_EXPORT l_uint32
 getMorphBorderPixelColor(l_int32  type,
                          l_int32  depth)
 {

@@ -90,7 +90,7 @@ static const char JP2K_IMAGE_DATA[12] = { 0x00, 0x00, 0x00, 0x0C,
  *          filenames are read into the Pixa.  If substr is NULL,
  *          all filenames are read into the Pixa.
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaReadFiles(const char  *dirname,
               const char  *substr)
 {
@@ -117,7 +117,7 @@ SARRAY  *sa;
  *      Input:  sarray (full pathnames for all files)
  *      Return: pixa, or null on error
  */
-PIXA *
+LEPTONICA_EXPORT PIXA *
 pixaReadFilesSA(SARRAY  *sa)
 {
 char    *str;
@@ -151,7 +151,7 @@ PIXA    *pixa;
  *      Input:  filename (with full pathname or in local directory)
  *      Return: pix if OK; null on error
  */
-PIX *
+LEPTONICA_REAL_EXPORT PIX *
 pixRead(const char  *filename)
 {
 FILE  *fp;
@@ -193,7 +193,7 @@ PIX   *pix;
  *      (1) The hint is not binding, but may be used to optimize jpeg decoding.
  *          Use 0 for no hinting.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadWithHint(const char  *filename,
                 l_int32      hint)
 {
@@ -242,7 +242,7 @@ PIX   *pix;
  *      (4) See convertSegmentedPagesToPS() in src/psio1.c for an
  *          example of usage.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadIndexed(SARRAY  *sa,
                l_int32  index)
 {
@@ -281,7 +281,7 @@ PIX     *pix;
  *  Notes:
  *      (1) The hint only applies to jpeg.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadStream(FILE    *fp,
               l_int32  hint)
 {
@@ -395,7 +395,7 @@ PIX     *pix;
  *          For bmp and gif, we cheat and read the entire file into a pix,
  *          from which we extract the "header" information.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixReadHeader(const char  *filename,
               l_int32     *pformat,
               l_int32     *pw,
@@ -537,7 +537,7 @@ PIX     *pix;
  *              &format (<return>)
  *      Return: 0 if OK, 1 on error or if format is not recognized
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 findFileFormat(const char  *filename,
                l_int32     *pformat)
 {
@@ -570,7 +570,7 @@ FILE    *fp;
  *  Notes:
  *      (1) Important: Side effect -- this resets fp to BOF.
  */
-l_int32
+LEPTONICA_REAL_EXPORT l_int32
 findFileFormatStream(FILE     *fp,
                      l_int32  *pformat)
 {
@@ -621,7 +621,7 @@ l_int32  format;
  *      (2) For tiff files, this returns IFF_TIFF.  The specific tiff
  *          compression is then determined using findTiffCompression().
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 findFileFormatBuffer(const l_uint8  *buf,
                      l_int32        *pformat)
 {
@@ -730,7 +730,7 @@ l_uint16  twobytepw;
  *      Input:  fp (file stream)
  *      Return: 1 if file is tiff; 0 otherwise or on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 fileFormatIsTiff(FILE  *fp)
 {
 l_int32  format;
@@ -770,7 +770,7 @@ l_int32  format;
  *      (3) findFileFormatBuffer() requires up to 8 bytes to decide on
  *          the format.  That determines the constraint here.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixReadMem(const l_uint8  *data,
            size_t          size)
 {
@@ -890,7 +890,7 @@ PIX     *pix;
  *      (3) findFileFormatBuffer() requires up to 8 bytes to decide on
  *          the format.  That determines the constraint here.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 pixReadHeaderMem(const l_uint8  *data,
                  size_t          size,
                  l_int32        *pformat,

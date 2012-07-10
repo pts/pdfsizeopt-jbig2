@@ -65,7 +65,7 @@
  *
  *  See comments in pixDitherToBinary() in binarize.c
  */
-void
+LEPTONICA_EXPORT void
 ditherToBinaryLow(l_uint32  *datad,
                   l_int32    w,
                   l_int32    h,
@@ -122,7 +122,7 @@ l_uint32    *lined;
  *  combination of operations obviates the need to
  *  generate a 2x grayscale image as an intermediary.
  */
-void
+LEPTONICA_EXPORT void
 ditherToBinaryLineLow(l_uint32  *lined,
                       l_int32    w,
                       l_uint32  *bufs1,
@@ -239,7 +239,7 @@ l_uint8   fval1, fval2, rval, bval, dval;
  *  If the source pixel is less than thresh,
  *  the dest will be 1; otherwise, it will be 0
  */
-void
+LEPTONICA_EXPORT void
 thresholdToBinaryLow(l_uint32  *datad,
                      l_int32    w,
                      l_int32    h,
@@ -265,7 +265,7 @@ l_uint32  *lines, *lined;
  *  thresholdToBinaryLineLow()
  *
  */
-void
+LEPTONICA_EXPORT void
 thresholdToBinaryLineLow(l_uint32  *lined,
                          l_int32    w,
                          l_uint32  *lines,
@@ -398,7 +398,7 @@ l_uint32 sword, dword;
  *  is traditional but arbitrary when you use a lookup table; the
  *  only constraint is that the sum is 1.  See other comments below.
  */
-void
+LEPTONICA_EXPORT void
 ditherToBinaryLUTLow(l_uint32  *datad,
                      l_int32    w,
                      l_int32    h,
@@ -445,7 +445,7 @@ l_uint32    *lined;
  *              lastlineflag  (0 if not last dest line, 1 if last dest line)
  *      Return: void
  */
-void
+LEPTONICA_EXPORT void
 ditherToBinaryLineLUTLow(l_uint32  *lined,
                          l_int32    w,
                          l_uint32  *bufs1,
@@ -538,7 +538,7 @@ l_uint8  rval, bval, dval;
  *
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 make8To1DitherTables(l_int32 **ptabval,
                      l_int32 **ptab38,
                      l_int32 **ptab14,
@@ -608,7 +608,7 @@ l_int32  *tabval, *tab38, *tab14;
  *  only constraint is that the sum is 1.  See other comments
  *  below and in grayquant.c.
  */
-void
+LEPTONICA_EXPORT void
 ditherTo2bppLow(l_uint32  *datad,
                 l_int32    w,
                 l_int32    h,
@@ -667,7 +667,7 @@ l_uint32    *lined;
  *  combination of operations obviates the need to
  *  generate a 2x grayscale image as an intermediary.
  */
-void
+LEPTONICA_EXPORT void
 ditherTo2bppLineLow(l_uint32  *lined,
                     l_int32    w,
                     l_uint32  *bufs1,
@@ -749,7 +749,7 @@ l_uint8  rval, bval, dval;
  *
  *      Return: 0 if OK, 1 on error
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 make8To2DitherTables(l_int32 **ptabval,
                      l_int32 **ptab38,
                      l_int32 **ptab14,
@@ -840,7 +840,7 @@ l_int32  *tabval, *tab38, *tab14;
  *  representing four consecutive 8-bit pixels, we compose one byte
  *  of output consisiting of four 2-bit pixels.
  */
-void
+LEPTONICA_EXPORT void
 thresholdTo2bppLow(l_uint32  *datad,
                    l_int32    h,
                    l_int32    wpld,
@@ -885,7 +885,7 @@ l_uint32  *lines, *lined;
  *  representing four consecutive 8-bit pixels, we compose two bytes
  *  of output consisiting of four 4-bit pixels.
  */
-void
+LEPTONICA_EXPORT void
 thresholdTo4bppLow(l_uint32  *datad,
                    l_int32    h,
                    l_int32    wpld,

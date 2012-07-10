@@ -114,7 +114,7 @@
  *                added at the beginning, the result must be at the
  *                same resolution as the input!
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphSequence(PIX         *pixs,
                  const char  *sequence,
                  l_int32      dispsep)
@@ -308,7 +308,7 @@ SARRAY  *sa;
  *            - The arg to the expansion is a power of two, in the set
  *              {2, 4, 8, 16}.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphCompSequence(PIX         *pixs,
                      const char  *sequence,
                      l_int32      dispsep)
@@ -483,7 +483,7 @@ SARRAY  *sa;
  *          generated and run.
  *      (6) See pixMorphSequence() for further information about usage.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphSequenceDwa(PIX         *pixs,
                     const char  *sequence,
                     l_int32      dispsep)
@@ -658,7 +658,7 @@ SARRAY  *sa;
  *          generated and run.
  *      (6) See pixMorphSequence() for further information about usage.
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixMorphCompSequenceDwa(PIX         *pixs,
                         const char  *sequence,
                         l_int32      dispsep)
@@ -826,7 +826,7 @@ SARRAY  *sa;
  *      (2) See pixMorphSequence() for notes on valid operations
  *          in the sequence.
  */
-l_int32
+LEPTONICA_EXPORT l_int32
 morphSequenceVerify(SARRAY  *sa)
 {
 char    *rawop, *op;
@@ -996,7 +996,7 @@ l_int32  intlogbase2[5] = {1, 2, 3, 0, 4};  /* of arg/4 */
  *             "c5.3 + o7.5"
  *             "c9.9 + tw9.9"
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixGrayMorphSequence(PIX         *pixs,
                      const char  *sequence,
                      l_int32      dispsep,
@@ -1213,7 +1213,7 @@ SARRAY  *sa;
  *             "c5.3 + o7.5"
  *             "D9.1"
  */
-PIX *
+LEPTONICA_EXPORT PIX *
 pixColorMorphSequence(PIX         *pixs,
                       const char  *sequence,
                       l_int32      dispsep,
