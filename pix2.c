@@ -711,56 +711,6 @@ PIXCMAP   *cmap;
 }
 
 
-/*!
- *  pixSetBlackOrWhite()
- *
- *      Input:  pixs (all depths; cmap ok)
- *              op (L_SET_BLACK, L_SET_WHITE)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) Function for setting all pixels in an image to either black
- *          or white.
- *      (2) If pixs is colormapped, it adds black or white to the
- *          colormap if it's not there and there is room.  If the colormap
- *          is full, it finds the closest color in intensity.
- *          This index is written to all pixels.
- */
-LEPTONICA_EXPORT l_int32
-pixSetBlackOrWhite(PIX     *pixs,
-                   l_int32  op)
-{
-l_int32   d, index;
-PIXCMAP  *cmap;
-
-    PROCNAME("pixSetBlackOrWhite");
-
-    if (!pixs)
-        return ERROR_INT("pix not defined", procName, 1);
-    if (op != L_SET_BLACK && op != L_SET_WHITE)
-        return ERROR_INT("invalid op", procName, 1);
-
-    cmap = pixGetColormap(pixs);
-    d = pixGetDepth(pixs);
-    if (!cmap) {
-        if ((d == 1 && op == L_SET_BLACK) ||
-            (d > 1 && op == L_SET_WHITE))
-            pixSetAll(pixs);
-        else 
-            pixClearAll(pixs);
-    }
-    else {  /* handle colormap */
-        if (op == L_SET_BLACK)
-            pixcmapAddBlackOrWhite(cmap, 0, &index);
-        else  /* L_SET_WHITE */
-            pixcmapAddBlackOrWhite(cmap, 1, &index);
-        pixSetAllArbitrary(pixs, index);
-    }
-
-    return 0;
-}
-
-
 /*-------------------------------------------------------------*
  *     Rectangular region clear/set/set-to-arbitrary-value     *
  *-------------------------------------------------------------*/
@@ -1457,37 +1407,6 @@ pixAddBorder(PIX      *pixs,
         return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
     if (npix == 0)
         return pixClone(pixs);
-    return pixAddBorderGeneral(pixs, npix, npix, npix, npix, val);
-}
-
-
-/*!
- *  pixAddBlackBorder()
- *
- *      Input:  pixs (all depths; colormap ok)
- *              npix (number of pixels to be added to each side)
- *      Return: pixd (with the added exterior pixels), or null on error
- */
-LEPTONICA_EXPORT PIX *
-pixAddBlackBorder(PIX      *pixs,
-                  l_int32   npix)
-{
-l_int32   d, val;
-PIXCMAP  *cmap;
-
-    PROCNAME("pixAddBlackBorder");
-
-    if (!pixs)
-        return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
-    if (npix == 0)
-        return pixClone(pixs);
-
-    if ((cmap = pixGetColormap(pixs)) != NULL)
-        pixcmapGetRankIntensity(cmap, 0.0, &val);
-    else {
-        d = pixGetDepth(pixs);
-        val = (d == 1) ? 1 : 0;
-    }
     return pixAddBorderGeneral(pixs, npix, npix, npix, npix, val);
 }
 
