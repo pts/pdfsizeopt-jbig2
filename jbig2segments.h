@@ -6,8 +6,8 @@
 
 #include <vector>
 #ifdef __MINGW32__ 
-#define htons my_htons 
-#define htonl my_htons 
+#define htons my_htons
+#define htonl my_htonl
 unsigned short my_htons(unsigned short); 
 unsigned long my_htonl(unsigned long);   
 #else 

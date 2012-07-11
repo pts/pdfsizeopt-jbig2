@@ -1,13 +1,8 @@
-TODO: why do we have a few bytes of difference in the header?
-      is it because of a different C compiler or because of a different arch?
-      cmp -l pts2.jbig2.{dynamic,mingw}
-TODO: remove support of unnecessary image formats, even from the enum
-TODO: remove pixReadMem*()
 TODO: remove std::sort from *.cc (reduce dependencies)
 TODO: remove std::map from *.cc (reduce dependencies)
       maybe https://github.com/paulhodge/EASTL/blob/community/include/EASTL/map.h
 TODO: remove std::vector from *.cc (reduce dependencies)
-TODO: use gcc-4.4 for MinGW Linux cross-compilation as well
+TODO: use gcc-4.4 for MinGW Linux cross-compilation as well (now 4.2)
 TODO: try to make it even smaller for pdfsizeopt by accepting .pnm.gz
       instead of .png
 
