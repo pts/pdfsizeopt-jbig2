@@ -67,3 +67,133 @@ l_int32   i;
     return tab;
 }
 
+/*-------------------------------------------------------------------*
+ *                 Low-level rank filtered reduction                 *
+ *-------------------------------------------------------------------*/
+/*!
+ *  reduceRankBinary2Low()
+ *
+ *  Rank filtering is done to the UL corner of each 2x2 pixel block,
+ *  using only logical operations.
+ *
+ *  Then these pixels are chosen in the 2x subsampling process,
+ *  subsampled, as described above in reduceBinary2Low().
+ */
+LEPTONICA_EXPORT void
+reduceRankBinary2Low(l_uint32  *datad,
+                     l_int32    wpld,
+                     l_uint32  *datas,
+                     l_int32    hs,
+                     l_int32    wpls,
+                     l_uint8   *tab,
+                     l_int32    level)
+{
+l_int32    i, id, j, wplsi;
+l_uint8    byte0, byte1;
+l_uint16   shortd;
+l_uint32   word1, word2, word3, word4;
+l_uint32  *lines, *lined;
+
+        /* e.g., if ws = 65: wd = 32, wpls = 3, wpld = 1 --> trouble */
+    wplsi = L_MIN(wpls, 2 * wpld);  /* iterate over this number of words */
+
+    switch (level)
+    {
+
+    case 1:
+        for (i = 0, id = 0; i < hs - 1; i += 2, id++) {
+            lines = datas + i * wpls;
+            lined = datad + id * wpld;
+            for (j = 0; j < wplsi; j++) {
+                word1 = *(lines + j);
+                word2 = *(lines + wpls + j);
+
+                    /* OR/OR */
+                word2 = word1 | word2;
+                word2 = word2 | (word2 << 1);
+
+                word2 = word2 & 0xaaaaaaaa;  /* mask */
+                word1 = word2 | (word2 << 7);  /* fold; data in bytes 0 & 2 */
+                byte0 = word1 >> 24;
+                byte1 = (word1 >> 8) & 0xff;
+                shortd = (tab[byte0] << 8) | tab[byte1];
+                SET_DATA_TWO_BYTES(lined, j, shortd);
+            }
+        }
+        break;
+
+    case 2:
+        for (i = 0, id = 0; i < hs - 1; i += 2, id++) {
+            lines = datas + i * wpls;
+            lined = datad + id * wpld;
+            for (j = 0; j < wplsi; j++) {
+                word1 = *(lines + j);
+                word2 = *(lines + wpls + j);
+
+                    /* (AND/OR) OR (OR/AND) */
+                word3 = word1 & word2;
+                word3 = word3 | (word3 << 1);
+                word4 = word1 | word2;
+                word4 = word4 & (word4 << 1);
+                word2 = word3 | word4;
+
+                word2 = word2 & 0xaaaaaaaa;  /* mask */
+                word1 = word2 | (word2 << 7);  /* fold; data in bytes 0 & 2 */
+                byte0 = word1 >> 24;
+                byte1 = (word1 >> 8) & 0xff;
+                shortd = (tab[byte0] << 8) | tab[byte1];
+                SET_DATA_TWO_BYTES(lined, j, shortd);
+            }
+        }
+        break;
+
+    case 3:
+        for (i = 0, id = 0; i < hs - 1; i += 2, id++) {
+            lines = datas + i * wpls;
+            lined = datad + id * wpld;
+            for (j = 0; j < wplsi; j++) {
+                word1 = *(lines + j);
+                word2 = *(lines + wpls + j);
+
+                    /* (AND/OR) AND (OR/AND) */
+                word3 = word1 & word2;
+                word3 = word3 | (word3 << 1);
+                word4 = word1 | word2;
+                word4 = word4 & (word4 << 1);
+                word2 = word3 & word4;
+
+                word2 = word2 & 0xaaaaaaaa;  /* mask */
+                word1 = word2 | (word2 << 7);  /* fold; data in bytes 0 & 2 */
+                byte0 = word1 >> 24;
+                byte1 = (word1 >> 8) & 0xff;
+                shortd = (tab[byte0] << 8) | tab[byte1];
+                SET_DATA_TWO_BYTES(lined, j, shortd);
+            }
+        }
+        break;
+
+    case 4:
+        for (i = 0, id = 0; i < hs - 1; i += 2, id++) {
+            lines = datas + i * wpls;
+            lined = datad + id * wpld;
+            for (j = 0; j < wplsi; j++) {
+                word1 = *(lines + j);
+                word2 = *(lines + wpls + j);
+
+                    /* AND/AND */
+                word2 = word1 & word2;
+                word2 = word2 & (word2 << 1);
+
+                word2 = word2 & 0xaaaaaaaa;  /* mask */
+                word1 = word2 | (word2 << 7);  /* fold; data in bytes 0 & 2 */
+                byte0 = word1 >> 24;
+                byte1 = (word1 >> 8) & 0xff;
+                shortd = (tab[byte0] << 8) | tab[byte1];
+                SET_DATA_TWO_BYTES(lined, j, shortd);
+            }
+        }
+        break;
+    }
+
+    return;
+}

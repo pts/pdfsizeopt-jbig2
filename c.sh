@@ -18,4 +18,5 @@ g++ -Wl,--gc-sections \
     -fno-exceptions -fno-rtti -s -o jbig2 *.o \
     -lpng -lz
 
+echo OK.
 : OK.
