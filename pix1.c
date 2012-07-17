@@ -592,7 +592,11 @@ l_uint32  *data;
     pixSetDepth(pixd, d);
     pixSetWpl(pixd, wpl);
     bytes = 4 * wpl * h;
-    pixFreeData(pixd);  /* free any existing image data */
+
+    if ((data = pixGetData(pixd)) != NULL) {
+        pix_free(data);
+        pixd->data = NULL;
+    }
     if ((data = (l_uint32 *)pix_malloc(bytes)) == NULL)
         return ERROR_INT("pix_malloc fail for data", procName, 1);
     pixSetData(pixd, data);
@@ -1124,32 +1128,5 @@ pixSetData(PIX       *pix,
         return ERROR_INT("pix not defined", procName, 1);
 
     pix->data = data;
-    return 0;
-}
-
-
-/*!
- *  pixFreeData()
- *
- *  Notes:
- *      (1) This frees the data and sets the pix data ptr to null.
- *          It should be used before pixSetData() in the situation where
- *          you want to free any existing data before doing
- *          a subsequent assignment with pixSetData().
- */
-LEPTONICA_EXPORT l_int32
-pixFreeData(PIX  *pix)
-{
-l_uint32  *data;
-
-    PROCNAME("pixFreeData");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-
-    if ((data = pixGetData(pix)) != NULL) {
-        pix_free(data);
-        pix->data = NULL;
-    }
     return 0;
 }
