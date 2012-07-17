@@ -1,3 +1,8 @@
+TODO: fix bug: make the output the same for pts2.png and pts2i.png
+      (indexed1)
+TODO: make rasteropGeneralLow etc. shorter by removing switch cases for unused
+      values of `op'
+TODO: remove unused global variables
 TODO: remove std::sort from *.cc (reduce dependencies)
 TODO: remove std::map from *.cc (reduce dependencies)
       maybe https://github.com/paulhodge/EASTL/blob/community/include/EASTL/map.h
@@ -5,5 +10,6 @@ TODO: remove std::vector from *.cc (reduce dependencies)
 TODO: use gcc-4.4 for MinGW Linux cross-compilation as well (now 4.2)
 TODO: try to make it even smaller for pdfsizeopt by accepting .pnm.gz
       instead of .png
+TODO: remove calls to L_WARNING etc.
 
 doc: Stripping the mingw_lib/*.a files makes them unlinkable.

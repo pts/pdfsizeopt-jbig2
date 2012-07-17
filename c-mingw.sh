@@ -4,6 +4,7 @@
 # works with 
 set -ex
 rm -f *.o
+#i586-mingw32msvc-gcc -fdump-tree-fixupcfg-lineno -g -c \
 i586-mingw32msvc-gcc -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-unused-parameter -Wno-sign-compare \
