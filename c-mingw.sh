@@ -6,7 +6,7 @@ set -ex
 rm -f *.o
 i586-mingw32msvc-gcc -s -O2 -c \
     -ffunction-sections -fdata-sections \
-    -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
+    -W -Wall -Wno-uninitialized -Wno-unused-parameter -Wno-sign-compare \
     -Wno-strict-aliasing -fno-strict-aliasing \
     -Imingw_include \
     leptonica.c

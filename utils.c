@@ -830,7 +830,6 @@ l_int32  dirlen, namelen, size;
 
 #ifdef _WIN32
     {
-        char  dirt[MAX_PATH];
         stringCopy(pathout, cdir, dirlen);
         if (NULL != strchr(pathout, '/')) {
             char    *p;
