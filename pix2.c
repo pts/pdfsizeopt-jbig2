@@ -200,35 +200,6 @@ l_uint32  *line, *data;
 
 
 /*-------------------------------------------------------------*
- *     Full image clear/set/set-to-arbitrary-value/invert      *
- *-------------------------------------------------------------*/
-/*!
- *  pixClearAll()
- *
- *      Input:  pix (all depths; use cmapped with caution)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) Clears all data to 0.  For 1 bpp, this is white; for grayscale
- *          or color, this is black.
- *      (2) Caution: for colormapped pix, this sets the color to the first
- *          one in the colormap.  Be sure that this is the intended color!
- */
-LEPTONICA_EXPORT l_int32
-pixClearAll(PIX  *pix)
-{
-    PROCNAME("pixClearAll");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-        
-    pixRasterop(pix, 0, 0, pixGetWidth(pix), pixGetHeight(pix),
-                PIX_CLR, NULL, 0, 0);
-    return 0;
-}
-
-
-/*-------------------------------------------------------------*
  *                         Set pad bits                        *
  *-------------------------------------------------------------*/
 /*!

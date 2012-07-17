@@ -225,39 +225,6 @@ l_error(const char  *msg,
 }
 
 /*!
- *  l_errorInt()
- *
- *      Input: msg (error message; must include '%d')
- *             procname
- *             ival (embedded in error message via %d)
- */
-LEPTONICA_EXPORT void
-l_errorInt(const char  *msg,
-           const char  *procname,
-           l_int32      ival)
-{
-l_int32  bufsize;
-char    *charbuf;
-
-    if (!msg || !procname) {
-        L_ERROR("msg or procname not defined in l_errorInt()", procname);
-        return;
-    }
-
-    bufsize = strlen(msg) + strlen(procname) + 128;
-    if ((charbuf = (char *)CALLOC(bufsize, sizeof(char))) == NULL) {
-        L_ERROR("charbuf not made in l_errorInt()", procname);
-        return;
-    }
-
-    sprintf(charbuf, "Error in %s: %s\n", procname, msg);
-    fprintf(stderr, charbuf, ival);
-
-    FREE(charbuf);
-    return;
-}
-
-/*!
  *  l_warning()
  *
  *      Input: msg (warning message)

@@ -32,9 +32,8 @@
 struct JbClasser
 {
     struct Sarray   *safiles;      /* input page image file names            */
-    l_int32          method;       /* JB_RANKHAUS, JB_CORRELATION            */
-    l_int32          components;   /* JB_CONN_COMPS, JB_CHARACTERS or        */
-                                   /* JB_WORDS                               */
+    l_int32          method;       /* JB_CORRELATION                         */
+    l_int32          components;   /* JB_CONN_COMPS */
     l_int32          maxwidth;     /* max component width allowed            */
     l_int32          maxheight;    /* max component height allowed           */
     l_int32          npages;       /* number of pages already processed      */
@@ -102,7 +101,7 @@ typedef struct JbData  JBDATA;
 
     /* Classifier methods */
 enum {
-   JB_RANKHAUS = 0,
+   /* JB_RANKHAUS = 0, */
    JB_CORRELATION = 1
 };
 
