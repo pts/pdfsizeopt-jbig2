@@ -39,7 +39,6 @@ LEPT_DLL LEPTONICA_EXTERN BOXA * pixConnCompPixa ( PIX *pixs, PIXA **ppixa, l_in
 LEPT_DLL LEPTONICA_EXTERN l_int32 nextOnPixelInRaster ( PIX *pixs, l_int32 xstart, l_int32 ystart, l_int32 *px, l_int32 *py );
 LEPT_DLL LEPTONICA_EXTERN l_int32 nextOnPixelInRasterLow ( l_uint32 *data, l_int32 w, l_int32 h, l_int32 wpl, l_int32 xstart, l_int32 ystart, l_int32 *px, l_int32 *py );
 LEPT_DLL LEPTONICA_EXTERN BOX * pixSeedfillBB ( PIX *pixs, L_STACK *lstack, l_int32 x, l_int32 y, l_int32 connectivity );
-LEPT_DLL LEPTONICA_EXTERN BOX * pixSeedfill4BB ( PIX *pixs, L_STACK *lstack, l_int32 x, l_int32 y );
 LEPT_DLL LEPTONICA_EXTERN BOX * pixSeedfill8BB ( PIX *pixs, L_STACK *lstack, l_int32 x, l_int32 y );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixCorrelationScoreThresholded ( PIX *pix1, PIX *pix2, l_int32 area1, l_int32 area2, l_float32 delx, l_float32 dely, l_int32 maxdiffw, l_int32 maxdiffh, l_int32 *tab, l_int32 *downcount, l_float32 score_threshold );
 LEPT_DLL extern PIX * pixThresholdToBinary ( PIX *pixs, l_int32 thresh );
