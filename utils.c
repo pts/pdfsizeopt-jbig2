@@ -831,29 +831,12 @@ l_int32  dirlen, namelen, size;
 #ifdef _WIN32
     {
         char  dirt[MAX_PATH];
-        if (stringFindSubstr(cdir, "/", NULL) > 0) {
-            char    *tempdir;
-            l_int32  tdirlen;
-            tempdir = stringReplaceEachSubstr(cdir, "/", "\\", NULL);
-            tdirlen = strlen(tempdir);
-            if (strncmp(dir, "/tmp", 4) == 0) {  /* get temp directory */
-                GetTempPath(sizeof(dirt), dirt);
-                stringCopy(pathout, dirt, strlen(dirt) - 1);
-                stringCat(pathout, size, "\\leptonica");
-                if (tdirlen > 4)
-                    stringCat(pathout, size, tempdir + 4);
-
-                    /* Set an extra null byte.  Otherwise, when setting
-                       sepchar later, no trailing null byte remains. */
-                pathout[strlen(pathout) + 1] = '\0';
+        stringCopy(pathout, cdir, dirlen);
+        if (NULL != strchr(pathout, '/')) {
+            char    *p;
+            for (p = pathout; *p != '\0'; ++p) {
+              if (*p == '/') *p = '\\';
             }
-            else {
-                stringCopy(pathout, tempdir, tdirlen);
-            }
-            FREE(tempdir);
-        }
-        else {  /* no '/' characters; OK as is */
-            stringCopy(pathout, cdir, dirlen);
         }
     }
 #else

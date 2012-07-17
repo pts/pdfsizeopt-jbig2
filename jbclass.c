@@ -1339,20 +1339,6 @@ SEL     *sel;
     }
     pixDestroy(&pixt1);
 
-#if  DEBUG_PLOT_CC
-    {GPLOT *gplot;
-     NUMA  *naseq;
-        naseq = numaMakeSequence(1, 1, numaGetCount(nacc));
-        gplot = gplotCreate("/tmp/cc_output", GPLOT_PNG,
-                            "Number of cc vs. horizontal dilation",
-                            "Sel horiz", "Number of cc");
-        gplotAddPlot(gplot, naseq, nacc, GPLOT_LINES, "");
-        gplotMakeOutput(gplot);
-        gplotDestroy(&gplot);
-        numaDestroy(&naseq);
-    }
-#endif  /* DEBUG_PLOT_CC */
-
         /* Save the result of the optimal dilation */
     pixt2 = pixaGetPix(pixa, imin, L_CLONE);
     sel = selCreateBrick(1, imin, 0, imin - 1, SEL_HIT);
