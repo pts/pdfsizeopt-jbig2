@@ -110,9 +110,9 @@ jbig2_init(float thresh, float weight, int xres, int yres, bool full_headers,
   ctx->refine_level = refine_level;
   ctx->avg_templates = NULL;
 
-  ctx->classer = jbCorrelationInitWithoutComponents(JB_CONN_COMPS, 9999, 9999,
+  ctx->classer = jbCorrelationInitWithoutComponents(JB_CONN_COMPS /* components == 0 */,
+                                                    9999, 9999,
                                                     thresh, weight);
-
   return ctx;
 }
 

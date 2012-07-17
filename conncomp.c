@@ -117,7 +117,7 @@ static void popFillseg(L_STACK *lstack, l_int32 *pxleft, l_int32 *pxright,
  *  pixConnComp()
  *
  *      Input:  pixs (1 bpp)
- *              &pixa   (<optional return> pixa of each c.c.)
+ *              &pixa   (<return> pixa of each c.c.)
  *              connectivity (4 or 8)
  *      Return: boxa, or null on error
  *
@@ -142,10 +142,7 @@ pixConnComp(PIX     *pixs,
     if (connectivity != 4 && connectivity != 8)
         return (BOXA *)ERROR_PTR("connectivity not 4 or 8", procName, NULL);
 
-    if (!ppixa)
-        return pixConnCompBB(pixs, connectivity);
-    else
-        return pixConnCompPixa(pixs, ppixa, connectivity);
+    return pixConnCompPixa(pixs, ppixa, connectivity);
 }
 
 
@@ -245,77 +242,6 @@ L_STACK  *lstack, *auxstack;
     lstackDestroy(&lstack, TRUE);
     pixDestroy(&pixt1);
     pixDestroy(&pixt2);
-
-    return boxa;
-}
-
-
-/*!
- *  pixConnCompBB()
- *
- *      Input:  pixs (1 bpp)
- *              connectivity (4 or 8)
- *      Return: boxa, or null on error
- *
- * Notes:
- *     (1) Finds bounding boxes of 4- or 8-connected components
- *         in a binary image.
- *     (2) This works on a copy of the input pix.  The c.c. are located
- *         in raster order and erased one at a time.  In the process,
- *         the b.b. is computed and saved.
- */
-LEPTONICA_EXPORT BOXA *
-pixConnCompBB(PIX     *pixs,
-              l_int32  connectivity)
-{
-l_int32   h, iszero;
-l_int32   x, y, xstart, ystart;
-PIX      *pixt;
-BOX      *box;
-BOXA     *boxa;
-L_STACK  *lstack, *auxstack;
-
-    PROCNAME("pixConnCompBB");
-
-    if (!pixs || pixGetDepth(pixs) != 1)
-        return (BOXA *)ERROR_PTR("pixs undefined or not 1 bpp", procName, NULL);
-    if (connectivity != 4 && connectivity != 8)
-        return (BOXA *)ERROR_PTR("connectivity not 4 or 8", procName, NULL);
-
-    pixZero(pixs, &iszero);
-    if (iszero)
-        return boxaCreate(1);  /* return empty boxa */
-
-    if ((pixt = pixCopy(NULL, pixs)) == NULL)
-        return (BOXA *)ERROR_PTR("pixt not made", procName, NULL);
-
-    h = pixGetHeight(pixs);
-    if ((lstack = lstackCreate(h)) == NULL)
-        return (BOXA *)ERROR_PTR("lstack not made", procName, NULL);
-    if ((auxstack = lstackCreate(0)) == NULL)
-        return (BOXA *)ERROR_PTR("auxstack not made", procName, NULL);
-    lstack->auxstack = auxstack;
-    if ((boxa = boxaCreate(0)) == NULL)
-        return (BOXA *)ERROR_PTR("boxa not made", procName, NULL);
-
-    xstart = 0;
-    ystart = 0;
-    while (1)
-    {
-        if (!nextOnPixelInRaster(pixt, xstart, ystart, &x, &y))
-            break;
-
-        if ((box = pixSeedfillBB(pixt, lstack, x, y, connectivity)) == NULL)
-            return (BOXA *)ERROR_PTR("box not made", procName, NULL);
-        boxaAddBox(boxa, box, L_INSERT);
-
-        xstart = x;
-        ystart = y;
-    }
-
-        /* Cleanup, freeing the fillsegs on each stack */
-    lstackDestroy(&lstack, TRUE);
-    pixDestroy(&pixt);
 
     return boxa;
 }

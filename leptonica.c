@@ -1,10 +1,6 @@
 #define LEPTONICA_EXPORT static
 #define LEPTONICA_EXTERN static
 
-#include "binexpand.c"
-#include "binexpandlow.c"
-#include "binreduce.c"
-#include "binreducelow.c"
 #include "boxbasic.c"
 #include "boxfunc1.c"
 #include "colormap.c"
@@ -15,7 +11,6 @@
 #include "jbclass.c"
 #include "morphapp.c"
 #include "morph.c"
-#include "morphseq.c"
 #include "numabasic.c"
 #include "pix1.c"
 #include "pix2.c"

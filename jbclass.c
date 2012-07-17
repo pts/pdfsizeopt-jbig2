@@ -291,9 +291,8 @@ JBCLASSER  *classer;
 
     PROCNAME("jbCorrelationInitInternal");
 
-    if (components != JB_CONN_COMPS && components != JB_CHARACTERS &&
-        components != JB_WORDS)
-        return (JBCLASSER *)ERROR_PTR("invalid components", procName, NULL);
+    if (components != JB_CONN_COMPS)
+        return (JBCLASSER *)ERROR_PTR("expected JB_CONN_COMPS", procName, NULL);
     if (thresh < 0.4 || thresh > 0.98)
         return (JBCLASSER *)ERROR_PTR("thresh not in range [0.4 - 0.98]",
                 procName, NULL);
@@ -301,12 +300,7 @@ JBCLASSER  *classer;
         return (JBCLASSER *)ERROR_PTR("weightfactor not in range [0.0 - 1.0]",
                 procName, NULL);
     if (maxwidth == 0) {
-        if (components == JB_CONN_COMPS)
-            maxwidth = MAX_CONN_COMP_WIDTH;
-        else if (components == JB_CHARACTERS)
-            maxwidth = MAX_CHAR_COMP_WIDTH;
-        else  /* JB_WORDS */
-            maxwidth = MAX_WORD_COMP_WIDTH;
+        maxwidth = MAX_CONN_COMP_WIDTH;
     }
     if (maxheight == 0)
         maxheight = MAX_COMP_HEIGHT;
@@ -1145,7 +1139,7 @@ l_uint8     byte;
  *  jbGetComponents()
  *
  *      Input:  pixs (1 bpp)
- *              components (JB_CONN_COMPS, JB_CHARACTERS, JB_WORDS)
+ *              components (JB_CONN_COMPS)
  *              maxwidth, maxheight (of saved components; larger are discarded)
  *              &pboxa (<return> b.b. of component items)
  *              &ppixa (<return> component items)
@@ -1159,10 +1153,9 @@ jbGetComponents(PIX     *pixs,
                 BOXA   **pboxad,
                 PIXA   **ppixad)
 {
-l_int32    empty, res, redfactor;
+l_int32    empty;
 BOXA      *boxa;
-PIX       *pixt1, *pixt2, *pixt3;
-PIXA      *pixa, *pixat;
+PIXA      *pixa;
 
     PROCNAME("jbGetComponents");
 
@@ -1174,8 +1167,7 @@ PIXA      *pixa, *pixat;
     *ppixad = NULL;
     if (!pixs)
         return ERROR_INT("pixs not defined", procName, 1);
-    if (components != JB_CONN_COMPS && components != JB_CHARACTERS &&
-        components != JB_WORDS)
+    if (components != JB_CONN_COMPS)
         return ERROR_INT("invalid components", procName, 1);
 
     pixZero(pixs, &empty);
@@ -1198,59 +1190,7 @@ PIXA      *pixa, *pixat;
          * in some cases be barely larger than the space between
          * characters.  The first step is to generate the mask and
          * identify each of its connected components.  */
-    if (components == JB_CONN_COMPS) {  /* no preprocessing */
-        boxa = pixConnComp(pixs, &pixa, 8);
-    } 
-    else if (components == JB_CHARACTERS) {
-        pixt1 = pixMorphSequence(pixs, "c1.6", 0);
-        boxa = pixConnComp(pixt1, &pixat, 8);
-        pixa = pixaClipToPix(pixat, pixs);
-        pixDestroy(&pixt1);
-        pixaDestroy(&pixat);
-    } 
-    else {  /* components == JB_WORDS */
-
-            /* Do the operations at about 150 ppi resolution.
-             * It is much faster at 75 ppi, but the results are
-             * more accurate at 150 ppi.  This will segment the
-             * words in body text.  It can be expected that relatively
-             * infrequent words in a larger font will be split. */
-        res = pixGetXRes(pixs);
-        if (res <= 200) {
-            redfactor = 1;
-            pixt1 = pixClone(pixs);
-        }
-        else if (res <= 400) {
-            redfactor = 2;
-            pixt1 = pixReduceRankBinaryCascade(pixs, 1, 0, 0, 0);
-        }
-        else {
-            redfactor = 4;
-            pixt1 = pixReduceRankBinaryCascade(pixs, 1, 1, 0, 0);
-        }
-
-        pixt2 = pixWordMaskByDilation(pixt1, 0, NULL);
-
-            /* Expand the optimally dilated word mask to full res. */
-        pixt3 = pixExpandReplicate(pixt2, redfactor);
-
-            /* Pull out the pixels in pixs corresponding to the mask
-             * components in pixt3.  Note that above we used threshold
-             * levels in the reduction of 1 to insure that the resulting
-             * mask fully covers the input pixs.  The downside of using
-             * a threshold of 1 is that very close characters from adjacent
-             * lines can be joined.  But with a level of 2 or greater,
-             * it is necessary to use a seedfill, followed by a pixOr():
-             *       pixt4 = pixSeedfillBinary(NULL, pixt3, pixs, 8);
-             *       pixOr(pixt3, pixt3, pixt4);
-             * to insure that the mask coverage is complete over pixs.  */
-        boxa = pixConnComp(pixt3, &pixat, 4);
-        pixa = pixaClipToPix(pixat, pixs);
-        pixaDestroy(&pixat);
-        pixDestroy(&pixt1);
-        pixDestroy(&pixt2);
-        pixDestroy(&pixt3);
-    }
+    boxa = pixConnComp(pixs, &pixa, 8);
 
         /* Remove large components, and save the results.  */
     *ppixad = pixaSelectBySize(pixa, maxwidth, maxheight, L_SELECT_IF_BOTH,
@@ -1264,96 +1204,6 @@ PIXA      *pixa, *pixat;
 }
 
 
-/*!
- *  pixWordMaskByDilation()
- *
- *      Input:  pixs (1 bpp; typ. at 75 to 150 ppi)
- *              maxsize (use 0 for default; not to exceed 14)
- *              &size (<optional return> size of optimal horiz Sel)
- *      Return: pixd (dilated word mask), or null on error
- *
- *  Notes:
- *      (1) For 75 to 150 ppi, the optimal dilation should not exceed 7.
- *          This is the default size chosen if maxsize <= 0.
- *      (2) To run this on images at resolution between 200 and 300, it
- *          is advisable to use a larger maxsize, say between 10 and 14.
- *      (3) The best size for dilating to get word masks is optionally returned.
- */
-LEPTONICA_EXPORT PIX *
-pixWordMaskByDilation(PIX      *pixs,
-                      l_int32   maxsize,
-                      l_int32  *psize)
-{
-l_int32  i, diffmin, ndiff, imin;
-l_int32  ncc[MAX_ALLOWED_DILATION + 1];
-BOXA    *boxa;
-NUMA    *nacc;
-PIX     *pixt1, *pixt2, *pixt3;
-PIXA    *pixa;
-SEL     *sel;
-
-    PROCNAME("pixWordMaskbyDilation");
-
-    if (!pixs)
-        return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
-
-        /* Find the optimal dilation to create the word mask.
-         * Look for successively increasing dilations where the
-         * number of connected components doesn't decrease.
-         * This is the situation where the components in the
-         * word mask should properly cover each word.  Use of
-         * 4 cc slightly reduces the likelihood that words from
-         * different lines are joined.  */
-    diffmin = 1000000;
-    pixa = pixaCreate(8);
-    pixt1 = pixCopy(NULL, pixs);
-    pixaAddPix(pixa, pixt1, L_COPY); 
-
-    if (maxsize <= 0)
-        maxsize = 7;  /* default */
-    if (maxsize > MAX_ALLOWED_DILATION)
-        maxsize = MAX_ALLOWED_DILATION;
-    nacc = numaCreate(maxsize);
-    for (i = 0; i <= maxsize; i++) {
-        if (i == 0)     /* first one not dilated */
-            pixt2 = pixCopy(NULL, pixt1); 
-        else    /* successive dilation by sel_2h */
-            pixt2 = pixMorphSequence(pixt1, "d2.1", 0);
-        boxa = pixConnCompBB(pixt2, 4);
-        ncc[i] = boxaGetCount(boxa);
-        numaAddNumber(nacc, ncc[i]);
-        if (i > 0) {
-            ndiff = ncc[i - 1] - ncc[i];
-#if  DEBUG_PLOT_CC
-            fprintf(stderr, "ndiff[%d] = %d\n", i - 1, ndiff);
-#endif  /* DEBUG_PLOT_CC */
-            if (ndiff < diffmin) {
-                imin = i;
-                diffmin = ndiff;
-            }
-        }
-        pixaAddPix(pixa, pixt2, L_COPY);
-        pixDestroy(&pixt1);
-        pixt1 = pixt2;
-        boxaDestroy(&boxa);
-    }
-    pixDestroy(&pixt1);
-
-        /* Save the result of the optimal dilation */
-    pixt2 = pixaGetPix(pixa, imin, L_CLONE);
-    sel = selCreateBrick(1, imin, 0, imin - 1, SEL_HIT);
-    pixt3 = pixErode(NULL, pixt2, sel);  /* remove effect of dilation */
-    selDestroy(&sel);
-    pixDestroy(&pixt2);
-    pixaDestroy(&pixa);
-    if (psize)
-        *psize = imin + 1;
-
-    numaDestroy(&nacc);
-    return pixt3;
-}
-
-
 /*----------------------------------------------------------------------*
  *                       jbig2 utility routines                         *
  *----------------------------------------------------------------------*/
@@ -1361,7 +1211,7 @@ SEL     *sel;
  *  jbClasserCreate()
  *
  *      Input:  method (JB_RANKHAUS, JB_CORRELATION) 
- *              components (JB_CONN_COMPS, JB_CHARACTERS, JB_WORDS)
+ *              components (JB_CONN_COMPS)
  *      Return: jbclasser, or null on error
  */
 LEPTONICA_EXPORT JBCLASSER *
@@ -1376,8 +1226,7 @@ JBCLASSER  *classer;
         return (JBCLASSER *)ERROR_PTR("classer not made", procName, NULL);
     if (method != JB_RANKHAUS && method != JB_CORRELATION)
         return (JBCLASSER *)ERROR_PTR("invalid type", procName, NULL);
-    if (components != JB_CONN_COMPS && components != JB_CHARACTERS &&
-        components != JB_WORDS)
+    if (components != JB_CONN_COMPS)
         return (JBCLASSER *)ERROR_PTR("invalid type", procName, NULL);
 
     classer->method = method;

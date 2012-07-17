@@ -117,68 +117,6 @@ pixInvert(PIX  *pixd,
 }
 
 /*!
- *  pixAnd()
- *
- *      Input:  pixd  (<optional>; this can be null, equal to pixs1,
- *                     different from pixs1)
- *              pixs1 (can be == pixd)
- *              pixs2 (must be != pixd)
- *      Return: pixd always
- *
- *  Notes:
- *      (1) This gives the intersection of two images with equal depth,
- *          aligning them to the the UL corner.  pixs1 and pixs2 
- *          need not have the same width and height.
- *      (2) There are 3 cases:
- *            (a) pixd == null,   (src1 & src2) --> new pixd
- *            (b) pixd == pixs1,  (src1 & src2) --> src1  (in-place)
- *            (c) pixd != pixs1,  (src1 & src2) --> input pixd
- *      (3) For clarity, if the case is known, use these patterns:
- *            (a) pixd = pixAnd(NULL, pixs1, pixs2);
- *            (b) pixAnd(pixs1, pixs1, pixs2);
- *            (c) pixAnd(pixd, pixs1, pixs2);
- *      (4) The size of the result is determined by pixs1.
- *      (5) The depths of pixs1 and pixs2 must be equal.
- *      (6) Note carefully that the order of pixs1 and pixs2 only matters
- *          for the in-place case.  For in-place, you must have
- *          pixd == pixs1.  Setting pixd == pixs2 gives an incorrect
- *          result: the copy puts pixs1 image data in pixs2, and
- *          the rasterop is then between pixs2 and pixs2 (a no-op).
- */
-LEPTONICA_EXPORT PIX *
-pixAnd(PIX  *pixd,
-       PIX  *pixs1,
-       PIX  *pixs2)
-{
-    PROCNAME("pixAnd");
-
-    if (!pixs1)
-        return (PIX *)ERROR_PTR("pixs1 not defined", procName, pixd);
-    if (!pixs2)
-        return (PIX *)ERROR_PTR("pixs2 not defined", procName, pixd);
-    if (pixd == pixs2)
-        return (PIX *)ERROR_PTR("cannot have pixs2 == pixd", procName, pixd);
-    if (pixGetDepth(pixs1) != pixGetDepth(pixs2))
-        return (PIX *)ERROR_PTR("depths of pixs* unequal", procName, pixd);
-
-#if  EQUAL_SIZE_WARNING
-    if (!pixSizesEqual(pixs1, pixs2))
-        L_WARNING("pixs1 and pixs2 not equal sizes", procName);
-#endif  /* EQUAL_SIZE_WARNING */
-
-        /* Prepare pixd to be a copy of pixs1 */
-    if ((pixd = pixCopy(pixd, pixs1)) == NULL)
-        return (PIX *)ERROR_PTR("pixd not made", procName, pixd);
-
-        /* src1 & src2 --> dest */
-    pixRasterop(pixd, 0, 0, pixGetWidth(pixd), pixGetHeight(pixd),
-                PIX_SRC & PIX_DST, pixs2, 0, 0);
-
-    return pixd;
-}
-
-
-/*!
  *  pixXor()
  *
  *      Input:  pixd  (<optional>; this can be null, equal to pixs1,

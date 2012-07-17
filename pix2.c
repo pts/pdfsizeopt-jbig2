@@ -228,41 +228,6 @@ pixClearAll(PIX  *pix)
 }
 
 
-/*!
- *  pixSetAll()
- *
- *      Input:  pix (all depths; use cmapped with caution)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) Sets all data to 1.  For 1 bpp, this is black; for grayscale
- *          or color, this is white.
- *      (2) Caution: for colormapped pix, this sets the pixel value to the
- *          maximum value supported by the colormap: 2^d - 1.  However, this
- *          color may not be defined, because the colormap may not be full.
- */
-LEPTONICA_EXPORT l_int32
-pixSetAll(PIX  *pix)
-{
-l_int32   n;
-PIXCMAP  *cmap;
-
-    PROCNAME("pixSetAll");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-    if ((cmap = pixGetColormap(pix)) != NULL) {
-        n = pixcmapGetCount(cmap);
-        if (n < cmap->nalloc)  /* cmap is not full */
-            return ERROR_INT("cmap entry does not exist", procName, 1);
-    }
-
-    pixRasterop(pix, 0, 0, pixGetWidth(pix), pixGetHeight(pix),
-                PIX_SET, NULL, 0, 0);
-    return 0;
-}
-
-
 /*-------------------------------------------------------------*
  *                         Set pad bits                        *
  *-------------------------------------------------------------*/
@@ -324,31 +289,6 @@ l_uint32  *data, *pword;
 /*-------------------------------------------------------------*
  *                     Add and remove border                   *
  *-------------------------------------------------------------*/
-/*!
- *  pixAddBorder()
- *
- *      Input:  pixs (all depths; colormap ok)
- *              npix (number of pixels to be added to each side)
- *              val  (value of added border pixels)
- *      Return: pixd (with the added exterior pixels), or null on error
- *
- *  Notes:
- *      (1) See pixAddBorderGeneral() for values of white & black pixels.
- */
-LEPTONICA_EXPORT PIX *
-pixAddBorder(PIX      *pixs,
-             l_int32   npix,
-             l_uint32  val)
-{
-    PROCNAME("pixAddBorder");
-
-    if (!pixs)
-        return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
-    if (npix == 0)
-        return pixClone(pixs);
-    return pixAddBorderGeneral(pixs, npix, npix, npix, npix, val);
-}
-
 
 /*!
  *  pixAddBorderGeneral()
