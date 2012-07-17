@@ -138,6 +138,7 @@ jbig2enc_init(struct jbig2enc_ctx *ctx) {
   ctx->iaidctx = NULL;
 }
 
+#if JBIG2_COMPILE_UNUSED
 // see comments in .h file
 void
 jbig2enc_reset(struct jbig2enc_ctx *ctx) {
@@ -151,7 +152,9 @@ jbig2enc_reset(struct jbig2enc_ctx *ctx) {
   memset(ctx->context, 0, JBIG2_MAX_CTX);
   memset(ctx->intctx, 0, 13 * 512);
 }
+#endif
 
+#if JBIG2_COMPILE_UNUSED
 // see comments in .h file
 void
 jbig2enc_flush(struct jbig2enc_ctx *ctx) {
@@ -164,6 +167,7 @@ jbig2enc_flush(struct jbig2enc_ctx *ctx) {
   ctx->output_chunks->clear();
   ctx->bp = -1;
 }
+#endif
 
 // see comments in .h file
 void
@@ -447,6 +451,7 @@ static const u8 input[] = { 0, 2, 0, 0x51, 0, 0, 0, 0xc0, 0x03, 0x52, 0x87,
   0x2a, 0xaa, 0xaa, 0xaa, 0xaa, 0x82, 0xc0, 0x20, 0, 0xfc, 0xd7, 0x9e, 0xf6,
   0xbf, 0x7f, 0xed, 0x90, 0x4f, 0x46, 0xa3, 0xbf } ;
 
+#if JBIG2_COMPILE_UNUSED
 // -----------------------------------------------------------------------------
 // This function  is used by jbig2enc_image to fetch values from the image and
 // to automatically extend the range of the image on three sides with zero's
@@ -457,6 +462,7 @@ static u8 image_get(const u8 *restrict image, int x, int y, int mx, int my) {
   if (y >= my) return 0;
   return image[mx * y + x];
 }
+#endif
 
 // see comments in .h file
 unsigned
@@ -731,6 +737,7 @@ jbig2enc_refine(struct jbig2enc_ctx *__restrict__ ctx,
   }
 }
 
+#if JBIG2_COMPILE_UNUSED
 // see comments in .h file
 void
 jbig2enc_image(struct jbig2enc_ctx *restrict ctx, const u8 *restrict data,
@@ -778,3 +785,4 @@ jbig2enc_image(struct jbig2enc_ctx *restrict ctx, const u8 *restrict data,
     }
   }
 }
+#endif
