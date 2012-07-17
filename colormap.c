@@ -106,41 +106,6 @@ PIXCMAP    *cmap;
 
 
 /*!
- *  pixcmapCreateLinear()
- *
- *      Input:  d (depth of pix for this colormap; 1, 2, 4 or 8)
- *              nlevels (valid in range [2, 2^d])
- *      Return: cmap, or null on error
- *
- *  Notes:
- *      (1) Colormap has equally spaced gray color values
- *          from black (0, 0, 0) to white (255, 255, 255).
- */
-LEPTONICA_EXPORT PIXCMAP *
-pixcmapCreateLinear(l_int32  d,
-                    l_int32  nlevels)
-{
-l_int32   maxlevels, i, val;
-PIXCMAP  *cmap;
-
-    PROCNAME("pixcmapCreateLinear");
-
-    if (d != 1 && d != 2 && d !=4 && d != 8)
-        return (PIXCMAP *)ERROR_PTR("d not in {1, 2, 4, 8}", procName, NULL);
-    maxlevels = 1 << d;
-    if (nlevels < 2 || nlevels > maxlevels)
-        return (PIXCMAP *)ERROR_PTR("invalid nlevels", procName, NULL);
-
-    cmap = pixcmapCreate(d);
-    for (i = 0; i < nlevels; i++) {
-        val = (255 * i) / (nlevels - 1);
-        pixcmapAddColor(cmap, val, val, val);
-    }
-    return cmap;
-}
-
-
-/*!
  *  pixcmapCopy()
  *
  *      Input:  cmaps 

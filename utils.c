@@ -653,9 +653,6 @@ size_t  nbytes, pos;
  *      (2) endian conversion on data before it is written to a file        *
  *--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------*
- *                        16-bit byte swapping                        *
- *--------------------------------------------------------------------*/
 #ifdef L_BIG_ENDIAN
 
 LEPTONICA_EXPORT l_uint16
@@ -664,19 +661,7 @@ convertOnBigEnd16(l_uint16  shortin)
     return ((shortin << 8) | (shortin >> 8));
 }
 
-LEPTONICA_EXPORT l_uint16
-convertOnLittleEnd16(l_uint16  shortin)
-{
-    return  shortin;
-}
-
 #else     /* L_LITTLE_ENDIAN */
-
-LEPTONICA_EXPORT l_uint16
-convertOnLittleEnd16(l_uint16  shortin)
-{
-    return ((shortin << 8) | (shortin >> 8));
-}
 
 LEPTONICA_EXPORT l_uint16
 convertOnBigEnd16(l_uint16  shortin)
@@ -685,6 +670,7 @@ convertOnBigEnd16(l_uint16  shortin)
 }
 
 #endif  /* L_BIG_ENDIAN */
+
 
 
 /*--------------------------------------------------------------------*

@@ -361,43 +361,6 @@ l_int32  **array;
  *----------------------------------------------------------------------*/
 
 /*!
- *  selSetElement()
- *
- *      Input:  sel
- *              row
- *              col
- *              type  (SEL_HIT, SEL_MISS, SEL_DONT_CARE)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) Because we use row and column to index into an array,
- *          they are always non-negative.  The location of the origin
- *          (and the type of operation) determine the actual
- *          direction of the rasterop.
- */
-LEPTONICA_EXPORT l_int32
-selSetElement(SEL     *sel,
-              l_int32  row,
-              l_int32  col,
-              l_int32  type)
-{
-    PROCNAME("selSetElement");
-
-    if (!sel)
-        return ERROR_INT("sel not defined", procName, 1);
-    if (type != SEL_HIT && type != SEL_MISS && type != SEL_DONT_CARE)
-        return ERROR_INT("invalid sel element type", procName, 1);
-    if (row < 0 || row >= sel->sy)
-        return ERROR_INT("sel row out of bounds", procName, 1);
-    if (col < 0 || col >= sel->sx)
-        return ERROR_INT("sel col out of bounds", procName, 1);
-
-    sel->data[row][col] = type;
-    return 0;
-}
-
-
-/*!
  *  selGetParameters()
  *
  *      Input:  sel
