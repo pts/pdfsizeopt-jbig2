@@ -330,40 +330,6 @@ l_int32  *rmap, *gmap, *bmap;
     return 0;
 }
 
-/*-------------------------------------------------------------*
- *                       Colormap conversion                   *
- *-------------------------------------------------------------*/
-/*!
- *  pixcmapGrayToColor()
- *
- *      Input:  color
- *      Return: cmap, or null on error
- *
- *  Notes:
- *      (1) This creates a colormap that maps from gray to
- *          a specific color.  In the mapping, each component
- *          is faded to white, depending on the gray value.
- *      (2) In use, this is simply attached to a grayscale pix
- *          to give it the input color.
- */
-LEPTONICA_EXPORT PIXCMAP *
-pixcmapGrayToColor(l_uint32  color)
-{
-l_int32   i, rval, gval, bval;
-PIXCMAP  *cmap;
-
-    extractRGBValues(color, &rval, &gval, &bval);
-    cmap = pixcmapCreate(8);
-    for (i = 0; i < 256; i++) {
-        pixcmapAddColor(cmap, rval + (i * (255 - rval)) / 255,
-                        gval + (i * (255 - gval)) / 255,
-                        bval + (i * (255 - bval)) / 255);
-    }
-
-    return cmap;
-}
-
-
 /*----------------------------------------------------------------------*
  *               Extract colormap arrays and serialization              *
  *----------------------------------------------------------------------*/
@@ -407,49 +373,6 @@ RGBA_QUAD  *cta;
         gmap[i] = cta[i].green;
         bmap[i] = cta[i].blue;
     }
-
-    return 0;
-}
-
-
-/*!
- *  pixcmapToRGBTable()
- *
- *      Input:  colormap
- *              &tab (<return> table of rgba values for the colormap)
- *              &ncolors (<optional return> size of table)
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixcmapToRGBTable(PIXCMAP    *cmap,
-                  l_uint32  **ptab,
-                  l_int32    *pncolors)
-{
-l_int32    i, ncolors, rval, gval, bval;
-l_uint32  *tab;
-
-    PROCNAME("pixcmapToRGBTable");
-
-    if (!ptab)
-        return ERROR_INT("&tab not defined", procName, 1);
-    *ptab = NULL;
-    if (!cmap)
-        return ERROR_INT("cmap not defined", procName, 1);
-
-    ncolors = pixcmapGetCount(cmap);
-    if (pncolors)
-        *pncolors = ncolors;
-    if ((tab = (l_uint32 *)CALLOC(ncolors, sizeof(l_uint32))) == NULL)
-        return ERROR_INT("tab not made", procName, 1);
-    *ptab = tab;
-   
-    for (i = 0; i < ncolors; i++) {
-        pixcmapGetColor(cmap, i, &rval, &gval, &bval);
-        composeRGBPixel(rval, gval, bval, &tab[i]);
-    }
-
-/*    for (i = 0; i < ncolors; i++)
-        fprintf(stderr, "Color[%d] = %x\n", i, tab[i]); */
 
     return 0;
 }

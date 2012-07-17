@@ -198,46 +198,6 @@ PIX       *pix;
 
 
 /*!
- *  readHeaderPnm()
- *
- *      Input:  filename
- *              &pix (<optional return> use null to return only header data)
- *              &width (<return>)
- *              &height (<return>)
- *              &depth (<return>)
- *              &type (<return> pnm type)
- *              &bps (<optional return>, bits/sample)
- *              &spp (<optional return>, samples/pixel)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-readHeaderPnm(const char *filename,
-              PIX     **ppix,
-              l_int32  *pwidth,
-              l_int32  *pheight,
-              l_int32  *pdepth,
-              l_int32  *ptype,
-              l_int32  *pbps,
-              l_int32  *pspp)
-{
-l_int32  ret;
-FILE    *fp;
-
-    PROCNAME("readHeaderPnm");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!pwidth || !pheight || !pbps || !pspp)
-        return ERROR_INT("input ptr(s) not defined", procName, 1);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return ERROR_INT("image file not found", procName, 1);
-    ret = freadHeaderPnm(fp, ppix, pwidth, pheight, pdepth, ptype, pbps, pspp);
-    fclose(fp);
-    return ret;
-}
-
-
-/*!
  *  freadHeaderPnm()
  *
  *      Input:  stream opened for read

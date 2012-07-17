@@ -357,39 +357,6 @@ numaGetCount(NUMA  *na)
 
 
 /*!
- *  numaGetFValue()
- *
- *      Input:  na
- *              index (into numa)
- *              &val  (<return> float value; 0.0 on error)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) Caller may need to check the function return value to
- *          decide if a 0.0 in the returned ival is valid.
- */
-LEPTONICA_EXPORT l_int32
-numaGetFValue(NUMA       *na,
-              l_int32     index,
-              l_float32  *pval)
-{
-    PROCNAME("numaGetFValue");
-
-    if (!pval)
-        return ERROR_INT("&val not defined", procName, 1);
-    *pval = 0.0;
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-
-    if (index < 0 || index >= na->n)
-        return ERROR_INT("index not valid", procName, 1);
-
-    *pval = na->array[index];
-    return 0;
-}
-
-
-/*!
  *  numaGetIValue()
  *
  *      Input:  na
@@ -460,77 +427,6 @@ numaChangeRefcount(NUMA    *na,
     return 0;
 }
 
-
-/*!
- *  numaGetXParameters()
- *
- *      Input:  na
- *              &startx (<optional return> startx)
- *              &delx (<optional return> delx)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-numaGetXParameters(NUMA       *na,
-                   l_float32  *pstartx,
-                   l_float32  *pdelx)
-{
-    PROCNAME("numaGetXParameters");
-
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-
-    if (pstartx) *pstartx = na->startx;
-    if (pdelx) *pdelx = na->delx;
-    return 0;
-}
-
-
-/*----------------------------------------------------------------------*
- *                           Numaa accessors                            *
- *----------------------------------------------------------------------*/
-/*!
- *  numaaGetCount()
- *
- *      Input:  naa
- *      Return: count (number of numa), or 0 if no numa or on error
- */
-LEPTONICA_EXPORT l_int32
-numaaGetCount(NUMAA  *naa)
-{
-    PROCNAME("numaaGetCount");
-
-    if (!naa)
-        return ERROR_INT("naa not defined", procName, 0);
-    return naa->n;
-}
-
-/*!
- *  numaaGetNuma()
- *
- *      Input:  naa
- *              index  (to the index-th numa)
- *              accessflag   (L_COPY or L_CLONE)
- *      Return: numa, or null on error
- */
-LEPTONICA_EXPORT NUMA *
-numaaGetNuma(NUMAA   *naa,
-             l_int32  index,
-             l_int32  accessflag)
-{
-    PROCNAME("numaaGetNuma");
-
-    if (!naa)
-        return (NUMA *)ERROR_PTR("naa not defined", procName, NULL);
-    if (index < 0 || index >= naa->n)
-        return (NUMA *)ERROR_PTR("index not valid", procName, NULL);
-
-    if (accessflag == L_COPY)
-        return numaCopy(naa->numa[index]);
-    else if (accessflag == L_CLONE)
-        return numaClone(naa->numa[index]);
-    else
-        return (NUMA *)ERROR_PTR("invalid accessflag", procName, NULL);
-}
 
 /*--------------------------------------------------------------------------*
  *               Number array hash: Creation and destruction                *

@@ -63,41 +63,6 @@ static const char JP2K_IMAGE_DATA[12] = { 0x00, 0x00, 0x00, 0x0C,
  *          Top-level functions for reading images from file           *
  *---------------------------------------------------------------------*/
 
-
-/*!
- *  pixaReadFilesSA()
- *
- *      Input:  sarray (full pathnames for all files)
- *      Return: pixa, or null on error
- */
-LEPTONICA_EXPORT PIXA *
-pixaReadFilesSA(SARRAY  *sa)
-{
-char    *str;
-l_int32  i, n;
-PIX     *pix;
-PIXA    *pixa;
-
-    PROCNAME("pixaReadFilesSA");
-
-    if (!sa)
-        return (PIXA *)ERROR_PTR("sa not defined", procName, NULL);
-
-    n = sarrayGetCount(sa);
-    pixa = pixaCreate(n);
-    for (i = 0; i < n; i++) {
-        str = sarrayGetString(sa, i, L_NOCOPY);
-        if ((pix = pixRead(str)) == NULL) {
-            L_WARNING_STRING("pix not read from file %s", procName, str);
-            continue;
-        }
-	pixaAddPix(pixa, pix, L_INSERT);
-    }
-
-    return pixa;
-}
-
-
 /*!
  *  pixRead()
  *

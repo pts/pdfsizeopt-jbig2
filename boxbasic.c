@@ -620,40 +620,6 @@ BOX  *box;
 }
 
 
-/*---------------------------------------------------------------------*
- *                        Boxa array modifiers                         *
- *---------------------------------------------------------------------*/
-/*!
- *  boxaReplaceBox()
- *
- *      Input:  boxa
- *              index  (to the index-th box)
- *              box (insert to replace existing one)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) In-place replacement of one box.
- *      (2) The previous box at that location is destroyed.
- */
-LEPTONICA_EXPORT l_int32
-boxaReplaceBox(BOXA    *boxa,
-               l_int32  index,
-               BOX     *box)
-{
-    PROCNAME("boxaReplaceBox");
-
-    if (!boxa)
-        return ERROR_INT("boxa not defined", procName, 1);
-    if (index < 0 || index >= boxa->n)
-        return ERROR_INT("index not valid", procName, 1);
-    if (!box)
-        return ERROR_INT("box not defined", procName, 1);
-
-    boxDestroy(&(boxa->box[index]));
-    boxa->box[index] = box;
-    return 0;
-}
-
 /*----------------------------------------------------------------------*
  *                           Boxaa accessors                            *
  *----------------------------------------------------------------------*/

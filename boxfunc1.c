@@ -58,35 +58,6 @@
 #include "allheaders.h"
 
 /*!
- *  boxContainsPt()
- *
- *      Input:  box
- *              x, y (a point)
- *              &contains (<return> 1 if box contains point; 0 otherwise)
- *      Return: 0 if OK, 1 on error.
- */
-LEPTONICA_EXPORT l_int32
-boxContainsPt(BOX       *box,
-              l_float32  x,
-              l_float32  y,
-              l_int32   *pcontains)
-{
-l_int32  bx, by, bw, bh;
-
-    PROCNAME("boxContainsPt");
-
-    if (!pcontains)
-        return ERROR_INT("&contains not defined", procName, 1);
-    *pcontains = 0;
-    if (!box)
-        return ERROR_INT("&box not defined", procName, 1);
-    boxGetGeometry(box, &bx, &by, &bw, &bh);
-    if (x >= bx && x < bx + bw && y >= by && y < by + bh)
-        *pcontains = 1;
-    return 0;
-}
-
-/*!
  *  boxClipToRectangle()
  *
  *      Input:  box

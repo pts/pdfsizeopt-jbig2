@@ -224,42 +224,6 @@ l_error(const char  *msg,
     return;
 }
 
-
-/*!
- *  l_errorString()
- *
- *      Input: msg (error message; must include '%s')
- *             procname
- *             str (embedded in error message via %s)
- */
-LEPTONICA_EXPORT void
-l_errorString(const char  *msg,
-              const char  *procname,
-              const char  *str)
-{
-l_int32  bufsize;
-char    *charbuf;
-
-    if (!msg || !procname || !str) {
-        L_ERROR("msg, procname or str not defined in l_errorString()",
-                procname);
-        return;
-    }
-
-    bufsize = strlen(msg) + strlen(procname) + 128;
-    if ((charbuf = (char *)CALLOC(bufsize, sizeof(char))) == NULL) {
-        L_ERROR("charbuf not made in l_errorString()", procname);
-        return;
-    }
-
-    sprintf(charbuf, "Error in %s: %s\n", procname, msg);
-    fprintf(stderr, charbuf, str);
-
-    FREE(charbuf);
-    return;
-}
-
-
 /*!
  *  l_errorInt()
  *
@@ -376,20 +340,6 @@ char    *charbuf;
     return;
 }
 
-/*!
- *  l_info()
- *
- *      Input: msg (info message)
- *             procname
- */
-LEPTONICA_EXPORT void
-l_info(const char  *msg,
-       const char  *procname)
-{
-    fprintf(stderr, "Info in %s: %s\n", procname, msg);
-    return;
-}
-
 /*--------------------------------------------------------------------*
  *                       Safe string operations                       *
  *--------------------------------------------------------------------*/
@@ -496,41 +446,6 @@ l_int32  len;
         *pdest = NULL;
 
     return 0;
-}
-    
-
-/*!
- *  stringLength()
- *
- *      Input:  src string (can be null or null-terminated string)
- *              size (size of src buffer)
- *      Return: length of src in bytes.
- *
- *  Notes:
- *      (1) Safe implementation of strlen that only checks size bytes
- *          for trailing NUL.
- *      (2) Valid returned string lengths are between 0 and size - 1.
- *          If size bytes are checked without finding a NUL byte, then
- *          an error is indicated by returning size.
- */
-LEPTONICA_EXPORT l_int32
-stringLength(const char  *src,
-             size_t       size)
-{
-l_int32  i;
-
-    PROCNAME("stringLength");
-
-    if (!src)
-        return ERROR_INT("src not defined", procName, 0);
-    if (size < 1)
-        return 0;
-
-    for (i = 0; i < size; i++) {
-        if (src[i] == '\0')
-            return i;
-    }
-    return size;
 }
 
 
@@ -703,120 +618,6 @@ l_int32  nsrc, i, k;
     return dest;
 }
 
-
-/*!
- *  stringFindSubstr()
- *
- *      Input:  src (input string; can be of zero length)
- *              sub (substring to be searched for)
- *              &loc (<return optional> location of substring in src)
- *      Return: 1 if found; 0 if not found or on error
- *
- *  Notes:
- *      (1) This is a wrapper around strstr().
- *      (2) Both @src and @sub must be defined, and @sub must have
- *          length of at least 1.
- *      (3) If the substring is not found and loc is returned, it has
- *          the value -1.
- */
-LEPTONICA_EXPORT l_int32
-stringFindSubstr(const char  *src,
-                 const char  *sub,
-                 l_int32     *ploc)
-{
-char  *ptr;
-
-    PROCNAME("stringFindSubstr");
-
-    if (!src)
-        return ERROR_INT("src not defined", procName, 0);
-    if (!sub)
-        return ERROR_INT("sub not defined", procName, 0);
-    if (ploc) *ploc = -1;
-    if (strlen(sub) == 0)
-        return ERROR_INT("substring length 0", procName, 0);
-    if (strlen(src) == 0)
-        return 0;
-
-    if ((ptr = (char *)strstr(src, sub)) == NULL)  /* not found */
-        return 0;
-
-    if (ploc)
-        *ploc = ptr - src;
-    return 1;
-}
-
-
-/*!
- *  stringReplaceSubstr()
- *
- *      Input:  src (input string; can be of zero length)
- *              sub1 (substring to be replaced)
- *              sub2 (substring to put in; can be "")
- *              &found (<return optional> 1 if sub1 is found; 0 otherwise)
- *              &loc (<return optional> location of ptr after replacement)
- *      Return: dest (string with substring replaced), or null if the
- *              substring not found or on error.
- *
- *  Notes:
- *      (1) Replaces the first instance.
- *      (2) To only remove sub1, use "" for sub2
- *      (3) Returns a new string if sub1 and sub2 are the same.
- *      (4) The optional loc is input as the byte offset within the src
- *          from which the search starts, and after the search it is the
- *          char position in the string of the next character after
- *          the substituted string.
- *      (5) N.B. If ploc is not null, loc must always be initialized.
- *          To search the string from the beginning, set loc = 0.
- */
-LEPTONICA_EXPORT char *
-stringReplaceSubstr(const char  *src,
-                    const char  *sub1,
-                    const char  *sub2,
-                    l_int32     *pfound,
-                    l_int32     *ploc)
-{
-char    *ptr, *dest;
-l_int32  nsrc, nsub1, nsub2, len, npre, loc;
-
-    PROCNAME("stringReplaceSubstr");
-
-    if (!src)
-        return (char *)ERROR_PTR("src not defined", procName, NULL);
-    if (!sub1)
-        return (char *)ERROR_PTR("sub1 not defined", procName, NULL);
-    if (!sub2)
-        return (char *)ERROR_PTR("sub2 not defined", procName, NULL);
-    
-    if (pfound)
-        *pfound = 0;
-    if (ploc)
-        loc = *ploc;
-    else
-        loc = 0;
-    if ((ptr = (char *)strstr(src + loc, sub1)) == NULL) {
-        return NULL;
-    }
-
-    if (pfound)
-        *pfound = 1;
-    nsrc = strlen(src);
-    nsub1 = strlen(sub1);
-    nsub2 = strlen(sub2);
-    len = nsrc + nsub2 - nsub1;
-    if ((dest = (char *)CALLOC(len + 1, sizeof(char))) == NULL)
-        return (char *)ERROR_PTR("dest not made", procName, NULL);
-    npre = ptr - src;
-    memcpy(dest, src, npre);
-    strcpy(dest + npre, sub2);
-    strcpy(dest + npre + nsub2, ptr + nsub1);
-    if (ploc)
-        *ploc = npre + nsub2;
-
-    return dest;
-}
-
-
 /*!
  *  arrayFindSequence()
  *
@@ -953,35 +754,6 @@ void    *newdata;
 /*--------------------------------------------------------------------*
  *                 Read and write between file and memory             *
  *--------------------------------------------------------------------*/
-/*!
- *  l_binaryRead()
- *
- *      Input:  filename
- *              &nbytes (<return> number of bytes read)
- *      Return: data, or null on error
- */
-LEPTONICA_EXPORT l_uint8 *
-l_binaryRead(const char  *filename, 
-             size_t      *pnbytes)
-{
-l_uint8  *data;
-FILE     *fp;
-
-    PROCNAME("l_binaryRead");
-
-    if (!filename)
-        return (l_uint8 *)ERROR_PTR("filename not defined", procName, NULL);
-    if (!pnbytes)
-        return (l_uint8 *)ERROR_PTR("pnbytes not defined", procName, NULL);
-    *pnbytes = 0;
-
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return (l_uint8 *)ERROR_PTR("file stream not opened", procName, NULL);
-
-    data = l_binaryReadStream(fp, pnbytes);
-    fclose(fp);
-    return data;
-}
 
 
 /*!
@@ -1019,76 +791,6 @@ l_uint8  *data;
     ignore = fread(data, 1, *pnbytes, fp);
     return data;
 }
-
-
-/*!
- *  l_binaryWrite()
- *
- *      Input:  filename (output)
- *              operation  ("w" for write; "a" for append)
- *              data  (binary data to be written)
- *              nbytes  (size of data array)
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-l_binaryWrite(const char  *filename,
-              const char  *operation,
-              void        *data,
-              size_t       nbytes)
-{
-char   actualOperation[20];
-FILE  *fp;
-
-    PROCNAME("l_binaryWrite");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!operation)
-        return ERROR_INT("operation not defined", procName, 1);
-    if (!data)
-        return ERROR_INT("data not defined", procName, 1);
-    if (nbytes <= 0)
-        return ERROR_INT("nbytes must be > 0", procName, 1);
-
-    if (!strcmp(operation, "w") && !strcmp(operation, "a"))
-        return ERROR_INT("operation not one of {'w','a'}", procName, 1);
-
-        /* The 'b' flag to fopen() is ignored for all POSIX
-         * conforming systems.  However, Windows needs the 'b' flag. */
-    stringCopy(actualOperation, operation, 2);
-    strncat(actualOperation, "b", 2);
-
-    if ((fp = fopenWriteStream(filename, actualOperation)) == NULL)
-        return ERROR_INT("stream not opened", procName, 1);
-    fwrite(data, 1, nbytes, fp);
-    fclose(fp);
-    return 0;
-}
-
-
-/*!
- *  nbytesInFile()
- *
- *      Input:  filename
- *      Return: nbytes in file; 0 on error
- */
-LEPTONICA_EXPORT size_t
-nbytesInFile(const char  *filename)
-{
-size_t  nbytes;
-FILE   *fp;
-
-    PROCNAME("nbytesInFile");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 0);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return ERROR_INT("stream not opened", procName, 0);
-    nbytes = fnbytesInFile(fp);
-    fclose(fp);
-    return nbytes;
-}
-
 
 /*!
  *  fnbytesInFile()
@@ -1458,110 +1160,3 @@ l_int32  dirlen, namelen, size;
     FREE(cdir);
     return pathout;
 }
-
-/*! 
- *  extractNumberFromFilename()
- *
- *      Input:  fname
- *              numpre (number of characters before the digits to be found)
- *              numpost (number of characters after the digits to be found)
- *      Return: num (number embedded in the filename); -1 on error or if
- *                   not found
- *
- *  Notes:
- *      (1) Use unix-style pathname separators ('/').
- *      (2) The number is to be found in the basename, which is the
- *          filename without either the directory or the last extension.
- *      (3) When a number is found, it is non-negative.  If no number
- *          is found, this returns -1, without an error message.  The
- *          caller needs to check.
- */
-LEPTONICA_EXPORT l_int32
-extractNumberFromFilename(const char  *fname,
-                          l_int32      numpre,
-                          l_int32      numpost)
-{
-char    *tail, *basename;
-l_int32  len, nret, num;
-    
-    PROCNAME("extractNumberFromFilename");
-
-    if (!fname)
-        return ERROR_INT("fname not defined", procName, -1);
-
-    splitPathAtDirectory(fname, NULL, &tail);
-    splitPathAtExtension(tail, &basename, NULL);
-    FREE(tail);
-
-    len = strlen(basename);
-    if (numpre + numpost > len - 1) {
-        FREE(basename);
-        return ERROR_INT("numpre + numpost too big", procName, -1);
-    }
-
-    basename[len - numpost] = '\0';
-    nret = sscanf(basename + numpre, "%d", &num);
-    FREE(basename);
-
-    if (nret == 1)
-        return num;
-    else
-        return -1;  /* not found */
-}
-
-
-/*---------------------------------------------------------------------*
- *                           Timing procs                              *
- *---------------------------------------------------------------------*/
-#ifndef _WIN32
-
-/*!
- *  l_getCurrentTime()
- *
- *      Input:  &sec (<optional return> in seconds since birth of Unix)
- *              &usec (<optional return> in microseconds since birth of Unix)
- *      Return: void
- */
-LEPTONICA_EXPORT void
-l_getCurrentTime(l_int32  *sec,
-                 l_int32  *usec)
-{
-struct timeval tv;
-
-    gettimeofday(&tv, NULL);
-    if (sec) *sec = (l_int32)tv.tv_sec;
-    if (usec) *usec = (l_int32)tv.tv_usec;
-    return;
-}
-
-
-#else   /* _WIN32 : resource.h not implemented under Windows */
-
-    /* Note: if division by 10^7 seems strange, the time is expressed
-     * as the number of 100-nanosecond intervals that have elapsed
-     * since 12:00 A.M. January 1, 1601.  */
-
-LEPTONICA_EXPORT void
-l_getCurrentTime(l_int32  *sec,
-                 l_int32  *usec)
-{
-ULARGE_INTEGER  utime, birthunix;
-FILETIME        systemtime;
-LONGLONG        birthunixhnsec = 116444736000000000ll;  /*in units of 100 ns */
-LONGLONG        usecs;
-
-    GetSystemTimeAsFileTime(&systemtime);
-    utime.LowPart  = systemtime.dwLowDateTime;
-    utime.HighPart = systemtime.dwHighDateTime;
-
-    birthunix.LowPart = (DWORD) birthunixhnsec;
-    birthunix.HighPart = birthunixhnsec >> 32;
-
-    usecs = (LONGLONG) ((utime.QuadPart - birthunix.QuadPart) / 10);
-
-    if (sec) *sec = (l_int32) (usecs / 1000000);
-    if (usec) *usec = (l_int32) (usecs % 1000000);
-    return;
-}
-
-#endif

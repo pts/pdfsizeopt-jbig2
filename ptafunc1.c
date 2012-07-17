@@ -118,85 +118,6 @@ l_int32  ns, i, x, y;
 
 
 /*---------------------------------------------------------------------*
- *                               Geometric                             *
- *---------------------------------------------------------------------*/
-/*!
- *  ptaGetBoundingRegion()
- *
- *      Input:  pta
- *      Return: box, or null on error
- *
- *  Notes:
- *      (1) This is used when the pta represents a set of points in
- *          a two-dimensional image.  It returns the box of minimum
- *          size containing the pts in the pta.
- */
-LEPTONICA_EXPORT BOX *
-ptaGetBoundingRegion(PTA  *pta)
-{
-l_int32  n, i, x, y, minx, maxx, miny, maxy;
-
-    PROCNAME("ptaGetBoundingRegion");
-
-    if (!pta)
-        return (BOX *)ERROR_PTR("pta not defined", procName, NULL);
-
-    minx = 10000000;
-    miny = 10000000;
-    maxx = -10000000;
-    maxy = -10000000;
-    n = ptaGetCount(pta);
-    for (i = 0; i < n; i++) {
-        ptaGetIPt(pta, i, &x, &y);
-        if (x < minx) minx = x;
-        if (x > maxx) maxx = x;
-        if (y < miny) miny = y;
-        if (y > maxy) maxy = y;
-    }
-
-    return boxCreate(minx, miny, maxx - minx + 1, maxy - miny + 1);
-}
-
-/*!
- *  ptaTransform()
- *
- *      Input:  pta
- *              shiftx, shifty
- *              scalex, scaley
- *      Return: pta, or null on error
- *
- *  Notes:
- *      (1) Shift first, then scale.
- */
-LEPTONICA_EXPORT PTA *
-ptaTransform(PTA       *ptas,
-             l_int32    shiftx,
-             l_int32    shifty,
-             l_float32  scalex,
-             l_float32  scaley)
-{
-l_int32  n, i, x, y;
-PTA     *ptad;
-
-    PROCNAME("ptaTransform");
-
-    if (!ptas)
-        return (PTA *)ERROR_PTR("ptas not defined", procName, NULL);
-    n = ptaGetCount(ptas);
-    ptad = ptaCreate(n);
-    for (i = 0; i < n; i++) {
-        ptaGetIPt(ptas, i, &x, &y);
-        x = (l_int32)(scalex * (x + shiftx) + 0.5);
-        y = (l_int32)(scaley * (y + shifty) + 0.5);
-        ptaAddPt(ptad, x, y);
-    }
-
-    return ptad;
-}
-
-
-
-/*---------------------------------------------------------------------*
  *                            Least Squares Fit                        *
  *---------------------------------------------------------------------*/
 
@@ -246,41 +167,5 @@ PTA       *pta;
         }
     }
 
-    return pta;
-}
-
-
-/*!
- *  ptaGetBoundaryPixels()
- *
- *      Input:  pixs (1 bpp)
- *              type (L_BOUNDARY_FG, L_BOUNDARY_BG)
- *      Return: pta, or null on error
- *
- *  Notes:
- *      (1) This generates a pta of either fg or bg boundary pixels.
- */
-LEPTONICA_EXPORT PTA *
-ptaGetBoundaryPixels(PIX     *pixs,
-                     l_int32  type)
-{
-PIX  *pixt;
-PTA  *pta;
-
-    PROCNAME("ptaGetBoundaryPixels");
-
-    if (!pixs || (pixGetDepth(pixs) != 1))
-        return (PTA *)ERROR_PTR("pixs undefined or not 1 bpp", procName, NULL);
-    if (type != L_BOUNDARY_FG && type != L_BOUNDARY_BG)
-        return (PTA *)ERROR_PTR("invalid type", procName, NULL);
-
-    if (type == L_BOUNDARY_FG)
-        pixt = pixMorphSequence(pixs, "e3.3", 0);
-    else
-        pixt = pixMorphSequence(pixs, "d3.3", 0);
-    pixXor(pixt, pixt, pixs);
-    pta = ptaGetPixelsFromPix(pixt, NULL);
-
-    pixDestroy(&pixt);
     return pta;
 }
