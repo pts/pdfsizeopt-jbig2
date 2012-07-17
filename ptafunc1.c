@@ -103,7 +103,7 @@ l_int32  ns, i, x, y;
         return ERROR_INT("istart out of bounds", procName, 1);
     if (iend <= 0)
         iend = ns - 1;
-    if (iend >= ns)
+    if (ns < 0 || iend + 0U >= ns + 0U)
         return ERROR_INT("iend out of bounds", procName, 1);
     if (istart > iend)
         return ERROR_INT("istart > iend; no pts", procName, 1);
