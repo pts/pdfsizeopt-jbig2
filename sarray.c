@@ -183,8 +183,8 @@ SARRAY  *sa;
     if ((sa = *psa) == NULL)
         return;
 
-    sarrayChangeRefcount(sa, -1);
-    if (sarrayGetRefcount(sa) <= 0) {
+    sa->refcount -= 1;
+    if (sa->refcount <= 0) {
         if (sa->array) {
             for (i = 0; i < sa->n; i++) {
                 if (sa->array[i])
@@ -326,43 +326,6 @@ sarrayGetString(SARRAY  *sa,
         return sa->array[index];
     else  /* L_COPY */
         return stringNew(sa->array[index]);
-}
-
-
-/*!
- *  sarrayGetRefCount()
- *
- *      Input:  sarray
- *      Return: refcount, or UNDEF on error
- */
-LEPTONICA_EXPORT l_int32
-sarrayGetRefcount(SARRAY  *sa)
-{
-    PROCNAME("sarrayGetRefcount");
-
-    if (!sa)
-        return ERROR_INT("sa not defined", procName, UNDEF);
-    return sa->refcount;
-}
-
-
-/*!
- *  sarrayChangeRefCount()
- *
- *      Input:  sarray
- *              delta (change to be applied)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-sarrayChangeRefcount(SARRAY  *sa,
-		     l_int32  delta)
-{
-    PROCNAME("sarrayChangeRefcount");
-
-    if (!sa)
-        return ERROR_INT("sa not defined", procName, UNDEF);
-    sa->refcount += delta;
-    return 0;
 }
 
 
