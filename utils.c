@@ -690,7 +690,7 @@ convertOnBigEnd16(l_uint16  shortin)
 LEPTONICA_EXPORT FILE *
 fopenReadStream(const char  *filename)
 {
-char  *fname, *tail;
+char  *fname;
 FILE  *fp;
 
     PROCNAME("fopenReadStream");
@@ -704,81 +704,12 @@ FILE  *fp;
     FREE(fname);
     if (fp) return fp;
 
-        /* Else, strip directory and try locally */
-    splitPathAtDirectory(filename, NULL, &tail);
-    fp = fopen(tail, "rb");
-    FREE(tail);
-    
-    if (!fp)
-        return (FILE *)ERROR_PTR("file not found", procName, NULL);
-    return fp;
+    return (FILE *)ERROR_PTR("file not found", procName, NULL);
 }
 
 /*--------------------------------------------------------------------*
  *                         File name operations                       *
  *--------------------------------------------------------------------*/
-/*!
- *  splitPathAtDirectory()
- *
- *      Input:  pathname  (full path; can be a directory)
- *              &dir  (<optional return> root directory name of
- *                     input path, including trailing '/')
- *              &tail (<optional return> path tail, which is either
- *                     the file name within the root directory or
- *                     the last sub-directory in the path)
- *      Return: 0 if OK, 1 on error
- *       
- *  Notes:
- *      (1) If you only want the tail, input null for the root directory ptr.
- *      (2) If you only want the root directory name, input null for the
- *          tail ptr.
- *      (3) This function makes decisions based only on the lexical
- *          structure of the input.  Examples:
- *            /usr/tmp/abc  -->  dir: /usr/tmp/   tail: abc
- *            /usr/tmp/  -->  dir: /usr/tmp/   tail: [empty string]
- *            /usr/tmp  -->  dir: /usr/   tail: tmp
- *      (4) N.B. The input pathname must have unix directory separators
- *          for unix and windows directory separators for windows.
- */
-LEPTONICA_EXPORT l_int32
-splitPathAtDirectory(const char  *pathname,
-                     char       **pdir,
-                     char       **ptail)
-{
-char  *cpathname, *lastslash;
-
-    PROCNAME("splitPathAtDirectory");
-
-    if (!pdir && !ptail)
-        return ERROR_INT("null input for both strings", procName, 1);
-    if (pdir) *pdir = NULL;
-    if (ptail) *ptail = NULL;
-    if (!pathname)
-        return ERROR_INT("pathname not defined", procName, 1);
-
-    cpathname = stringNew(pathname);
-    if ((lastslash = strrchr(cpathname, sepchar))) {
-        if (ptail)
-            *ptail = stringNew(lastslash + 1);
-        if (pdir) {
-            *(lastslash + 1) = '\0';
-            *pdir = cpathname;
-        }
-        else
-            FREE(cpathname);
-    }
-    else {  /* no directory */
-        if (pdir)
-            *pdir = stringNew("");
-        if (ptail)
-            *ptail = cpathname;
-        else
-            FREE(cpathname);
-    }
-
-    return 0;
-}
-
 
 /*! 
  *  genPathname()
