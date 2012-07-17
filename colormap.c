@@ -293,44 +293,6 @@ RGBA_QUAD  *cta;
 
 
 /*!
- *  pixcmapResetColor()
- *
- *      Input:  cmap
- *              index
- *              rval, gval, bval (colormap entry to be reset; each number
- *                                is in range [0, ... 255])
- *      Return: 0 if OK, 1 if not accessable (caller should check)
- *
- *  Notes:
- *      (1) This resets sets the color of an entry that has already
- *          been set and included in the count of colors.
- */
-LEPTONICA_EXPORT l_int32
-pixcmapResetColor(PIXCMAP  *cmap,
-                  l_int32   index,
-                  l_int32   rval,
-                  l_int32   gval,
-                  l_int32   bval)
-{
-RGBA_QUAD  *cta;
-
-    PROCNAME("pixcmapResetColor");
-
-    if (!cmap)
-        return ERROR_INT("cmap not defined", procName, 1);
-    if (index < 0 || index >= cmap->n)
-        return ERROR_INT("index out of bounds", procName, 1);
-
-    cta = (RGBA_QUAD *)cmap->array;
-    cta[index].red = rval;
-    cta[index].green = gval;
-    cta[index].blue = bval;
-
-    return 0;
-}
-
-
-/*!
  *  pixcmapHasColor()
  *
  *      Input:  cmap
