@@ -101,8 +101,6 @@ static void pushFillsegBB(L_STACK *lstack, l_int32 xleft, l_int32 xright,
                           l_int32 y, l_int32 dy, l_int32 ymax,
                           l_int32 *pminx, l_int32 *pmaxx,
                           l_int32 *pminy, l_int32 *pmaxy);
-static void pushFillseg(L_STACK *lstack, l_int32 xleft, l_int32 xright,
-                        l_int32 y, l_int32 dy, l_int32 ymax);
 static void popFillseg(L_STACK *lstack, l_int32 *pxleft, l_int32 *pxright,
                        l_int32 *py, l_int32 *pdy);
 

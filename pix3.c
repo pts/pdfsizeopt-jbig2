@@ -70,10 +70,6 @@
 #include <string.h>
 #include "allheaders.h"
 
-static l_int32 findTilePatchCenter(PIX *pixs, BOX *box, l_int32 dir,
-                                   l_uint32 targdist, l_uint32 *pdist,
-                                   l_int32 *pxc, l_int32 *pyc);
-
 #ifndef  NO_CONSOLE_IO
 #define   EQUAL_SIZE_WARNING      0
 #endif  /* ~NO_CONSOLE_IO */

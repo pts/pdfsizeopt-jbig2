@@ -4,7 +4,7 @@ set -ex
 rm -f *.o
 gcc -g -c \
     -ffunction-sections -fdata-sections \
-    -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
+    -W -Wall -Wno-uninitialized -Wno-sign-compare -Wno-unused-parameter \
     leptonica.c
 
 g++ -fno-exceptions -fno-rtti -g -c \

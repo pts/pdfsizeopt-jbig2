@@ -135,8 +135,6 @@
 static const l_int32  INITIAL_PTR_ARRAYSIZE6 = 50;  /* n'import quoi */
 static const l_int32  MANY_SELS = 1000;
 
-static SEL *selCreateFromSArray(SARRAY *sa, l_int32 first, l_int32 last);
-
 struct CompParameterMap
 {
     l_int32  size;
