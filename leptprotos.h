@@ -134,11 +134,9 @@ LEPT_DLL LEPTONICA_EXTERN l_int32 pixSetColormap ( PIX *pix, PIXCMAP *colormap )
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixDestroyColormap ( PIX *pix );
 LEPT_DLL LEPTONICA_EXTERN l_uint32 * pixGetData ( PIX *pix );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixSetData ( PIX *pix, l_uint32 *data );
-LEPT_DLL LEPTONICA_EXTERN l_int32 pixFreeData ( PIX *pix );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixSetPixel ( PIX *pix, l_int32 x, l_int32 y, l_uint32 val );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixClearAll ( PIX *pix );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixSetAll ( PIX *pix );
-LEPT_DLL LEPTONICA_EXTERN l_int32 pixSetAllArbitrary ( PIX *pix, l_uint32 val );
 LEPT_DLL extern l_int32 pixSetPadBits ( PIX *pix, l_int32 val );
 LEPT_DLL LEPTONICA_EXTERN PIX * pixAddBorder ( PIX *pixs, l_int32 npix, l_uint32 val );
 LEPT_DLL LEPTONICA_EXTERN PIX * pixAddBorderGeneral ( PIX *pixs, l_int32 left, l_int32 right, l_int32 top, l_int32 bot, l_uint32 val );
@@ -170,7 +168,6 @@ LEPT_DLL LEPTONICA_EXTERN BOX * pixaGetBox ( PIXA *pixa, l_int32 index, l_int32 
 LEPT_DLL LEPTONICA_EXTERN PIXAA * pixaaCreate ( l_int32 n );
 LEPT_DLL LEPTONICA_EXTERN void pixaaDestroy ( PIXAA **ppixaa );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixaaAddPixa ( PIXAA *pixaa, PIXA *pixa, l_int32 copyflag );
-LEPT_DLL LEPTONICA_EXTERN l_int32 pixaaExtendArray ( PIXAA *pixaa );
 LEPT_DLL LEPTONICA_EXTERN l_int32 pixaaGetCount ( PIXAA *pixaa );
 LEPT_DLL LEPTONICA_EXTERN PIXA * pixaaGetPixa ( PIXAA *pixaa, l_int32 index, l_int32 accesstype );
 LEPT_DLL LEPTONICA_EXTERN PIXA * pixaSelectBySize ( PIXA *pixas, l_int32 width, l_int32 height, l_int32 type, l_int32 relation, l_int32 *pchanged );
@@ -204,8 +201,6 @@ LEPT_DLL LEPTONICA_EXTERN l_int32 sarrayAddString ( SARRAY *sa, char *string, l_
 LEPT_DLL LEPTONICA_EXTERN l_int32 sarrayExtendArray ( SARRAY *sa );
 LEPT_DLL LEPTONICA_EXTERN l_int32 sarrayGetCount ( SARRAY *sa );
 LEPT_DLL LEPTONICA_EXTERN char * sarrayGetString ( SARRAY *sa, l_int32 index, l_int32 copyflag );
-LEPT_DLL LEPTONICA_EXTERN l_int32 sarrayGetRefcount ( SARRAY *sa );
-LEPT_DLL LEPTONICA_EXTERN l_int32 sarrayChangeRefcount ( SARRAY *sa, l_int32 delta );
 LEPT_DLL LEPTONICA_EXTERN l_int32 sarraySplitString ( SARRAY *sa, const char *str, const char *separators );
 LEPT_DLL LEPTONICA_EXTERN PIX * pixExpandReplicate ( PIX *pixs, l_int32 factor );
 LEPT_DLL extern PIX * pixScaleGray2xLIThresh ( PIX *pixs, l_int32 thresh );
@@ -240,7 +235,6 @@ LEPT_DLL LEPTONICA_EXTERN void * reallocNew ( void **pindata, l_int32 oldsize, l
 LEPT_DLL LEPTONICA_EXTERN size_t fnbytesInFile ( FILE *fp );
 LEPT_DLL LEPTONICA_EXTERN l_uint16 convertOnBigEnd16 ( l_uint16 shortin );
 LEPT_DLL LEPTONICA_EXTERN FILE * fopenReadStream ( const char *filename );
-LEPT_DLL LEPTONICA_EXTERN l_int32 splitPathAtDirectory ( const char *pathname, char **pdir, char **ptail );
 LEPT_DLL LEPTONICA_EXTERN char * genPathname ( const char *dir, const char *fname );
 
 #ifdef __cplusplus
