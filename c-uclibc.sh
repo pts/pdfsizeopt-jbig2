@@ -62,7 +62,7 @@ PREFIX=/home/pts/prg/pts-mini-gpl/uevalrun/cross-compiler
 rm -f *.o
 ${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
     -ffunction-sections -fdata-sections \
-    -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
+    -W -Wall -Wno-uninitialized -Wno-unused-parameter -Wno-sign-compare \
     -Wno-strict-aliasing -fno-strict-aliasing \
     leptonica.c
 
