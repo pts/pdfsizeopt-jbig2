@@ -695,46 +695,6 @@ BOX       *box;
             
 
 /*!
- *  pixSeedfill()
- *
- *      Input:  pixs (1 bpp)
- *              lstack (for holding fillsegs)
- *              x,y   (location of seed pixel)
- *              connectivity  (4 or 8)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This removes the component from pixs with a fg pixel at (x,y).
- *      (2) See pixSeedfill4() and pixSeedfill8() for details.
- */
-LEPTONICA_EXPORT l_int32
-pixSeedfill(PIX      *pixs,
-            L_STACK  *lstack,
-            l_int32   x,
-            l_int32   y,
-            l_int32   connectivity)
-{
-l_int32  retval;
-
-    PROCNAME("pixSeedfill");
-
-    if (!pixs || pixGetDepth(pixs) != 1)
-        return ERROR_INT("pixs not defined or not 1 bpp", procName, 1);
-    if (!lstack)
-        return ERROR_INT("lstack not defined", procName, 1);
-    if (connectivity != 4 && connectivity != 8)
-        return ERROR_INT("connectivity not 4 or 8", procName, 1);
-
-    if (connectivity == 4)
-        retval = pixSeedfill4(pixs, lstack, x, y);
-    else  /* connectivity == 8  */
-        retval = pixSeedfill8(pixs, lstack, x, y);
-
-    return retval;
-}
-
-
-/*!
  *  pixSeedfill4()
  *
  *      Input:  pixs (1 bpp)

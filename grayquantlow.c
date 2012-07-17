@@ -381,57 +381,6 @@ l_uint32 sword, dword;
 }
 
 
-/*---------------------------------------------------------------------*
- *    Alternate implementation of dithering that uses lookup tables.   *
- *    This is analogous to the method used in dithering to 2 bpp.      *
- *---------------------------------------------------------------------*/
-/*!
- *  ditherToBinaryLUTLow()
- *
- *  Low-level function for doing Floyd-Steinberg error diffusion
- *  dithering from 8 bpp (datas) to 1 bpp (datad).  Two source
- *  line buffers, bufs1 and bufs2, are provided, along with three
- *  256-entry lookup tables: tabval gives the output pixel value,
- *  tab38 gives the extra (plus or minus) transferred to the pixels
- *  directly to the left and below, and tab14 gives the extra
- *  transferred to the diagonal below.  The choice of 3/8 and 1/4
- *  is traditional but arbitrary when you use a lookup table; the
- *  only constraint is that the sum is 1.  See other comments below.
- */
-LEPTONICA_EXPORT void
-ditherToBinaryLUTLow(l_uint32  *datad,
-                     l_int32    w,
-                     l_int32    h,
-                     l_int32    wpld,
-                     l_uint32  *datas,
-                     l_int32    wpls,
-                     l_uint32  *bufs1,
-                     l_uint32  *bufs2,
-                     l_int32   *tabval,
-                     l_int32   *tab38,
-                     l_int32   *tab14)
-{
-l_int32      i;
-l_uint32    *lined;
-
-        /* do all lines except last line */
-    memcpy(bufs2, datas, 4 * wpls);  /* prime the buffer */
-    for (i = 0; i < h - 1; i++) {
-        memcpy(bufs1, bufs2, 4 * wpls);
-        memcpy(bufs2, datas + (i + 1) * wpls, 4 * wpls);
-        lined = datad + i * wpld;
-        ditherToBinaryLineLUTLow(lined, w, bufs1, bufs2,
-                                 tabval, tab38, tab14, 0);
-    }
-
-        /* do last line */
-    memcpy(bufs1, bufs2, 4 * wpls);
-    lined = datad + (h - 1) * wpld;
-    ditherToBinaryLineLUTLow(lined, w, bufs1, bufs2, tabval, tab38, tab14,  1);
-    return;
-}
-
-
 /*!
  *  ditherToBinaryLineLUTLow()
  *   
@@ -524,70 +473,6 @@ l_uint8  rval, bval, dval;
     }
 
     return;
-}
-
-
-/*!
- *  make8To1DitherTables()
- *
- *      Input: &tabval (value assigned to output pixel; 0 or 1)
- *             &tab38  (amount propagated to pixels left and below)
- *             &tab14  (amount propagated to pixel to left and down)
- *             lowerclip (values near 0 where the excess is not propagated)
- *             upperclip (values near 255 where the deficit is not propagated)
- *
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-make8To1DitherTables(l_int32 **ptabval,
-                     l_int32 **ptab38,
-                     l_int32 **ptab14,
-                     l_int32   lowerclip,
-                     l_int32   upperclip)
-{
-l_int32   i;
-l_int32  *tabval, *tab38, *tab14;
-
-    PROCNAME("make8To1DitherTables");
-
-    if (!ptabval || !ptab38 || !ptab14)
-        return ERROR_INT("table ptrs not all defined", procName, 1);
-
-        /* 3 lookup tables: 1-bit value, (3/8)excess, and (1/4)excess */
-    if ((tabval = (l_int32 *)CALLOC(256, sizeof(l_int32))) == NULL)
-        return ERROR_INT("tabval not made", procName, 1);
-    if ((tab38 = (l_int32 *)CALLOC(256, sizeof(l_int32))) == NULL)
-        return ERROR_INT("tab38 not made", procName, 1);
-    if ((tab14 = (l_int32 *)CALLOC(256, sizeof(l_int32))) == NULL)
-        return ERROR_INT("tab14 not made", procName, 1);
-    *ptabval = tabval;
-    *ptab38 = tab38;
-    *ptab14 = tab14;
-
-    for (i = 0; i < 256; i++) {
-        if (i <= lowerclip) {
-            tabval[i] = 1;
-            tab38[i] = 0;
-            tab14[i] = 0;
-        }
-        else if (i < 128) {
-            tabval[i] = 1;
-            tab38[i] = (3 * i + 4) / 8;
-            tab14[i] = (i + 2) / 4;
-        }
-        else if (i < 255 - upperclip) {
-            tabval[i] = 0;
-            tab38[i] = (3 * (i - 255) + 4) / 8;
-            tab14[i] = ((i - 255) + 2) / 4;
-        }
-        else {  /* i >= 255 - upperclip */
-            tabval[i] = 0;
-            tab38[i] = 0;
-            tab14[i] = 0;
-        }
-    }
-
-    return 0;
 }
 
 

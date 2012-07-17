@@ -782,34 +782,6 @@ pixGetDimensions(PIX      *pix,
 }
 
 
-/*!
- *  pixCopyDimensions()
- *
- *      Input:  pixd
- *              pixd
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixCopyDimensions(PIX  *pixd,
-                  PIX  *pixs)
-{
-    PROCNAME("pixCopyDimensions");
-
-    if (!pixd)
-        return ERROR_INT("pixd not defined", procName, 1);
-    if (!pixs)
-        return ERROR_INT("pixs not defined", procName, 1);
-    if (pixs == pixd)
-        return 0;   /* no-op */
-
-    pixSetWidth(pixd, pixGetWidth(pixs));
-    pixSetHeight(pixd, pixGetHeight(pixs));
-    pixSetDepth(pixd, pixGetDepth(pixs));
-    pixSetWpl(pixd, pixGetWpl(pixs));
-    return 0;
-}
-
-
 LEPTONICA_EXPORT l_int32
 pixGetWpl(PIX  *pix)
 {
