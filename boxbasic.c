@@ -164,29 +164,6 @@ BOX  *box;
 
 
 /*!
- *  boxCreateValid()
- *
- *      Input:  x, y, w, h
- *      Return: box, or null on error
- *
- *  Notes:
- *      (1) This returns NULL if either w = 0 or h = 0.
- */
-LEPTONICA_EXPORT BOX *
-boxCreateValid(l_int32  x,
-               l_int32  y,
-               l_int32  w,
-               l_int32  h)
-{
-    PROCNAME("boxCreateValid");
-
-    if (w <= 0 || h <= 0)
-        return (BOX *)ERROR_PTR("w and h not both > 0", procName, NULL);
-    return boxCreate(x, y, w, h);
-}
-
-
-/*!
  *  boxCopy()
  *
  *      Input:  box
@@ -578,32 +555,6 @@ boxaGetCount(BOXA  *boxa)
 
 
 /*!
- *  boxaGetValidCount()
- *
- *      Input:  boxa
- *      Return: count (of valid boxes); 0 if no valid boxes or on error
- */
-LEPTONICA_EXPORT l_int32
-boxaGetValidCount(BOXA  *boxa)
-{
-l_int32  n, i, w, h, count;
-
-    PROCNAME("boxaGetValidCount");
-
-    if (!boxa)
-        return ERROR_INT("boxa not defined", procName, 0);
-
-    n = boxaGetCount(boxa);
-    for (i = 0, count = 0; i < n; i++) {
-        boxaGetBoxGeometry(boxa, i, NULL, NULL, &w, &h);
-        if (w > 0 && h > 0)
-            count++;
-    }
-    return count;
-}
-
-
-/*!
  *  boxaGetBox()
  *
  *      Input:  boxa
@@ -629,44 +580,6 @@ boxaGetBox(BOXA    *boxa,
         return boxClone(boxa->box[index]);
     else
         return (BOX *)ERROR_PTR("invalid accessflag", procName, NULL);
-}
-
-
-/*!
- *  boxaGetValidBox()
- *
- *      Input:  boxa
- *              index  (to the index-th box)
- *              accessflag  (L_COPY or L_CLONE)
- *      Return: box, or null if box is not valid or on error
- *
- *  Notes:
- *      (1) This returns NULL for an invalid box in a boxa.
- *          For a box to be valid, both the width and height must be > 0.
- *      (2) We allow invalid boxes, with w = 0 or h = 0, as placeholders
- *          in boxa for which the index of the box in the boxa is important.
- *          This is an atypical situation; usually you want to put only
- *          valid boxes in a boxa.
- */
-LEPTONICA_EXPORT BOX *
-boxaGetValidBox(BOXA    *boxa,
-                l_int32  index,
-                l_int32  accessflag)
-{
-l_int32  w, h;
-BOX     *box;
-
-    PROCNAME("boxaGetValidBox");
-
-    if (!boxa)
-        return (BOX *)ERROR_PTR("boxa not defined", procName, NULL);
-
-    if ((box = boxaGetBox(boxa, index, accessflag)) == NULL)
-        return (BOX *)ERROR_PTR("box not returned", procName, NULL);
-    boxGetGeometry(box, NULL, NULL, &w, &h);
-    if (w <= 0 || h <= 0)  /* not valid, but not necessarily an error */
-        boxDestroy(&box);
-    return box;
 }
 
 
@@ -943,77 +856,6 @@ BOXAA  *baa;
 }
 
 
-/*!
- *  boxaaCopy()
- *
- *      Input:  baas (input boxaa to be copied)
- *              copyflag (L_COPY, L_CLONE)
- *      Return: baad (new boxaa, composed of copies or clones of the boxa
- *                    in baas), or null on error
- *
- *  Notes:
- *      (1) L_COPY makes a copy of each boxa in baas.
- *          L_CLONE makes a clone of each boxa in baas.
- */
-LEPTONICA_EXPORT BOXAA *
-boxaaCopy(BOXAA   *baas,
-          l_int32  copyflag)
-{
-l_int32  i, n;
-BOXA    *boxa;
-BOXAA   *baad;
-
-    PROCNAME("boxaaCopy");
-
-    if (!baas)
-        return (BOXAA *)ERROR_PTR("baas not defined", procName, NULL);
-    if (copyflag != L_COPY && copyflag != L_CLONE)
-        return (BOXAA *)ERROR_PTR("invalid copyflag", procName, NULL);
-
-    n = boxaaGetCount(baas);
-    baad = boxaaCreate(n);
-    for (i = 0; i < n; i++) {
-        boxa = boxaaGetBoxa(baas, i, copyflag);
-        boxaaAddBoxa(baad, boxa, L_INSERT);
-    }
-
-    return baad;
-}
-
-
-/*!
- *  boxaaDestroy()
- *
- *      Input:  &boxaa (<will be set to null before returning>)
- *      Return: void
- */
-LEPTONICA_EXPORT void
-boxaaDestroy(BOXAA  **pbaa)
-{
-l_int32  i;
-BOXAA   *baa;
-
-    PROCNAME("boxaaDestroy");
-
-    if (pbaa == NULL) {
-        L_WARNING("ptr address is NULL!", procName);
-        return;
-    }
-
-    if ((baa = *pbaa) == NULL)
-        return;
-
-    for (i = 0; i < baa->n; i++)
-        boxaDestroy(&baa->boxa[i]);
-    FREE(baa->boxa);
-    FREE(baa);
-    *pbaa = NULL;
-
-    return;
-}
-
-
-
 /*--------------------------------------------------------------------------*
  *                              Add Boxa to Boxaa                           *
  *--------------------------------------------------------------------------*/
@@ -1102,34 +944,6 @@ boxaaGetCount(BOXAA  *baa)
 
 
 /*!
- *  boxaaGetBoxCount()
- *
- *      Input:  boxaa
- *      Return: count (number of boxes), or 0 if no boxes or on error
- */
-LEPTONICA_EXPORT l_int32
-boxaaGetBoxCount(BOXAA  *baa)
-{
-BOXA    *boxa;
-l_int32  n, sum, i;
-
-    PROCNAME("boxaaGetBoxCount");
-
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 0);
-
-    n = boxaaGetCount(baa);
-    for (sum = 0, i = 0; i < n; i++) {
-        boxa = boxaaGetBoxa(baa, i, L_CLONE);
-        sum += boxaGetCount(boxa);
-        boxaDestroy(&boxa);
-    }
-
-    return sum;
-}
-
-
-/*!
  *  boxaaGetBoxa()
  *
  *      Input:  boxaa
@@ -1155,197 +969,6 @@ l_int32  n;
         return (BOXA *)ERROR_PTR("invalid accessflag", procName, NULL);
 
     return boxaCopy(baa->boxa[index], accessflag);
-}
-
-
-/*!
- *  boxaaReplaceBoxa()
- *
- *      Input:  boxaa
- *              index  (to the index-th boxa)
- *              boxa (insert and replace any existing one)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) Any existing boxa is destroyed, and the input one
- *          is inserted in its place.
- *      (2) If the index is invalid, return 1 (error)
- */
-LEPTONICA_EXPORT l_int32
-boxaaReplaceBoxa(BOXAA   *baa,
-                 l_int32  index,
-                 BOXA    *boxa)
-{
-l_int32  n;
-
-    PROCNAME("boxaaReplaceBoxa");
-
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 1);
-    if (!boxa)
-        return ERROR_INT("boxa not defined", procName, 1);
-    n = boxaaGetCount(baa);
-    if (index < 0 || index >= n)
-        return ERROR_INT("index not valid", procName, 1);
-
-    boxaDestroy(&baa->boxa[index]);
-    baa->boxa[index] = boxa;
-    return 0;
-}
-
-
-/*!
- *  boxaaInsertBoxa()
- *
- *      Input:  boxaa
- *              index (location in boxaa to insert new boxa)
- *              boxa (new boxa to be inserted)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This shifts boxa[i] --> boxa[i + 1] for all i >= index,
- *          and then inserts boxa as boxa[index].
- *      (2) To insert at the beginning of the array, set index = 0.
- *      (3) To append to the array, it's easier to use boxaaAddBoxa().
- *      (4) This should not be used repeatedly to insert into large arrays,
- *          because the function is O(n).
- */
-LEPTONICA_EXPORT l_int32
-boxaaInsertBoxa(BOXAA   *baa,
-                l_int32  index,
-                BOXA    *boxa)
-{
-l_int32  i, n;
-BOXA   **array;
-
-    PROCNAME("boxaaInsertBoxa");
-
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 1);
-    n = boxaaGetCount(baa);
-    if (index < 0 || index > n)
-        return ERROR_INT("index not in {0...n}", procName, 1);
-    if (!boxa)
-        return ERROR_INT("boxa not defined", procName, 1);
-
-    if (n >= baa->nalloc)
-        boxaaExtendArray(baa);
-    array = baa->boxa;
-    baa->n++;
-    for (i = n; i > index; i--)
-        array[i] = array[i - 1];
-    array[index] = boxa;
-
-    return 0;
-}
-
-
-/*!
- *  boxaaRemoveBoxa()
- *
- *      Input:  boxaa
- *              index  (of the boxa to be removed)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This removes boxa[index] and then shifts
- *          boxa[i] --> boxa[i - 1] for all i > index.
- *      (2) The removed boxaa is destroyed.
- *      (2) This should not be used repeatedly on large arrays,
- *          because the function is O(n).
- */
-LEPTONICA_EXPORT l_int32
-boxaaRemoveBoxa(BOXAA   *baa,
-                l_int32  index)
-{
-l_int32  i, n;
-BOXA   **array;
-
-    PROCNAME("boxaaRemoveBox");
-
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 1);
-    n = boxaaGetCount(baa);
-    if (index < 0 || index >= n)
-        return ERROR_INT("index not valid", procName, 1);
-
-    array = baa->boxa;
-    boxaDestroy(&array[index]);
-    for (i = index + 1; i < n; i++)
-        array[i - 1] = array[i];
-    array[n - 1] = NULL;
-    baa->n--;
-
-    return 0;
-}
-
-
-/*!
- *  boxaaAddBox()
- *
- *      Input:  boxaa
- *              index (of boxa with boxaa)
- *              box (to be added)
- *              accessflag (L_INSERT, L_COPY or L_CLONE)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) Adds to an existing boxa only.
- */
-LEPTONICA_EXPORT l_int32
-boxaaAddBox(BOXAA   *baa,
-            l_int32  index,
-            BOX     *box,
-            l_int32  accessflag)
-{
-l_int32  n;
-BOXA    *boxa;
-    PROCNAME("boxaaAddBox");
-
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 1);
-    n = boxaaGetCount(baa);
-    if (index < 0 || index >= n)
-        return ERROR_INT("index not valid", procName, 1);
-    if (accessflag != L_INSERT && accessflag != L_COPY && accessflag != L_CLONE)
-        return ERROR_INT("invalid accessflag", procName, 1);
-
-    boxa = boxaaGetBoxa(baa, index, L_CLONE);
-    boxaAddBox(boxa, box, accessflag);
-    boxaDestroy(&boxa);
-    return 0;
-}
-
-
-/*---------------------------------------------------------------------*
- *                        Boxaa serialized I/O                         *
- *---------------------------------------------------------------------*/
-/*!
- *  boxaaRead()
- *
- *      Input:  filename
- *      Return: boxaa, or null on error
- */
-LEPTONICA_EXPORT BOXAA *
-boxaaRead(const char  *filename)
-{
-FILE   *fp;
-BOXAA  *baa;
-
-    PROCNAME("boxaaRead");
-
-    if (!filename)
-        return (BOXAA *)ERROR_PTR("filename not defined", procName, NULL);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return (BOXAA *)ERROR_PTR("stream not opened", procName, NULL);
-
-    if ((baa = boxaaReadStream(fp)) == NULL) {
-        fclose(fp);
-        return (BOXAA *)ERROR_PTR("boxaa not read", procName, NULL);
-    }
-
-    fclose(fp);
-    return baa;
 }
 
 
@@ -1391,36 +1014,6 @@ BOXAA   *baa;
 }
 
 /*!
- *  boxaaWrite()
- *
- *      Input:  filename
- *              boxaa
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-boxaaWrite(const char  *filename,
-           BOXAA       *baa)
-{
-FILE  *fp;
-
-    PROCNAME("boxaaWrite");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!baa)
-        return ERROR_INT("baa not defined", procName, 1);
-
-    if ((fp = fopenWriteStream(filename, "w")) == NULL)
-        return ERROR_INT("stream not opened", procName, 1);
-    if (boxaaWriteStream(fp, baa))
-        return ERROR_INT("baa not written to stream", procName, 1);
-    fclose(fp);
-
-    return 0;
-}
-
-
-/*!
  *  boxaaWriteStream()
  *
  *      Input: stream
@@ -1458,38 +1051,6 @@ BOXA    *boxa;
         boxaDestroy(&boxa);
     }
     return 0;
-}
-
-
-/*---------------------------------------------------------------------*
- *                         Boxa serialized I/O                         *
- *---------------------------------------------------------------------*/
-/*!
- *  boxaRead()
- *
- *      Input:  filename
- *      Return: boxa, or null on error
- */
-LEPTONICA_EXPORT BOXA *
-boxaRead(const char  *filename)
-{
-FILE  *fp;
-BOXA  *boxa;
-
-    PROCNAME("boxaRead");
-
-    if (!filename)
-        return (BOXA *)ERROR_PTR("filename not defined", procName, NULL);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return (BOXA *)ERROR_PTR("stream not opened", procName, NULL);
-
-    if ((boxa = boxaReadStream(fp)) == NULL) {
-        fclose(fp);
-        return (BOXA *)ERROR_PTR("boxa not read", procName, NULL);
-    }
-
-    fclose(fp);
-    return boxa;
 }
 
 
@@ -1536,36 +1097,6 @@ BOXA    *boxa;
 
 
 /*!
- *  boxaWrite()
- *
- *      Input:  filename
- *              boxa
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-boxaWrite(const char  *filename,
-          BOXA        *boxa)
-{
-FILE  *fp;
-
-    PROCNAME("boxaWrite");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!boxa)
-        return ERROR_INT("boxa not defined", procName, 1);
-
-    if ((fp = fopenWriteStream(filename, "w")) == NULL)
-        return ERROR_INT("stream not opened", procName, 1);
-    if (boxaWriteStream(fp, boxa))
-        return ERROR_INT("boxa not written to stream", procName, 1);
-    fclose(fp);
-
-    return 0;
-}
-
-
-/*!
  *  boxaWriteStream()
  *
  *      Input: stream
@@ -1598,39 +1129,3 @@ BOX     *box;
     }
     return 0;
 }
-
-
-/*---------------------------------------------------------------------*
- *                            Debug printing                           *
- *---------------------------------------------------------------------*/
-/*!
- *  boxPrintStreamInfo()
- *
- *      Input:  stream
- *              box
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This outputs information about the box, for debugging.
- *      (2) Use serialization functions to write to file if you want
- *          to read the data back.
- */
-LEPTONICA_EXPORT l_int32
-boxPrintStreamInfo(FILE  *fp,
-                   BOX   *box)
-{
-    PROCNAME("boxPrintStreamInfo");
-
-    if (!fp)
-        return ERROR_INT("stream not defined", procName, 1);
-    if (!box)
-        return ERROR_INT("box not defined", procName, 1);
-
-    fprintf(fp, " Box x (pixels) =           %d\n", box->x);
-    fprintf(fp, " Box y (pixels) =           %d\n", box->y);
-    fprintf(fp, " Box width (pixels) =       %d\n", box->w);
-    fprintf(fp, " Box height (pixels) =      %d\n", box->h);
-
-    return 0;
-}
-

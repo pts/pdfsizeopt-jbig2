@@ -2810,42 +2810,6 @@ struct tm  *tmp2;
 }
 
 
-/*--------------------------------------------------------------------*
- *                  Deprecated binary read functions                  *
- *--------------------------------------------------------------------*/
-/*   Don't use these: they use l_int32 instead of size_t              */
-/*!
- *  arrayRead()
- *
- *      Input:  filename
- *              &nbytes (<return> number of bytes read)
- *      Return: array, or null on error
- */
-LEPTONICA_EXPORT l_uint8 *
-arrayRead(const char  *fname,
-          l_int32     *pnbytes)
-{
-l_uint8  *data;
-FILE     *fp;
-
-    PROCNAME("arrayRead");
-
-    if (!fname)
-        return (l_uint8 *)ERROR_PTR("fname not defined", procName, NULL);
-    if (!pnbytes)
-        return (l_uint8 *)ERROR_PTR("pnbytes not defined", procName, NULL);
-    *pnbytes = 0;
-
-    if ((fp = fopenReadStream(fname)) == NULL)
-        return (l_uint8 *)ERROR_PTR("file stream not opened", procName, NULL);
-
-    data = arrayReadStream(fp, pnbytes);
-    fclose(fp);
-
-    return data;
-}
-
-
 /*!
  *  arrayReadStream()
  *

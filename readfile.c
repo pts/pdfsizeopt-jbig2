@@ -52,20 +52,6 @@ enum {
     READ_GRAY = 2              /* read gray only */
 };
 
-    /* Output files for ioFormatTest().
-     * Note that the test for jpeg is not yet implemented */
-static const char *FILE_BMP  =  "/tmp/junkout.bmp";
-static const char *FILE_PNG  =  "/tmp/junkout.png";
-static const char *FILE_PNM  =  "/tmp/junkout.pnm";
-static const char *FILE_G3   =  "/tmp/junkout_g3.tif";
-static const char *FILE_G4   =  "/tmp/junkout_g4.tif";
-static const char *FILE_RLE  =  "/tmp/junkout_rle.tif";
-static const char *FILE_PB   =  "/tmp/junkout_packbits.tif";
-static const char *FILE_LZW  =  "/tmp/junkout_lzw.tif";
-static const char *FILE_ZIP  =  "/tmp/junkout_zip.tif";
-static const char *FILE_TIFF =  "/tmp/junkout.tif";
-static const char *FILE_JPG  =  "/tmp/junkout.jpg";
-
     /* I found these from the source code to the unix file */
     /* command. man 1 file */
 static const char JP2K_CODESTREAM[4] = { 0xff, 0x4f, 0xff, 0x51 };

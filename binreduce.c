@@ -33,64 +33,6 @@
 
 
 /*------------------------------------------------------------------*
- *                       Subsampled reduction                       *
- *------------------------------------------------------------------*/
-/*!
- *  pixReduceBinary2()
- *
- *      Input:  pixs
- *              tab (<optional>; if null, a table is made here
- *                   and destroyed before exit)
- *      Return: pixd (2x subsampled), or null on error
- */
-LEPTONICA_EXPORT PIX *
-pixReduceBinary2(PIX      *pixs,
-                 l_uint8  *intab)
-{
-l_uint8   *tab;
-l_int32    ws, hs, wpls, wpld;
-l_uint32  *datas, *datad;
-PIX       *pixd;
-
-    PROCNAME("pixReduceBinary2");
-
-    if (!pixs)
-        return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
-
-    if (pixGetDepth(pixs) != 1)
-        return (PIX *)ERROR_PTR("pixs not binary", procName, NULL);
-
-    if (intab) /* use input table */
-        tab = intab;
-    else {
-        if ((tab = makeSubsampleTab2x()) == NULL)
-            return (PIX *)ERROR_PTR("tab not made", procName, NULL);
-    }
-    
-    ws = pixGetWidth(pixs);
-    hs = pixGetHeight(pixs);
-    if (hs <= 1)
-        return (PIX *)ERROR_PTR("hs must be at least 2", procName, NULL);
-    wpls = pixGetWpl(pixs);
-    datas = pixGetData(pixs);
-
-    if ((pixd = pixCreate(ws / 2, hs / 2, 1)) == NULL)
-        return (PIX *)ERROR_PTR("pixd not made", procName, NULL);
-    pixCopyResolution(pixd, pixs);
-    pixScaleResolution(pixd, 0.5, 0.5);
-    wpld = pixGetWpl(pixd);
-    datad = pixGetData(pixd);
-
-    reduceBinary2Low(datad, wpld, datas, hs, wpls, tab);
-
-    if (intab == NULL)
-        FREE(tab);
-
-    return pixd;
-}
-
-
-/*------------------------------------------------------------------*
  *                   Rank filtered binary reductions                *
  *------------------------------------------------------------------*/
 /*!
