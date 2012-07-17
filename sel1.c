@@ -287,45 +287,6 @@ SEL     *sel;
 
 
 /*!
- *  selCopy() 
- *
- *      Input:  sel
- *      Return: a copy of the sel, or null on error
- */
-LEPTONICA_EXPORT SEL *
-selCopy(SEL  *sel)
-{
-l_int32  sx, sy, cx, cy, i, j;
-SEL     *csel;
-
-    PROCNAME("selCopy");
-
-    if (!sel)
-        return (SEL *)ERROR_PTR("sel not defined", procName, NULL);
-
-    if ((csel = (SEL *)CALLOC(1, sizeof(SEL))) == NULL)
-        return (SEL *)ERROR_PTR("csel not made", procName, NULL);
-    selGetParameters(sel, &sy, &sx, &cy, &cx);
-    csel->sy = sy;
-    csel->sx = sx;
-    csel->cy = cy;
-    csel->cx = cx;
-
-    if ((csel->data = create2dIntArray(sy, sx)) == NULL)
-        return (SEL *)ERROR_PTR("sel data not made", procName, NULL);
-
-    for (i = 0; i < sy; i++)
-        for (j = 0; j < sx; j++)
-            csel->data[i][j] = sel->data[i][j];
-
-    if (sel->name)
-        csel->name = stringNew(sel->name);
-
-    return csel;
-}
-
-
-/*!
  *  selCreateBrick()
  *
  *      Input:  height, width
@@ -363,61 +324,6 @@ SEL     *sel;
     return sel;
 }
 
-
-/*!
- *  selCreateComb()
- *
- *      Input:  factor1 (contiguous space between comb tines)
- *              factor2 (number of comb tines)
- *              direction (L_HORIZ, L_VERT)
- *      Return: sel, or null on error
- *
- *  Notes:
- *      (1) This generates a comb Sel of hits with the origin as
- *          near the center as possible.
- */
-LEPTONICA_EXPORT SEL *
-selCreateComb(l_int32  factor1,
-              l_int32  factor2,
-              l_int32  direction)
-{
-l_int32  i, size, z;
-SEL     *sel;
-
-    PROCNAME("selCreateComb");
-
-    if (factor1 < 1 || factor2 < 1)
-        return (SEL *)ERROR_PTR("factors must be >= 1", procName, NULL);
-    if (direction != L_HORIZ && direction != L_VERT)
-        return (SEL *)ERROR_PTR("invalid direction", procName, NULL);
-
-    size = factor1 * factor2;
-    if (direction == L_HORIZ) {
-        sel = selCreate(1, size, NULL);
-        selSetOrigin(sel, 0, size / 2);
-    }
-    else {
-        sel = selCreate(size, 1, NULL);
-        selSetOrigin(sel, size / 2, 0);
-    }
-
-    for (i = 0; i < factor2; i++) {
-        if (factor2 & 1)  /* odd */
-            z = factor1 / 2 + i * factor1;
-        else
-            z = factor1 / 2 + i * factor1;
-/*        fprintf(stderr, "i = %d, factor1 = %d, factor2 = %d, z = %d\n",
-                        i, factor1, factor2, z); */
-        if (direction == L_HORIZ)
-            selSetElement(sel, 0, z, SEL_HIT);
-        else
-            selSetElement(sel, z, 0, SEL_HIT);
-    }
-
-    return sel;
-}
-
-
 /*!
  *  create2dIntArray()
  *
@@ -450,75 +356,9 @@ l_int32  **array;
     return array;
 }
 
-
-
-/*------------------------------------------------------------------------*
- *                           Extension of sela                            *
- *------------------------------------------------------------------------*/
-
-/*!
- *  selaExtendArray()
- *
- *      Input:  sela
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-selaExtendArray(SELA  *sela)
-{
-    PROCNAME("selaExtendArray");
-
-    if (!sela)
-        return ERROR_INT("sela not defined", procName, 1);
-    
-    if ((sela->sel = (SEL **)reallocNew((void **)&sela->sel,
-                              sizeof(SEL *) * sela->nalloc,
-                              2 * sizeof(SEL *) * sela->nalloc)) == NULL)
-            return ERROR_INT("new ptr array not returned", procName, 1);
-
-    sela->nalloc = 2 * sela->nalloc;
-    return 0;
-}
-
-
-
 /*----------------------------------------------------------------------*
  *                               Accessors                              *
  *----------------------------------------------------------------------*/
-/*!
- *  selaGetCount()
- *
- *      Input:  sela
- *      Return: count, or 0 on error
- */
-LEPTONICA_EXPORT l_int32
-selaGetCount(SELA  *sela)
-{
-    PROCNAME("selaGetCount");
-
-    if (!sela)
-        return ERROR_INT("sela not defined", procName, 0);
-
-    return sela->n;
-}
-
-
-/*!
- *  selGetName()
- *
- *      Input:  sel
- *      Return: sel name (not copied), or null if no name or on error
- */
-LEPTONICA_EXPORT char *
-selGetName(SEL  *sel)
-{
-    PROCNAME("selGetName");
-
-    if (!sel)
-        return (char *)ERROR_PTR("sel not defined", procName, NULL);
-
-    return sel->name;
-}
-
 
 /*!
  *  selSetElement()

@@ -139,56 +139,6 @@ PTA  *pta;
     return;
 }
 
-
-/*!
- *  ptaCopy()
- *
- *      Input:  pta
- *      Return: copy of pta, or null on error
- */
-LEPTONICA_EXPORT PTA *
-ptaCopy(PTA  *pta)
-{
-l_int32    i;
-l_float32  x, y;
-PTA       *npta;
-
-    PROCNAME("ptaCopy");
-
-    if (!pta)
-        return (PTA *)ERROR_PTR("pta not defined", procName, NULL);
-
-    if ((npta = ptaCreate(pta->nalloc)) == NULL)
-        return (PTA *)ERROR_PTR("npta not made", procName, NULL);
-
-    for (i = 0; i < pta->n; i++) {
-        ptaGetPt(pta, i, &x, &y);
-        ptaAddPt(npta, x, y);
-    }
-
-    return npta;
-}
-
-
-/*!
- *  ptaClone()
- *
- *      Input:  pta
- *      Return: ptr to same pta, or null on error
- */
-LEPTONICA_EXPORT PTA *
-ptaClone(PTA  *pta)
-{
-    PROCNAME("ptaClone");
-
-    if (!pta)
-        return (PTA *)ERROR_PTR("pta not defined", procName, NULL);
-
-    ptaChangeRefcount(pta, 1);
-    return pta;
-}
-
-
 /*---------------------------------------------------------------------*
  *                         Pta array extension                         *
  *---------------------------------------------------------------------*/
@@ -352,52 +302,4 @@ ptaGetIPt(PTA      *pta,
     if (px) *px = (l_int32)(pta->x[index] + 0.5);
     if (py) *py = (l_int32)(pta->y[index] + 0.5);
     return 0;
-}
-
-/*---------------------------------------------------------------------*
- *                          PTAA array extension                       *
- *---------------------------------------------------------------------*/
-
-/*!
- *  ptaaExtendArray()
- *
- *      Input:  ptaa
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-ptaaExtendArray(PTAA  *ptaa)
-{
-    PROCNAME("ptaaExtendArray");
-
-    if (!ptaa)
-        return ERROR_INT("ptaa not defined", procName, 1);
-
-    if ((ptaa->pta = (PTA **)reallocNew((void **)&ptaa->pta,
-                             sizeof(PTA *) * ptaa->nalloc,
-                             2 * sizeof(PTA *) * ptaa->nalloc)) == NULL)
-        return ERROR_INT("new ptr array not returned", procName, 1);
-
-    ptaa->nalloc = 2 * ptaa->nalloc;
-    return 0;
-}
-
-
-/*---------------------------------------------------------------------*
- *                          Ptaa accessors                             *
- *---------------------------------------------------------------------*/
-/*!
- *  ptaaGetCount()
- *
- *      Input:  ptaa
- *      Return: count, or 0 if no ptaa
- */
-LEPTONICA_EXPORT l_int32
-ptaaGetCount(PTAA  *ptaa)
-{
-    PROCNAME("ptaaGetCount");
-
-    if (!ptaa)
-        return ERROR_INT("ptaa not defined", procName, 0);
-
-    return ptaa->n;
 }

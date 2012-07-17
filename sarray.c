@@ -199,35 +199,7 @@ SARRAY  *sa;
     return;
 }
 
-        
-/*!
- *  sarrayCopy()
- *
- *      Input:  sarray
- *      Return: copy of sarray, or null on error
- */
-LEPTONICA_EXPORT SARRAY *
-sarrayCopy(SARRAY  *sa)
-{
-l_int32  i;
-SARRAY  *csa;
-
-    PROCNAME("sarrayCopy");
-
-    if (!sa)
-        return (SARRAY *)ERROR_PTR("sa not defined", procName, NULL);
-
-    if ((csa = sarrayCreate(sa->nalloc)) == NULL)
-        return (SARRAY *)ERROR_PTR("csa not made", procName, NULL);
-
-    for (i = 0; i < sa->n; i++)
-        sarrayAddString(csa, sa->array[i], L_COPY);
-
-    return csa;
-}
-
-
-/*!
+        /*!
  *  sarrayAddString()
  *
  *      Input:  sarray
@@ -433,52 +405,4 @@ char  *cstr, *substr, *saveptr;
     FREE(cstr);
 
     return 0;
-}
-
-
-/*----------------------------------------------------------------------*
- *                                   Sort                               *
- *----------------------------------------------------------------------*/
-
-/*!
- *  stringCompareLexical()
- *
- *      Input:  str1
- *              str2
- *      Return: 1 if str1 > str2 (lexically); 0 otherwise
- *
- *  Notes:
- *      (1) If the lexical values are identical, return a 0, to
- *          indicate that no swapping is required to sort the strings.
- */
-LEPTONICA_EXPORT l_int32
-stringCompareLexical(const char *str1,
-                     const char *str2)
-{
-l_int32  i, len1, len2, len;
-
-    PROCNAME("sarrayCompareLexical");
-
-    if (!str1)
-        return ERROR_INT("str1 not defined", procName, 1);
-    if (!str2)
-        return ERROR_INT("str2 not defined", procName, 1);
-
-    len1 = strlen(str1);
-    len2 = strlen(str2);
-    len = L_MIN(len1, len2);
-
-    for (i = 0; i < len; i++) {
-        if (str1[i] == str2[i])
-            continue;
-        if (str1[i] > str2[i])
-            return 1;
-        else
-            return 0;
-    }
-
-    if (len1 > len2)
-        return 1;
-    else
-        return 0;
 }

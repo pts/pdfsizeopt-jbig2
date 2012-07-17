@@ -412,42 +412,6 @@ l_int32  len;
     return 0;
 }
 
-
-/*!
- *  stringJoin()
- *
- *      Input:  src1 string (<optional> can be null)
- *              src2 string (<optional> can be null)
- *      Return: concatenated string, or null on error
- *
- *  Notes:
- *      (1) This is a safe version of strcat; it makes a new string.
- *      (2) It is not an error if either or both of the strings
- *          are empty, or if either or both of the pointers are null.
- */
-LEPTONICA_EXPORT char *
-stringJoin(const char  *src1, 
-           const char  *src2)
-{
-char    *dest;
-l_int32  srclen1, srclen2, destlen;
-
-    PROCNAME("stringJoin");
-
-    srclen1 = (src1) ? strlen(src1) : 0;
-    srclen2 = (src2) ? strlen(src2) : 0;
-    destlen = srclen1 + srclen2 + 3;
-
-    if ((dest = (char *)CALLOC(destlen, sizeof(char))) == NULL)
-        return (char *)ERROR_PTR("calloc fail for dest", procName, NULL);
-
-    if (src1)
-        stringCopy(dest, src1, srclen1);
-    if (src2)
-        strncat(dest, src2, srclen2);
-    return dest;
-}
-
 /*!
  *  strtokSafe()
  *
@@ -581,68 +545,6 @@ l_int32  nsrc, i, k;
 
     return dest;
 }
-
-/*!
- *  arrayFindSequence()
- *
- *      Input:  data (byte array)
- *              datalen (length of data, in bytes)
- *              sequence (subarray of bytes to find in data)
- *              seqlen (length of sequence, in bytes)
- *              &offset (return> offset from beginning of
- *                       data where the sequence begins)
- *              &found (<optional return> 1 if sequence is found; 0 otherwise)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) The byte arrays 'data' and 'sequence' are not C strings,
- *          as they can contain null bytes.  Therefore, for each
- *          we must give the length of the array.
- *      (2) This searches for the first occurrence in @data of @sequence,
- *          which consists of @seqlen bytes.  The parameter @seqlen
- *          must not exceed the actual length of the @sequence byte array.
- *      (3) If the sequence is not found, the offset will be set to -1.
- */
-LEPTONICA_EXPORT l_int32
-arrayFindSequence(const l_uint8  *data,
-                  l_int32         datalen,
-                  const l_uint8  *sequence,
-                  l_int32         seqlen,
-                  l_int32        *poffset,
-                  l_int32        *pfound)
-{
-l_int32  i, j, found, lastpos;
-
-    PROCNAME("arrayFindSequence");
-
-    if (!data || !sequence)
-        return ERROR_INT("data & sequence not both defined", procName, 1);
-    if (!poffset)
-        return ERROR_INT("&offset not defined", procName, 1);
-
-    *poffset = -1;
-    if (pfound) *pfound = 0;
-    lastpos = datalen - seqlen + 1;
-    found = 0;
-    for (i = 0; i < lastpos; i++) {
-        for (j = 0; j < seqlen; j++) {
-            if (data[i + j] != sequence[j])
-                 break;
-            if (j == seqlen - 1)
-                 found = 1;
-        }
-        if (found)
-            break;
-    }
-
-    if (found) {
-        *poffset = i;
-        if (pfound) *pfound = 1;
-    }
-
-    return 0;
-}
-
 
 /*--------------------------------------------------------------------*
  *                             Safe realloc                           *
