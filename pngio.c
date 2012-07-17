@@ -107,18 +107,12 @@
 /* --------------------------------------------*/
 
 #include "png.h"
-#include "zlib.h"
 
 /* ----------------Set defaults for read/write options ----------------- */
     /* strip 16 bpp --> 8 bpp on reading png; default is for stripping */
 static l_int32   var_PNG_STRIP_16_TO_8 = 1;
     /* strip alpha on reading png; default is for stripping */
 static l_int32   var_PNG_STRIP_ALPHA = 1;
-    /* write alpha for 32 bpp images; default is to write only RGB */
-static l_int32   var_PNG_WRITE_ALPHA = 0;
-    /* zlib compression in png; default is for standard compression */
-static l_int32   var_ZLIB_COMPRESSION = Z_DEFAULT_COMPRESSION;
-
 
 #ifndef  NO_CONSOLE_IO
 #define  DEBUG     0
@@ -327,52 +321,6 @@ PIXCMAP     *cmap;
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     return pix;
 }
-
-
-/*!
- *  freadHeaderPng()
- *
- *      Input:  stream
- *              &width (<return>)
- *              &height (<return>)
- *              &bps (<return>, bits/sample)
- *              &spp (<return>, samples/pixel)
- *              &iscmap (<optional return>; input NULL to ignore)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) If there is a colormap, iscmap is returned as 1; else 0.
- */
-LEPTONICA_EXPORT l_int32
-freadHeaderPng(FILE     *fp,
-               l_int32  *pwidth,
-               l_int32  *pheight,
-               l_int32  *pbps,
-               l_int32  *pspp,
-               l_int32  *piscmap)
-{
-l_int32   nbytes, ret;
-l_uint8  *data;
-
-    PROCNAME("freadHeaderPng");
-
-    if (!fp)
-        return ERROR_INT("stream not defined", procName, 1);
-    if (!pwidth || !pheight || !pbps || !pspp)
-        return ERROR_INT("input ptr(s) not defined", procName, 1);
-    
-    nbytes = fnbytesInFile(fp);
-    if (nbytes < 40)
-        return ERROR_INT("file too small to be png", procName, 1);
-    if ((data = (l_uint8 *)CALLOC(40, sizeof(l_uint8))) == NULL)
-        return ERROR_INT("CALLOC fail for data", procName, 1);
-    if (fread(data, 1, 40, fp) != 40)
-        return ERROR_INT("error reading data", procName, 1);
-    ret = sreadHeaderPng(data, pwidth, pheight, pbps, pspp, piscmap);
-    FREE(data);
-    return ret;
-}
-
 
 /*!
  *  sreadHeaderPng()

@@ -732,63 +732,6 @@ SEL     *sel, *selh, *selv;
 /*-----------------------------------------------------------------*
  *     Binary composed morphological (raster) ops with brick Sels  *
  *-----------------------------------------------------------------*/
-/*  selectComposableSels()
- *
- *      Input:  size (of composed sel)
- *              direction (L_HORIZ, L_VERT)
- *              &sel1 (<optional return> contiguous sel; can be null)
- *              &sel2 (<optional return> comb sel; can be null)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) When using composable Sels, where the original Sel is
- *          decomposed into two, the best you can do in terms
- *          of reducing the computation is by a factor:
- *
- *               2 * sqrt(size) / size
- *
- *          In practice, you get quite close to this.  E.g.,
- *
- *             Sel size     |   Optimum reduction factor
- *             --------         ------------------------
- *                36        |          1/3
- *                64        |          1/4
- *               144        |          1/6
- *               256        |          1/8
- */
-LEPTONICA_EXPORT l_int32
-selectComposableSels(l_int32  size,
-                     l_int32  direction,
-                     SEL    **psel1,
-                     SEL    **psel2)
-{
-l_int32  factor1, factor2;
-
-    PROCNAME("selectComposableSels");
-
-    if (!psel1 && !psel2)
-        return ERROR_INT("neither &sel1 nor &sel2 are defined", procName, 1);
-    if (psel1) *psel1 = NULL;
-    if (psel2) *psel2 = NULL;
-    if (size < 1 || size > 250 * 250)
-        return ERROR_INT("size < 1", procName, 1);
-    if (direction != L_HORIZ && direction != L_VERT)
-        return ERROR_INT("invalid direction", procName, 1);
-
-    if (selectComposableSizes(size, &factor1, &factor2))
-        return ERROR_INT("factors not found", procName, 1);
-
-    if (psel1) {
-        if (direction == L_HORIZ)
-            *psel1 = selCreateBrick(1, factor1, 0, factor1 / 2, SEL_HIT);
-        else
-            *psel1 = selCreateBrick(factor1, 1, factor1 / 2 , 0, SEL_HIT);
-    }
-    if (psel2)
-        *psel2 = selCreateComb(factor1, factor2, direction);
-    return 0;
-}
-
 
 /*!
  *  selectComposableSizes()

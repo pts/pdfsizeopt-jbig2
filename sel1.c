@@ -217,37 +217,6 @@ static const struct CompParameterMap  comp_parameter_map[] =
 /*------------------------------------------------------------------------*
  *                      Create / Destroy / Copy                           *
  *------------------------------------------------------------------------*/
-/*!
- *  selaCreate()
- *
- *      Input:  n (initial number of sel ptrs; use 0 for default)
- *      Return: sela, or null on error
- */
-LEPTONICA_EXPORT SELA *
-selaCreate(l_int32  n)
-{
-SELA  *sela;
-
-    PROCNAME("selaCreate");
-
-    if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE6;
-    if (n > MANY_SELS)
-        L_WARNING_INT("%d sels", procName, n);
-
-    if ((sela = (SELA *)CALLOC(1, sizeof(SELA))) == NULL)
-        return (SELA *)ERROR_PTR("sela not made", procName, NULL);
-
-    sela->nalloc = n;
-    sela->n = 0;
-
-        /* make array of se ptrs */
-    if ((sela->sel = (SEL **)CALLOC(n, sizeof(SEL *))) == NULL)
-        return (SELA *)ERROR_PTR("sel ptrs not made", procName, NULL);
-
-    return sela;
-}
-
 
 /*!
  *  selCreate()
@@ -486,58 +455,6 @@ l_int32  **array;
 /*------------------------------------------------------------------------*
  *                           Extension of sela                            *
  *------------------------------------------------------------------------*/
-/*!
- *  selaAddSel()
- *
- *      Input:  sela
- *              sel to be added
- *              selname (ignored if already defined in sel;
- *                       req'd in sel when added to a sela)
- *              copyflag (for sel: 0 inserts, 1 copies)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) This adds a sel, either inserting or making a copy.
- *      (2) Because every sel in a sela must have a name, it copies
- *          the input name if necessary.  You can input NULL for
- *          selname if the sel already has a name.
- */
-LEPTONICA_EXPORT l_int32
-selaAddSel(SELA        *sela,
-           SEL         *sel,
-           const char  *selname,
-           l_int32      copyflag)
-{
-l_int32  n;
-SEL     *csel;
-
-    PROCNAME("selaAddSel");
-
-    if (!sela)
-        return ERROR_INT("sela not defined", procName, 1);
-    if (!sel)
-        return ERROR_INT("sel not defined", procName, 1);
-    if (!sel->name && !selname)
-        return ERROR_INT("added sel must have name", procName, 1);
-
-    if (copyflag == TRUE) {
-        if ((csel = selCopy(sel)) == NULL)
-            return ERROR_INT("csel not made", procName, 1);
-    }
-    else   /* copyflag is false; insert directly */
-        csel = sel;
-    if (!csel->name)
-        csel->name = stringNew(selname);
-
-    n = selaGetCount(sela);
-    if (n >= sela->nalloc)
-        selaExtendArray(sela);
-    sela->sel[n] = csel;
-    sela->n++;
-
-    return 0;
-}
-    
 
 /*!
  *  selaExtendArray()
@@ -586,32 +503,6 @@ selaGetCount(SELA  *sela)
 
 
 /*!
- *  selaGetSel()
- *
- *      Input:  sela
- *              index of sel to be retrieved (not copied)
- *      Return: sel, or null on error
- *
- *  Notes:
- *      (1) This returns a ptr to the sel, not a copy, so the caller
- *          must not destroy it!
- */
-LEPTONICA_EXPORT SEL *
-selaGetSel(SELA    *sela,
-           l_int32  i)
-{
-    PROCNAME("selaGetSel");
-
-    if (!sela)
-        return (SEL *)ERROR_PTR("sela not defined", procName, NULL);
-
-    if (i < 0 || i >= sela->n)
-        return (SEL *)ERROR_PTR("invalid index", procName, NULL);
-    return sela->sel[i];
-}
-
-
-/*!
  *  selGetName()
  *
  *      Input:  sel
@@ -626,30 +517,6 @@ selGetName(SEL  *sel)
         return (char *)ERROR_PTR("sel not defined", procName, NULL);
 
     return sel->name;
-}
-
-
-/*!
- *  selSetName()
- *
- *      Input:  sel
- *              name (<optional>; can be null)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) Always frees the existing sel name, if defined.
- *      (2) If name is not defined, just clears any existing sel name.
- */
-LEPTONICA_EXPORT l_int32
-selSetName(SEL         *sel,
-           const char  *name)
-{
-    PROCNAME("selSetName");
-
-    if (!sel)
-        return ERROR_INT("sel not defined", procName, 1);
-
-    return stringReplace(&sel->name, name);
 }
 
 
@@ -790,95 +657,6 @@ l_int32  maxxp, maxyp, maxxn, maxyn;
     *pyp = maxyp;
     *pxn = maxxn;
     *pyn = maxyn;
-
-    return 0;
-}
-
-
-/*----------------------------------------------------------------------*
- *                       Sela and Sel serialized I/O                    *
- *----------------------------------------------------------------------*/
-
-/*!
- *  selReadStream()
- *
- *      Input:  stream
- *      Return: sel, or null on error
- */
-LEPTONICA_EXPORT SEL  *
-selReadStream(FILE  *fp)
-{
-char    *selname;
-char     linebuf[L_BUF_SIZE5];
-l_int32  sy, sx, cy, cx, i, j, version, ignore;
-SEL     *sel;
-
-    PROCNAME("selReadStream");
-
-    if (!fp)
-        return (SEL *)ERROR_PTR("stream not defined", procName, NULL);
-
-    if (fscanf(fp, "  Sel Version %d\n", &version) != 1)
-        return (SEL *)ERROR_PTR("not a sel file", procName, NULL);
-    if (version != SEL_VERSION_NUMBER)
-        return (SEL *)ERROR_PTR("invalid sel version", procName, NULL);
-
-    if (fgets(linebuf, L_BUF_SIZE5, fp) == NULL)
-        return (SEL *)ERROR_PTR("error reading into linebuf", procName, NULL);
-    selname = stringNew(linebuf);
-    sscanf(linebuf, "  ------  %s  ------", selname);
-
-    if (fscanf(fp, "  sy = %d, sx = %d, cy = %d, cx = %d\n",
-            &sy, &sx, &cy, &cx) != 4)
-        return (SEL *)ERROR_PTR("dimensions not read", procName, NULL);
-
-    if ((sel = selCreate(sy, sx, selname)) == NULL)
-        return (SEL *)ERROR_PTR("sel not made", procName, NULL);
-    selSetOrigin(sel, cy, cx);
-
-    for (i = 0; i < sy; i++) {
-        ignore = fscanf(fp, "    ");
-        for (j = 0; j < sx; j++)
-            ignore = fscanf(fp, "%1d", &sel->data[i][j]);
-        ignore = fscanf(fp, "\n");
-    }
-    ignore = fscanf(fp, "\n");
-
-    FREE(selname);
-    return sel;
-}
-
-/*!
- *  selWriteStream()
- *
- *      Input:  stream
- *              sel
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-selWriteStream(FILE  *fp,
-               SEL   *sel)
-{
-l_int32  sx, sy, cx, cy, i, j;
-
-    PROCNAME("selWriteStream");
-
-    if (!fp)
-        return ERROR_INT("stream not defined", procName, 1);
-    if (!sel)
-        return ERROR_INT("sel not defined", procName, 1);
-    selGetParameters(sel, &sy, &sx, &cy, &cx);
-
-    fprintf(fp, "  Sel Version %d\n", SEL_VERSION_NUMBER);
-    fprintf(fp, "  ------  %s  ------\n", selGetName(sel));
-    fprintf(fp, "  sy = %d, sx = %d, cy = %d, cx = %d\n", sy, sx, cy, cx);
-    for (i = 0; i < sy; i++) {
-        fprintf(fp, "    ");
-        for (j = 0; j < sx; j++)
-            fprintf(fp, "%d", sel->data[i][j]);
-        fprintf(fp, "\n");
-    }
-    fprintf(fp, "\n");
 
     return 0;
 }

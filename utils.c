@@ -271,42 +271,6 @@ l_warning(const char  *msg,
     return;
 }
 
-
-/*!
- *  l_warningString()
- *
- *      Input: msg (warning message; must include '%s')
- *             procname
- *             str (embedded in warning message via %s)
- */
-LEPTONICA_EXPORT void
-l_warningString(const char  *msg,
-                const char  *procname,
-                const char  *str)
-{
-l_int32  bufsize;
-char    *charbuf;
-
-    if (!msg || !procname || !str) {
-        L_ERROR("msg, procname or str not defined in l_warningString()",
-                procname);
-        return;
-    }
-
-    bufsize = strlen(msg) + strlen(procname) + 128;
-    if ((charbuf = (char *)CALLOC(bufsize, sizeof(char))) == NULL) {
-        L_ERROR("charbuf not made in l_warningString()", procname);
-        return;
-    }
-
-    sprintf(charbuf, "Warning in %s: %s\n", procname, msg);
-    fprintf(stderr, charbuf, str);
-
-    FREE(charbuf);
-    return;
-}
-
-
 /*!
  *  l_warningInt()
  *
@@ -755,43 +719,6 @@ void    *newdata;
  *                 Read and write between file and memory             *
  *--------------------------------------------------------------------*/
 
-
-/*!
- *  l_binaryReadStream()
- *
- *      Input:  stream
- *              &nbytes (<return> number of bytes read)
- *      Return: null-terminated array, or null on error
- *              (reading 0 bytes is not an error)
- *
- *  Notes:
- *      (1) The returned array is terminated with a null byte so that
- *          it can be used to read ascii data into a proper C string.
- *      (2) Side effect: this re-positions the stream ptr to the
- *          beginning of the file.
- */
-LEPTONICA_EXPORT l_uint8 *
-l_binaryReadStream(FILE    *fp, 
-                   size_t  *pnbytes)
-{
-l_int32   ignore;
-l_uint8  *data;
-
-    PROCNAME("l_binaryReadStream");
-
-    if (!pnbytes)
-        return (l_uint8 *)ERROR_PTR("&nbytes not defined", procName, NULL);
-    *pnbytes = 0;
-    if (!fp)
-        return (l_uint8 *)ERROR_PTR("stream not defined", procName, NULL);
-
-    *pnbytes = fnbytesInFile(fp);
-    if ((data = (l_uint8 *)CALLOC(1, *pnbytes + 1)) == NULL)
-        return (l_uint8 *)ERROR_PTR("calloc fail for data", procName, NULL);
-    ignore = fread(data, 1, *pnbytes, fp);
-    return data;
-}
-
 /*!
  *  fnbytesInFile()
  *
@@ -899,47 +826,6 @@ FILE  *fp;
     return fp;
 }
 
-
-/*!
- *  fopenWriteStream()
- *
- *      Input:  filename 
- *              modestring
- *      Return: stream, or null on error
- *
- *  Notes:
- *      (1) This wrapper also handles pathname conversions for Windows.
- *          It should be used whenever you want to run fopen() to
- *          write or append to a stream.
- */
-LEPTONICA_EXPORT FILE *
-fopenWriteStream(const char  *filename,
-                 const char  *modestring)
-{
-FILE  *fp;
-
-    PROCNAME("fopenWriteStream");
-
-    if (!filename)
-        return (FILE *)ERROR_PTR("filename not defined", procName, NULL);
-
-#ifdef _WIN32
-    {
-    char  *fname;
-        fname = genPathname(filename, NULL);
-        fp = fopen(fname, modestring);
-        FREE(fname);
-    }
-#else
-    fp = fopen(filename, modestring);
-#endif  /* _WIN32 */
-
-    if (!fp)
-        return (FILE *)ERROR_PTR("stream not opened", procName, NULL);
-    return fp;
-}
-
-
 /*--------------------------------------------------------------------*
  *                         File name operations                       *
  *--------------------------------------------------------------------*/
@@ -1002,72 +888,6 @@ char  *cpathname, *lastslash;
             FREE(cpathname);
     }
 
-    return 0;
-}
-
-
-/*!
- *  splitPathAtExtension()
- *
- *      Input:  pathname (full path; can be a directory)
- *              &basename (<optional return> pathname not including the
- *                        last dot and characters after that)
- *              &extension (<optional return> path extension, which is
- *                        the last dot and the characters after it.  If
- *                        there is no extension, it returns the empty string)
- *      Return: 0 if OK, 1 on error
- *       
- *  Notes:
- *      (1) If you only want the extension, input null for the basename ptr.
- *      (2) If you only want the basename without extension, input null
- *          for the extension ptr.
- *      (3) This function makes decisions based only on the lexical
- *          structure of the input.  Examples:
- *            /usr/tmp/abc.jpg  -->  basename: /usr/tmp/abc   ext: .jpg
- *            /usr/tmp/.jpg  -->  basename: /usr/tmp/   tail: .jpg
- *            /usr/tmp.jpg/  -->  basename: /usr/tmp.jpg/   tail: [empty str]
- *            ./.jpg  -->  basename: ./   tail: .jpg
- *      (4) N.B. The input pathname must have unix directory separators
- *          for unix and windows directory separators for windows.
- */
-LEPTONICA_EXPORT l_int32
-splitPathAtExtension(const char  *pathname,
-                     char       **pbasename,
-                     char       **pextension)
-{
-char  *tail, *dir, *lastdot;
-char   empty[4] = "";
-
-    PROCNAME("splitPathExtension");
-
-    if (!pbasename && !pextension)
-        return ERROR_INT("null input for both strings", procName, 1);
-    if (pbasename) *pbasename = NULL;
-    if (pextension) *pextension = NULL;
-    if (!pathname)
-        return ERROR_INT("pathname not defined", procName, 1);
-
-        /* Split out the directory first */
-    splitPathAtDirectory(pathname, &dir, &tail);
-
-        /* Then look for a "." in the tail part.
-         * This way we ignore all "." in the directory. */
-    if ((lastdot = strrchr(tail, '.'))) {
-        if (pextension)
-            *pextension = stringNew(lastdot);
-        if (pbasename) {
-            *lastdot = '\0';
-            *pbasename = stringJoin(dir, tail);
-        }
-    }
-    else {
-        if (pextension)
-            *pextension = stringNew(empty);
-        if (pbasename)
-            *pbasename = stringNew(pathname);
-    }
-    FREE(dir);
-    FREE(tail);
     return 0;
 }
 

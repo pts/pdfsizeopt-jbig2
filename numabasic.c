@@ -236,35 +236,6 @@ NUMA  *na;
 
 
 /*!
- *  numaCopy()
- *
- *      Input:  na
- *      Return: copy of numa, or null on error
- */
-LEPTONICA_EXPORT NUMA *
-numaCopy(NUMA  *na)
-{
-l_int32  i;
-NUMA    *cna;
-
-    PROCNAME("numaCopy");
-
-    if (!na)
-        return (NUMA *)ERROR_PTR("na not defined", procName, NULL);
-
-    if ((cna = numaCreate(na->nalloc)) == NULL)
-        return (NUMA *)ERROR_PTR("cna not made", procName, NULL);
-    cna->startx = na->startx;
-    cna->delx = na->delx;
-
-    for (i = 0; i < na->n; i++)
-        numaAddNumber(cna, na->array[i]);
-
-    return cna;
-}
-
-
-/*!
  *  numaClone()
  *
  *      Input:  na
