@@ -103,45 +103,6 @@ PTA  *pta;
     return pta;
 }
 
-
-/*!
- *  ptaCreateFromNuma()
- *
- *      Input:  nax (<optional> can be null)
- *              nay
- *      Return: pta, or null on error.
- */
-LEPTONICA_EXPORT PTA *
-ptaCreateFromNuma(NUMA  *nax,
-                  NUMA  *nay)
-{
-l_int32    i, n;
-l_float32  startx, delx, xval, yval;
-PTA       *pta;
-
-    PROCNAME("ptaCreateFromNuma");
-
-    if (!nay)
-        return (PTA *)ERROR_PTR("nay not defined", procName, NULL);
-    n = numaGetCount(nay);
-    if (nax && numaGetCount(nax) != n)
-        return (PTA *)ERROR_PTR("nax and nay sizes differ", procName, NULL);
-
-    pta = ptaCreate(n);
-    numaGetXParameters(nay, &startx, &delx);
-    for (i = 0; i < n; i++) {
-        if (nax)
-            numaGetFValue(nax, i, &xval);
-        else  /* use implicit x values from nay */
-            xval = startx + i * delx;
-        numaGetFValue(nay, i, &yval);
-        ptaAddPt(pta, xval, yval);
-    }
-
-    return pta;
-}
-
-
 /*!
  *  ptaDestroy()
  *
@@ -225,26 +186,6 @@ ptaClone(PTA  *pta)
 
     ptaChangeRefcount(pta, 1);
     return pta;
-}
-
-
-/*!
- *  ptaEmpty()
- *
- *      Input:  pta
- *      Return: 0 if OK, 1 on error
- *
- *  Note: this only resets the "n" field, for reuse
- */
-LEPTONICA_EXPORT l_int32
-ptaEmpty(PTA  *pta)
-{
-    PROCNAME("ptaEmpty");
-
-    if (!pta)
-        return ERROR_INT("ptad not defined", procName, 1);
-    pta->n = 0;
-    return 0;
 }
 
 
@@ -415,115 +356,6 @@ ptaGetIPt(PTA      *pta,
 
 
 /*!
- *  ptaSetPt()
- *
- *      Input:  pta
- *              index  (into arrays)
- *              x, y
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-ptaSetPt(PTA       *pta,
-         l_int32    index,
-         l_float32  x,
-         l_float32  y)
-{
-    PROCNAME("ptaSetPt");
-
-    if (!pta)
-        return ERROR_INT("pta not defined", procName, 1);
-    if (index < 0 || index >= pta->n)
-        return ERROR_INT("invalid index", procName, 1);
-
-    pta->x[index] = x;
-    pta->y[index] = y;
-    return 0;
-}
-
-
-/*!
- *  ptaGetArrays()
- *
- *      Input:  pta
- *              &nax (<optional return> numa of x array)
- *              &nay (<optional return> numa of y array)
- *      Return: 0 if OK; 1 on error or if pta is empty
- *
- *  Notes:
- *      (1) This copies the internal arrays into new Numas.
- */
-LEPTONICA_EXPORT l_int32
-ptaGetArrays(PTA    *pta,
-             NUMA  **pnax,
-             NUMA  **pnay)
-{
-l_int32  i, n;
-NUMA    *nax, *nay;
-
-    PROCNAME("ptaGetArrays");
-
-    if (!pnax && !pnay)
-        return ERROR_INT("no output requested", procName, 1);
-    if (pnax) *pnax = NULL;
-    if (pnay) *pnay = NULL;
-    if (!pta)
-        return ERROR_INT("pta not defined", procName, 1);
-    if ((n = ptaGetCount(pta)) == 0)
-        return ERROR_INT("pta is empty", procName, 1);
-
-    if (pnax) {
-        if ((nax = numaCreate(n)) == NULL)
-            return ERROR_INT("nax not made", procName, 1);
-        *pnax = nax;
-        for (i = 0; i < n; i++)
-            nax->array[i] = pta->x[i];
-        nax->n = n;
-    }
-    if (pnay) {
-        if ((nay = numaCreate(n)) == NULL)
-            return ERROR_INT("nay not made", procName, 1);
-        *pnay = nay;
-        for (i = 0; i < n; i++)
-            nay->array[i] = pta->y[i];
-        nay->n = n;
-    }
-    return 0;
-}
-
-
-/*---------------------------------------------------------------------*
- *                       Pta serialized for I/O                        *
- *---------------------------------------------------------------------*/
-/*!
- *  ptaRead()
- *
- *      Input:  filename
- *      Return: pta, or null on error
- */
-LEPTONICA_EXPORT PTA *
-ptaRead(const char  *filename)
-{
-FILE  *fp;
-PTA   *pta;
-
-    PROCNAME("ptaRead");
-
-    if (!filename)
-        return (PTA *)ERROR_PTR("filename not defined", procName, NULL);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return (PTA *)ERROR_PTR("stream not opened", procName, NULL);
-
-    if ((pta = ptaReadStream(fp)) == NULL) {
-        fclose(fp);
-        return (PTA *)ERROR_PTR("pta not read", procName, NULL);
-    }
-
-    fclose(fp);
-    return pta;
-}
-
-
-/*!
  *  ptaReadStream()
  *
  *      Input:  stream
@@ -569,38 +401,6 @@ PTA       *pta;
     }
 
     return pta;
-}
-
-
-/*!
- *  ptaWrite()
- *
- *      Input:  filename
- *              pta
- *              type  (0 for float values; 1 for integer values)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-ptaWrite(const char  *filename,
-         PTA         *pta,
-         l_int32      type)
-{
-FILE  *fp;
-
-    PROCNAME("ptaWrite");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!pta)
-        return ERROR_INT("pta not defined", procName, 1);
-
-    if ((fp = fopenWriteStream(filename, "w")) == NULL)
-        return ERROR_INT("stream not opened", procName, 1);
-    if (ptaWriteStream(fp, pta, type))
-        return ERROR_INT("pta not written to stream", procName, 1);
-    fclose(fp);
-
-    return 0;
 }
 
 
@@ -676,38 +476,6 @@ PTAA  *ptaa;
         return (PTAA *)ERROR_PTR("pta ptrs not made", procName, NULL);
 
     return ptaa;
-}
-
-
-/*!
- *  ptaaDestroy()
- *
- *      Input:  &ptaa <to be nulled>
- *      Return: void
- */
-LEPTONICA_EXPORT void
-ptaaDestroy(PTAA  **pptaa)
-{
-l_int32  i;
-PTAA    *ptaa;
-
-    PROCNAME("ptaaDestroy");
-
-    if (pptaa == NULL) {
-        L_WARNING("ptr address is NULL!", procName);
-        return;
-    }
-
-    if ((ptaa = *pptaa) == NULL)
-        return;
-
-    for (i = 0; i < ptaa->n; i++)
-        ptaDestroy(&ptaa->pta[i]);
-    FREE(ptaa->pta);
-
-    FREE(ptaa);
-    *pptaa = NULL;
-    return;
 }
 
 
@@ -835,78 +603,6 @@ ptaaGetPta(PTAA    *ptaa,
 
 
 /*!
- *  ptaaGetPt()
- *
- *      Input:  ptaa
- *              ipta  (to the i-th pta)
- *              jpt (index to the j-th pt in the pta)
- *              &x (<optional return> float x value)
- *              &y (<optional return> float y value)
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-ptaaGetPt(PTAA       *ptaa,
-           l_int32     ipta,
-           l_int32     jpt,
-           l_float32  *px,
-           l_float32  *py)
-{
-PTA  *pta;
-
-    PROCNAME("ptaaGetPt");
-
-    if (px) *px = 0;
-    if (py) *py = 0;
-    if (!ptaa)
-        return ERROR_INT("ptaa not defined", procName, 1);
-    if (ipta < 0 || ipta >= ptaa->n)
-        return ERROR_INT("index ipta not valid", procName, 1);
-
-    pta = ptaaGetPta(ptaa, ipta, L_CLONE);
-    if (jpt < 0 || jpt >= pta->n) {
-        ptaDestroy(&pta);
-        return ERROR_INT("index jpt not valid", procName, 1);
-    }
-
-    ptaGetPt(pta, jpt, px, py);
-    ptaDestroy(&pta);
-    return 0;
-}
-
-
-/*---------------------------------------------------------------------*
- *                       Ptaa serialized for I/O                       *
- *---------------------------------------------------------------------*/
-/*!
- *  ptaaRead()
- *
- *      Input:  filename
- *      Return: ptaa, or null on error
- */
-LEPTONICA_EXPORT PTAA *
-ptaaRead(const char  *filename)
-{
-FILE  *fp;
-PTAA  *ptaa;
-
-    PROCNAME("ptaaRead");
-
-    if (!filename)
-        return (PTAA *)ERROR_PTR("filename not defined", procName, NULL);
-    if ((fp = fopenReadStream(filename)) == NULL)
-        return (PTAA *)ERROR_PTR("stream not opened", procName, NULL);
-
-    if ((ptaa = ptaaReadStream(fp)) == NULL) {
-        fclose(fp);
-        return (PTAA *)ERROR_PTR("ptaa not read", procName, NULL);
-    }
-
-    fclose(fp);
-    return ptaa;
-}
-
-
-/*!
  *  ptaaReadStream()
  *
  *      Input:  stream
@@ -940,38 +636,6 @@ PTAA    *ptaa;
     }
 
     return ptaa;
-}
-
-
-/*!
- *  ptaaWrite()
- *
- *      Input:  filename
- *              ptaa
- *              type  (0 for float values; 1 for integer values)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-ptaaWrite(const char  *filename,
-          PTAA        *ptaa,
-          l_int32      type)
-{
-FILE  *fp;
-
-    PROCNAME("ptaaWrite");
-
-    if (!filename)
-        return ERROR_INT("filename not defined", procName, 1);
-    if (!ptaa)
-        return ERROR_INT("ptaa not defined", procName, 1);
-
-    if ((fp = fopenWriteStream(filename, "w")) == NULL)
-        return ERROR_INT("stream not opened", procName, 1);
-    if (ptaaWriteStream(fp, ptaa, type))
-        return ERROR_INT("ptaa not written to stream", procName, 1);
-    fclose(fp);
-
-    return 0;
 }
 
 

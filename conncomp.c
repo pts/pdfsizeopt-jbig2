@@ -769,67 +769,6 @@ L_STACK  *auxstack;
     return;
 }
 
-
-/*!
- *  pushFillseg()
- *
- *      Input:  lstack
- *              xleft, xright
- *              y
- *              dy
- *              ymax
- *      Return: void
- *
- *  Notes:
- *      (1) This adds a line segment to the stack.
- *      (2) The auxiliary stack is used as a storage area to recycle
- *          fillsegs that are no longer in use.  We only calloc new
- *          fillsegs if the auxiliary stack is empty.
- */
-static void
-pushFillseg(L_STACK  *lstack,
-            l_int32   xleft,
-            l_int32   xright,
-            l_int32   y,
-            l_int32   dy,
-            l_int32   ymax)
-{
-FILLSEG  *fseg;
-L_STACK  *auxstack;
-
-    PROCNAME("pushFillseg");
-
-    if (!lstack) {
-        L_ERROR(procName, "lstack not defined");
-        return;
-    }
-
-    if (y + dy >= 0 && y + dy <= ymax) {
-        if ((auxstack = lstack->auxstack) == NULL) {
-            L_ERROR("auxstack not defined", procName);
-            return;
-        }
-
-            /* Get a fillseg to use */
-        if (lstackGetCount(auxstack) > 0)
-            fseg = (FILLSEG *)lstackRemove(auxstack);
-        else {
-            if ((fseg = (FILLSEG *)CALLOC(1, sizeof(FILLSEG))) == NULL) {
-                L_ERROR("fillseg not made", procName);
-                return;
-            }
-        }
-
-        fseg->xleft = xleft;
-        fseg->xright = xright;
-        fseg->y = y;
-        fseg->dy = dy;
-        lstackAdd(lstack, fseg);
-    }
-    return;
-}
-
-
 /*!
  *  popFillseg()
  * 

@@ -420,38 +420,6 @@ pixaGetPix(PIXA    *pixa,
 
 
 /*!
- *  pixaGetPixDimensions()
- *
- *      Input:  pixa
- *              index  (to the index-th box)
- *              &w, &h, &d (<optional return>; each can be null)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixaGetPixDimensions(PIXA     *pixa,
-                     l_int32   index,
-                     l_int32  *pw,
-                     l_int32  *ph,
-                     l_int32  *pd)
-{
-PIX  *pix;
-
-    PROCNAME("pixaGetPixDimensions");
-
-    if (!pixa)
-        return ERROR_INT("pixa not defined", procName, 1);
-    if (index < 0 || index >= pixa->n)
-        return ERROR_INT("index not valid", procName, 1);
-
-    if ((pix = pixaGetPix(pixa, index, L_CLONE)) == NULL)
-        return ERROR_INT("pix not found!", procName, 1);
-    pixGetDimensions(pix, pw, ph, pd);
-    pixDestroy(&pix);
-    return 0;
-}
-
-
-/*!
  *  pixaGetBoxa()
  *
  *      Input:  pixa
@@ -473,24 +441,6 @@ pixaGetBoxa(PIXA    *pixa,
         return (BOXA *)ERROR_PTR("invalid accesstype", procName, NULL);
 
     return boxaCopy(pixa->boxa, accesstype);
-}
-
-
-/*!
- *  pixaGetBoxaCount()
- *
- *      Input:  pixa
- *      Return: count, or 0 on error
- */
-LEPTONICA_EXPORT l_int32
-pixaGetBoxaCount(PIXA  *pixa)
-{
-    PROCNAME("pixaGetBoxaCount");
-
-    if (!pixa)
-        return ERROR_INT("pixa not defined", procName, 0);
-    
-    return boxaGetCount(pixa->boxa);
 }
 
 
@@ -545,48 +495,6 @@ BOX  *box;
 /*---------------------------------------------------------------------*
  *                       Pixa array modifiers                          *
  *---------------------------------------------------------------------*/
-/*!
- *  pixaReplacePix()
- *
- *      Input:  pixa
- *              index  (to the index-th pix)
- *              pix (insert to replace existing one)
- *              box (<optional> insert to replace existing)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) In-place replacement of one pix.
- *      (2) The previous pix at that location is destroyed.
- */
-LEPTONICA_EXPORT l_int32
-pixaReplacePix(PIXA    *pixa,
-               l_int32  index,
-               PIX     *pix,
-               BOX     *box)
-{
-BOXA  *boxa;
-
-    PROCNAME("pixaReplacePix");
-
-    if (!pixa)
-        return ERROR_INT("pixa not defined", procName, 1);
-    if (index < 0 || index >= pixa->n)
-        return ERROR_INT("index not valid", procName, 1);
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-
-    pixDestroy(&(pixa->pix[index]));
-    pixa->pix[index] = pix;
-
-    if (box) {
-        boxa = pixa->boxa;
-        if (index > boxa->n)
-            return ERROR_INT("boxa index not valid", procName, 1);
-        boxaReplaceBox(boxa, index, box);
-    }
-
-    return 0;
-}
 
 
 /*---------------------------------------------------------------------*
@@ -868,65 +776,4 @@ PIXA    *pixa;
         pixaAddPix(pixa, pix, L_INSERT);
     }
     return pixa;
-}
-
-
-/*---------------------------------------------------------------------*
- *                         Pixaa serialized I/O                        *
- *---------------------------------------------------------------------*/
-
-
-/*!
- *  pixaaReadStream()
- *
- *      Input:  stream
- *      Return: pixaa, or null on error
- *
- *  Notes:
- *      (1) The pix are stored in the file as png.
- *          If the png library is not linked, this will fail.
- */
-LEPTONICA_EXPORT PIXAA *
-pixaaReadStream(FILE  *fp)
-{
-l_int32  n, i, version;
-l_int32  ignore;
-BOXA    *boxa;
-PIXA    *pixa;
-PIXAA   *pixaa;
-
-    PROCNAME("pixaaReadStream");
-
-#if !HAVE_LIBPNG     /* defined in environ.h and config_auto.h */
-    return (PIXAA *)ERROR_PTR("no libpng: can't read data", procName, NULL);
-#endif  /* !HAVE_LIBPNG */
-
-    if (!fp)
-        return (PIXAA *)ERROR_PTR("stream not defined", procName, NULL);
-
-    if (fscanf(fp, "\nPixaa Version %d\n", &version) != 1)
-        return (PIXAA *)ERROR_PTR("not a pixaa file", procName, NULL);
-    if (version != PIXAA_VERSION_NUMBER)
-        return (PIXAA *)ERROR_PTR("invalid pixaa version", procName, NULL);
-    if (fscanf(fp, "Number of pixa = %d\n", &n) != 1)
-        return (PIXAA *)ERROR_PTR("not a pixaa file", procName, NULL);
-
-    if ((pixaa = pixaaCreate(n)) == NULL)
-        return (PIXAA *)ERROR_PTR("pixaa not made", procName, NULL);
-    if ((boxa = boxaReadStream(fp)) == NULL)
-        return (PIXAA *)ERROR_PTR("boxa not made", procName, NULL);
-    boxaDestroy(&pixaa->boxa);
-    pixaa->boxa = boxa;
-
-    for (i = 0; i < n; i++) {
-        if ((fscanf(fp, "\n\n --------------- pixa[%d] ---------------\n",
-                    &ignore)) != 1) {
-            return (PIXAA *)ERROR_PTR("text reading", procName, NULL);
-        }
-        if ((pixa = pixaReadStream(fp)) == NULL)
-            return (PIXAA *)ERROR_PTR("pixa not read", procName, NULL);
-        pixaaAddPixa(pixaa, pixa, L_INSERT);
-    }
-
-    return pixaa;
 }

@@ -357,40 +357,6 @@ numaGetCount(NUMA  *na)
 
 
 /*!
- *  numaSetCount()
- *
- *      Input:  na
- *              newcount
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) If newcount <= na->nalloc, this resets na->n.
- *          Using newcount = 0 is equivalent to numaEmpty().
- *      (2) If newcount > na->nalloc, this causes a realloc
- *          to a size na->nalloc = newcount.
- *      (3) All the previously unused values in na are set to 0.0.
- */
-LEPTONICA_EXPORT l_int32
-numaSetCount(NUMA    *na,
-             l_int32  newcount)
-{
-    PROCNAME("numaSetCount");
-
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-    if (newcount > na->nalloc) {
-        if ((na->array = (l_float32 *)reallocNew((void **)&na->array,
-                         sizeof(l_float32) * na->nalloc,
-                         sizeof(l_float32) * newcount)) == NULL)
-            return ERROR_INT("new ptr array not returned", procName, 1);
-        na->nalloc = newcount;
-    }
-    na->n = newcount;
-    return 0;
-}
-
-
-/*!
  *  numaGetFValue()
  *
  *      Input:  na
@@ -459,52 +425,6 @@ l_float32  val;
 }
 
 /*!
- *  numaGetFArray()
- *
- *      Input:  na
- *              copyflag (L_NOCOPY or L_COPY)
- *      Return: either the bare internal array or a copy of it,
- *              or null on error
- *
- *  Notes:
- *      (1) If copyflag == L_COPY, it makes a copy which the caller
- *          is responsible for freeing.  Otherwise, it operates
- *          directly on the bare array of the numa.
- *      (2) Very important: for L_NOCOPY, any writes to the array
- *          will be in the numa.  Do not write beyond the size of
- *          the count field, because it will not be accessable
- *          from the numa!  If necessary, be sure to set the count
- *          field to a larger number (such as the alloc size)
- *          BEFORE calling this function.  Creating with numaMakeConstant()
- *          is another way to insure full initialization.
- */
-LEPTONICA_EXPORT l_float32 *
-numaGetFArray(NUMA    *na,
-              l_int32  copyflag)
-{
-l_int32     i, n;
-l_float32  *array;
-
-    PROCNAME("numaGetFArray");
-
-    if (!na)
-        return (l_float32 *)ERROR_PTR("na not defined", procName, NULL);
-
-    if (copyflag == L_NOCOPY)
-        array = na->array;
-    else {  /* copyflag == L_COPY */
-        n = numaGetCount(na);
-        if ((array = (l_float32 *)CALLOC(n, sizeof(l_float32))) == NULL)
-            return (l_float32 *)ERROR_PTR("array not made", procName, NULL);
-        for (i = 0; i < n; i++)
-            array[i] = na->array[i];
-    }
-
-    return array;
-}
-
-
-/*!
  *  numaGetRefCount()
  *
  *      Input:  na
@@ -565,55 +485,6 @@ numaGetXParameters(NUMA       *na,
 }
 
 
-/*!
- *  numaSetXParameters()
- *
- *      Input:  na
- *              startx (x value corresponding to na[0])
- *              delx (difference in x values for the situation where the
- *                    elements of na correspond to the evaulation of a
- *                    function at equal intervals of size @delx)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-numaSetXParameters(NUMA      *na,
-                   l_float32  startx,
-                   l_float32  delx)
-{
-    PROCNAME("numaSetXParameters");
-
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-
-    na->startx = startx;
-    na->delx = delx;
-    return 0;
-}
-
-/*!
- *  numaaExtendArray()
- *
- *      Input:  naa
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-numaaExtendArray(NUMAA  *naa)
-{
-    PROCNAME("numaaExtendArray");
-
-    if (!naa)
-        return ERROR_INT("naa not defined", procName, 1);
-
-    if ((naa->numa = (NUMA **)reallocNew((void **)&naa->numa,
-                              sizeof(NUMA *) * naa->nalloc,
-                              2 * sizeof(NUMA *) * naa->nalloc)) == NULL)
-            return ERROR_INT("new ptr array not returned", procName, 1);
-
-    naa->nalloc *= 2;
-    return 0;
-}
-
-
 /*----------------------------------------------------------------------*
  *                           Numaa accessors                            *
  *----------------------------------------------------------------------*/
@@ -631,34 +502,6 @@ numaaGetCount(NUMAA  *naa)
     if (!naa)
         return ERROR_INT("naa not defined", procName, 0);
     return naa->n;
-}
-
-/*!
- *  numaaGetNumberCount()
- *
- *      Input:  naa
- *      Return: count (total number of numbers in the numaa),
- *                     or 0 if no numbers or on error
- */
-LEPTONICA_EXPORT l_int32
-numaaGetNumberCount(NUMAA  *naa)
-{
-NUMA    *na;
-l_int32  n, sum, i;
-
-    PROCNAME("numaaGetNumberCount");
-
-    if (!naa)
-        return ERROR_INT("naa not defined", procName, 0);
-
-    n = numaaGetCount(naa);
-    for (sum = 0, i = 0; i < n; i++) {
-        na = numaaGetNuma(naa, i, L_CLONE);
-        sum += numaGetCount(na);
-        numaDestroy(&na);
-    }
-
-    return sum;
 }
 
 /*!
