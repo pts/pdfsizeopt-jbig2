@@ -263,71 +263,6 @@ PIXCMAP  *cmap;
 }
 
 
-/*!
- *  pixSetAllArbitrary()
- *
- *      Input:  pix (all depths; use cmapped with caution)
- *              val  (value to set all pixels)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) For colormapped pix, be sure the value is the intended
- *          one in the colormap.
- *      (2) Caution: for colormapped pix, this sets each pixel to the
- *          color at the index equal to val.  Be sure that this index
- *          exists in the colormap and that it is the intended one!
- */
-LEPTONICA_EXPORT l_int32
-pixSetAllArbitrary(PIX      *pix,
-                   l_uint32  val)
-{
-l_int32    n, i, j, w, h, d, wpl, npix;
-l_uint32   maxval, wordval;
-l_uint32  *data, *line;
-PIXCMAP   *cmap;
-
-    PROCNAME("pixSetAllArbitrary");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-    if ((cmap = pixGetColormap(pix)) != NULL) {
-        n = pixcmapGetCount(cmap);
-        if (val >= n) {
-            L_WARNING("index not in colormap; using last color", procName);
-            val = n - 1;
-        }
-    }
-
-    pixGetDimensions(pix, &w, &h, &d);
-    if (d == 32)
-        maxval = 0xffffffff;
-    else
-        maxval = (1 << d) - 1;
-    if (val > maxval) {
-        L_WARNING_INT("invalid pixel val; set to maxval = %d",
-                      procName, maxval);
-        val = maxval;
-    }
-
-        /* Set up word to tile with */
-    wordval = 0;
-    npix = 32 / d;    /* number of pixels per 32 bit word */
-    for (j = 0; j < npix; j++)
-        wordval |= (val << (j * d));
-
-    wpl = pixGetWpl(pix);
-    data = pixGetData(pix);
-    for (i = 0; i < h; i++) {
-        line = data + i * wpl;
-        for (j = 0; j < wpl; j++) {
-            *(line + j) = wordval;
-        }
-    }
-
-    return 0;
-}
-
-
 /*-------------------------------------------------------------*
  *                         Set pad bits                        *
  *-------------------------------------------------------------*/
@@ -454,6 +389,8 @@ PIX     *pixd;
         return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
     if (left < 0 || right < 0 || top < 0 || bot < 0)
         return (PIX *)ERROR_PTR("negative border added!", procName, NULL);
+    if (val)
+        return (PIX *)ERROR_PTR("only val=0 is supported", procName, NULL);
 
     pixGetDimensions(pixs, &ws, &hs, &d);
     wd = ws + left + right;
@@ -464,21 +401,11 @@ PIX     *pixd;
     pixCopyColormap(pixd, pixs);
 
         /* Set the new border pixels */
-    op = UNDEF;
-    if (val == 0)
-        op = PIX_CLR;
-    else if ((d == 1 && val == 1) || (d == 2 && val == 3) ||
-             (d == 4 && val == 0xf) || (d == 8 && val == 0xff) || 
-             (d == 16 && val == 0xffff) || (d == 32 && (val >> 8) == 0xffffff))
-        op = PIX_SET;
-    if (op == UNDEF)
-        pixSetAllArbitrary(pixd, val);   /* a little extra writing ! */
-    else {
-        pixRasterop(pixd, 0, 0, left, hd, op, NULL, 0, 0); 
-        pixRasterop(pixd, wd - right, 0, right, hd, op, NULL, 0, 0); 
-        pixRasterop(pixd, 0, 0, wd, top, op, NULL, 0, 0); 
-        pixRasterop(pixd, 0, hd - bot, wd, bot, op, NULL, 0, 0); 
-    }
+    op = PIX_CLR;
+    pixRasterop(pixd, 0, 0, left, hd, op, NULL, 0, 0); 
+    pixRasterop(pixd, wd - right, 0, right, hd, op, NULL, 0, 0); 
+    pixRasterop(pixd, 0, 0, wd, top, op, NULL, 0, 0); 
+    pixRasterop(pixd, 0, hd - bot, wd, bot, op, NULL, 0, 0); 
 
         /* Copy pixs into the interior */
     pixRasterop(pixd, left, top, ws, hs, PIX_SRC, pixs, 0, 0);
