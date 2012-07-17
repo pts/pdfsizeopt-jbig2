@@ -619,35 +619,17 @@ PIXA    *pixac;
     }
 
     n = pixaaGetCount(pixaa);
-    if (n >= pixaa->nalloc)
-        pixaaExtendArray(pixaa);
+    if (n >= pixaa->nalloc) {
+        if ((pixaa->pixa = (PIXA **)reallocNew((void **)&pixaa->pixa,
+                                 sizeof(PIXA *) * pixaa->nalloc,
+                                 2 * sizeof(PIXA *) * pixaa->nalloc)) == NULL)
+            return ERROR_INT("new ptr array not returned", procName, 1);
+
+        pixaa->nalloc = 2 * pixaa->nalloc;
+    }
     pixaa->pixa[n] = pixac;
     pixaa->n++;
 
-    return 0;
-}
-
-
-/*!
- *  pixaaExtendArray()
- *
- *      Input:  pixaa
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixaaExtendArray(PIXAA  *pixaa)
-{
-    PROCNAME("pixaaExtendArray");
-
-    if (!pixaa)
-        return ERROR_INT("pixaa not defined", procName, 1);
-
-    if ((pixaa->pixa = (PIXA **)reallocNew((void **)&pixaa->pixa,
-                             sizeof(PIXA *) * pixaa->nalloc,
-                             2 * sizeof(PIXA *) * pixaa->nalloc)) == NULL)
-        return ERROR_INT("new ptr array not returned", procName, 1);
-
-    pixaa->nalloc = 2 * pixaa->nalloc;
     return 0;
 }
 
