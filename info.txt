@@ -1,3 +1,4 @@
+TODO: make libpng and libz functions static (for better dead code removal)
 TODO: fix bug: make the output the same for pts2.png and pts2i.png
       (indexed1)
 TODO: make rasteropGeneralLow etc. shorter by removing switch cases for unused
