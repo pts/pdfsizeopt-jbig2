@@ -1,7 +1,6 @@
 #include "png.c"
 #include "pngerror.c"
 #include "pngget.c"
-#include "pngio.c"
 #include "pngmem.c"
 #include "pngread.c"
 #include "pngrio.c"
