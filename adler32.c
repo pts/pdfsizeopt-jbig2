@@ -15,11 +15,11 @@ local uLong adler32_combine_(uLong adler1, uLong adler2, z_off64_t len2);
 #define NMAX 5552
 /* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
 
-#define DO1(buf,i)  {adler += (buf)[i]; sum2 += adler;}
-#define DO2(buf,i)  DO1(buf,i); DO1(buf,i+1);
-#define DO4(buf,i)  DO2(buf,i); DO2(buf,i+2);
-#define DO8(buf,i)  DO4(buf,i); DO4(buf,i+4);
-#define DO16(buf)   DO8(buf,0); DO8(buf,8);
+#define ADO1(buf,i)  {adler += (buf)[i]; sum2 += adler;}
+#define ADO2(buf,i)  ADO1(buf,i); ADO1(buf,i+1);
+#define ADO4(buf,i)  ADO2(buf,i); ADO2(buf,i+2);
+#define ADO8(buf,i)  ADO4(buf,i); ADO4(buf,i+4);
+#define ADO16(buf)   ADO8(buf,0); ADO8(buf,8);
 
 /* use NO_DIVIDE if your processor does not do division in hardware */
 #ifdef NO_DIVIDE
@@ -101,7 +101,7 @@ uLong ZEXPORT adler32(adler, buf, len)
         len -= NMAX;
         n = NMAX / 16;          /* NMAX is divisible by 16 */
         do {
-            DO16(buf);          /* 16 sums unrolled */
+            ADO16(buf);          /* 16 sums unrolled */
             buf += 16;
         } while (--n);
         MOD(adler);
@@ -112,7 +112,7 @@ uLong ZEXPORT adler32(adler, buf, len)
     if (len) {                  /* avoid modulos if none remaining */
         while (len >= 16) {
             len -= 16;
-            DO16(buf);
+            ADO16(buf);
             buf += 16;
         }
         while (len--) {

@@ -60,23 +60,36 @@ set -ex
 
 PREFIX=/home/pts/prg/pts-mini-gpl/uevalrun/cross-compiler
 rm -f *.o
+
+${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
+    -ffunction-sections -fdata-sections \
+    -W -Wall \
+    -I. \
+    zall.c
+
+${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
+    -ffunction-sections -fdata-sections \
+    -W -Wall -Wno-uninitialized -Wno-sign-compare \
+    -I. \
+    pngall.c
+
 ${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-unused-parameter -Wno-sign-compare \
     -Wno-strict-aliasing -fno-strict-aliasing \
+    -I. \
     leptonica.c
 
 ${PREFIX}/bin/i686-g++ -static -fno-stack-protector \
     -fno-exceptions -fno-rtti -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
-    -I. -I${PREFIX}/include \
+    -I. \
     jbig2arith.cc jbig2.cc jbig2enc.cc jbig2sym.cc
 
 #g++ -Wl,--gc-sections,--print-gc-sections
 ${PREFIX}/bin/i686-g++ -static -Wl,--gc-sections \
-    -fno-exceptions -fno-rtti -s -o jbig2.static *.o \
-    -L${PREFIX}/lib -lpng -lz
+    -fno-exceptions -fno-rtti -s -o jbig2.static *.o
 
 do_elfosfix jbig2.static
 
