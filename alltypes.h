@@ -40,7 +40,6 @@
 #include "ptra.h"
 #include "queue.h"
 #include "regutils.h"
-#include "sudoku.h"
 #include "stack.h"
 #include "watershed.h"
 
