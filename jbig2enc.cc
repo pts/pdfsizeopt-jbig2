@@ -281,6 +281,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
 #endif
 
 #ifdef SYMBOL_COMPRESSION_DEBUGGING
+#error unimplemented map for usecount
   std::map<int, int> usecount;
   for (int i = 0; i < ctx->classer->naclass->n; ++i) {
     usecount[(int)ctx->classer->naclass->array[i]]++;
@@ -289,6 +290,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
   for (int p = 0; p < ctx->classer->npages; ++p) {
     const int numcomps = ctx->pagecomps[p].size();
     int unique_in_doc = 0;
+#error unimplemented map for symcount
     std::map<int, int> symcount;
     for (std::vector<int>::const_iterator i = ctx->pagecomps[p].begin();
          i != ctx->pagecomps[p].end(); ++i) {
