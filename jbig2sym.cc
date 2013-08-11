@@ -213,8 +213,8 @@ class XSorter {  // concept: stl/StrictWeakOrdering
 // see comment in .h file
 void
 jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
-                    /*const*/ std::map<int, int> &symmap,
-                    /*const*/ std::map<int, int> &symmap2,
+                    const std::map<int, int> &symmap,
+                    const std::map<int, int> &symmap2,
                     const std::vector<int> &comps,
                     PTA *const in_ll,
                     PIXA *const symbols,
