@@ -50,41 +50,28 @@ myiota(_ForwardIterator __first, _ForwardIterator __last, _Tp __val) {
 // because symbols are placed into the JBIG2 table in height order
 // -----------------------------------------------------------------------------
 
-class HeightSorter {  // concept: stl/StrictWeakOrdering
- public:
-  HeightSorter(const PIXA *isymbols)
-      : symbols(isymbols) {}
-
-  bool operator() (int x, int y) {
-    return S(x)->h < S(y)->h;
-  }
-
- private:
-  const PIXA *const symbols;
-};
+bool is_height_less(void *data, const int *x, const int *y) {
+  const PIXA *symbols = (const PIXA*)data;
+  return S(*x)->h < S(*y)->h;
+}  
 
 // -----------------------------------------------------------------------------
 // Sorts a vector of indexes into the symbols PIXA by width. This is needed
 // because symbols are placed into the JBIG2 table in width order (for a given
 // height class)
 // -----------------------------------------------------------------------------
-class WidthSorter {  // concept: stl/StrictWeakOrdering
- public:
-  WidthSorter(const PIXA *isymbols)
-      : symbols(isymbols) {}
 
-  bool operator() (int x, int y) {
-    return S(x)->w < S(y)->w;
-  }
-
- private:
-  const PIXA *const symbols;
-};
+bool is_width_less(void *data, const int *x, const int *y) {
+  const PIXA *symbols = (const PIXA*)data;
+  return S(*x)->w < S(*y)->w;
+}
 
 static const int kBorderSize = 6;
 
-template <typename T, typename IsLess>
-static void mergesort_low(T *a, size_t n, T *b, IsLess is_less, bool f) {
+static void mergesort_low(
+    /*T*/int *a, size_t n, /*T*/int *b,
+    bool (*is_less)(void *data, const int *a, const int *b),
+    void *data, bool f) {
   if (n == 1) {  // n == 0 is not supported.
     if (f) *b = *a;
     return;
@@ -92,9 +79,9 @@ static void mergesort_low(T *a, size_t n, T *b, IsLess is_less, bool f) {
   size_t an = n >> 1;
   size_t bn = n - an;
   f = !f;
-  mergesort_low(a, an, b, is_less, f);
-  mergesort_low(a + an, bn, b + an, is_less, f);
-  T *c;  
+  mergesort_low(a, an, b, is_less, data, f);
+  mergesort_low(a + an, bn, b + an, is_less, data, f);
+  /*T*/int *c;  
   if (f) {
     c = a;
     a = b;
@@ -104,7 +91,7 @@ static void mergesort_low(T *a, size_t n, T *b, IsLess is_less, bool f) {
     b = a + an;
   }
   while (an > 0 && bn > 0) {  // Now merge a[:an] and b[:bn] to c[:an+bn].
-    if (is_less(*b, *a)) {
+    if (is_less(data, b, a)) {
       *c++ = *b++;
       --bn;
     } else {
@@ -121,12 +108,16 @@ static void mergesort_low(T *a, size_t n, T *b, IsLess is_less, bool f) {
 }
 
 // Using a stable sort to get deterministic output for lists with equal values. 
-template <typename T, typename IsLess>
-static void jbstablesort(std::vector<T> *v, IsLess is_less) {
+// Would work with types other than int, but hardcoding int to reduce template
+// bloat.
+static void jbstablesort(
+    std::vector<int> *v,
+    bool (*is_less)(void *data, const int *a, const int *b),
+    void *data) {
   const size_t n = v->size();
   if (n < 2) return;
   v->resize(n << 1);  // Allocate temporary space.
-  mergesort_low(v->data(), n, v->data() + n, is_less, false);
+  mergesort_low(v->data(), n, v->data() + n, is_less, data, false);
   v->resize(n);
 }
 
@@ -144,12 +135,9 @@ jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
 #endif
 
   // this is a vector of indexes into symbols
-  jbvector<unsigned> syms(*symbol_list);
+  jbvector<int> syms(reinterpret_cast<int*>(symbol_list->data()), reinterpret_cast<int*>(symbol_list->data() + symbol_list->size()));
   // now sort that vector by height
-  jbstablesort(&syms, HeightSorter(symbols));  // on unsigned
-
-  // this is used for each height class to sort into increasing width
-  WidthSorter sorter(symbols);
+  jbstablesort(&syms, is_height_less, symbols);
 
   // this stores the indexes of the symbols for a given height class
   jbvector<int> hc;
@@ -174,7 +162,7 @@ jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
 #endif
     // all the symbols from i to j-1 are a height class
     // now sort them into increasing width
-    jbstablesort(&hc, sorter);  // on int
+    jbstablesort(&hc, is_width_less, symbols);
     // encode the delta height
     const int deltaheight = height - hcheight;
     jbig2enc_int(ctx, JBIG2_IADH, deltaheight);
@@ -224,32 +212,16 @@ jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
 }
 
 // sort by the bottom-left corner of the box
-class YSorter {  // concept: stl/StrictWeakOrdering
- public:
-  YSorter(const PTA *ill)
-    : ll(ill) {}
-
-  bool operator() (int x, int y) {
-    return ll->y[x] < ll->y[y];
-  }
-
- private:
-  const PTA *const ll;
-};
+bool is_y_less(void *data, const int *x, const int *y) {
+  const PTA *ll = (const PTA*)data;
+  return ll->y[*x] < ll->y[*y];
+}
 
 // sort by the bottom-left corner of the box
-class XSorter {  // concept: stl/StrictWeakOrdering
- public:
-  XSorter(const PTA *ill)
-    : ll(ill) {}
-
-  bool operator() (int x, int y) {
-    return ll->x[x] < ll->x[y];
-  }
-
- private:
-  const PTA *const ll;
-};
+bool is_x_less(void *data, const int *x, const int *y) {
+  const PTA *ll = (const PTA*)data;
+  return ll->x[*x] < ll->x[*y];
+}
 
 #if (__GNUC__ <= 2) || defined(sun)
 #define lrint(x) static_cast<int>(x)
@@ -311,9 +283,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
     syms = comps;
   }
   // sort into height order
-  jbstablesort(&syms, YSorter(ll));  // on int
-
-  XSorter sorter(ll);
+  jbstablesort(&syms, is_y_less, ll);
 
   int stript = 0;
   int firsts = 0;
@@ -344,7 +314,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
     }
 
     // now sort the strip into left-right order
-    jbstablesort(&strip, sorter);  // int
+    jbstablesort(&strip, is_x_less, ll);
     const int deltat = height - stript;
 #ifdef SYM_DEBUGGING
     fprintf(stderr, "deltat is %d\n", deltat);
