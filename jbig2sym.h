@@ -34,8 +34,8 @@ struct jbig2enc_ctx;
 // -----------------------------------------------------------------------------
 void jbig2enc_symboltable(struct jbig2enc_ctx *__restrict__ ctx,
                           PIXA *__restrict__ const symbols,
-                          std::vector<unsigned> *__restrict__ symbol_list,
-                          std::map<int, int> *symmap,
+                          jbvector<unsigned> *__restrict__ symbol_list,
+                          jbmap<int, int> *symmap,
                           bool unborder_symbols);
 
 // -----------------------------------------------------------------------------
@@ -64,9 +64,9 @@ void jbig2enc_symboltable(struct jbig2enc_ctx *__restrict__ ctx,
 // unborder_symbols: if true, symbols have a 6px border around them
 // -----------------------------------------------------------------------------
 void jbig2enc_textregion(struct jbig2enc_ctx *__restrict__ ctx,
-                         const std::map<int, int> &symmap,
-                         const std::map<int, int> &symmap2,
-                         const std::vector<int> &comps,
+                         const jbmap<int, int> &symmap,
+                         const jbmap<int, int> &symmap2,
+                         const jbvector<int> &comps,
                          PTA *const ll, PIXA *const symbols,
                          NUMA *assignments,
                          int stripwidth, int symbits,

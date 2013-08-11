@@ -15,10 +15,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <map>
-#include <vector>
-#include <algorithm>
-
 #include <stdio.h>
 #include <string.h>
 
@@ -36,6 +32,9 @@
 #define u32 uint32_t
 #define u16 uint16_t
 #define u8  uint8_t
+
+#include "jbmap.h"
+#include "jbvector.h"
 
 #include "jbig2arith.h"
 #include "jbig2sym.h"
@@ -101,22 +100,22 @@ struct jbig2ctx {
   int segnum;  // current segment number
   int symtab_segment;  // the segment number of the symbol table
   // a map from page number a list of components for that page
-  std::map<int, std::vector<int> > pagecomps;
+  jbmap<int, jbvector<int> > pagecomps;
   // for each page, the list of symbols which are only used on that page
-  std::map<int, std::vector<unsigned> > single_use_symbols;
+  jbmap<int, jbvector<unsigned> > single_use_symbols;
   // the number of symbols in the global symbol table
   int num_global_symbols;
-  std::vector<int> page_xres, page_yres;
-  std::vector<int> page_width, page_height;
+  jbvector<int> page_xres, page_yres;
+  jbvector<int> page_width, page_height;
   // Used to store the mapping from symbol number to the index in the global
   // symbol dictionary.
-  std::map<int, int> symmap;
+  jbmap<int, int> symmap;
   bool refinement;
   PIXA *avg_templates;  // grayed templates
   int refine_level;
   // only used when using refinement
     // the number of the first symbol of each page
-    std::vector<int> baseindexes;
+    jbvector<int> baseindexes;
 };
 
 // see comments in .h file
@@ -241,7 +240,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
   // pixat->n is the number of symbols
   // naclass->n is the number of connected components
 
-  std::vector<unsigned> symbol_used(ctx->classer->pixat->n);
+  jbvector<unsigned> symbol_used(ctx->classer->pixat->n);
   for (int i = 0; i < ctx->classer->naclass->n; ++i) {
     int n;
     numaGetIValue(ctx->classer->naclass, i, &n);
@@ -249,7 +248,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
   }
 
   // the multiuse symbols are the ones which go into the global dictionary
-  std::vector<unsigned> multiuse_symbols;
+  jbvector<unsigned> multiuse_symbols;
   for (int i = 0; i < ctx->classer->pixat->n; ++i) {
     if (symbol_used[i] == 0) abort();
     if (symbol_used[i] > 1 || single_page) multiuse_symbols.push_back(i);
@@ -272,7 +271,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
 
 #ifdef DUMP_SYMBOL_GRAPH
   for (int p = 0; p < ctx->classer->npages; ++p) {
-    for (std::vector<int>::const_iterator i = ctx->pagecomps[p].begin();
+    for (jbvector<int>::const_iterator i = ctx->pagecomps[p].begin();
          i != ctx->pagecomps[p].end(); ++i) {
       const int sym = (int) ctx->classer->naclass->array[*i];
       fprintf(stderr, "S: %d %d\n", p, sym);
@@ -282,7 +281,7 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
 
 #ifdef SYMBOL_COMPRESSION_DEBUGGING
 #error unimplemented map for usecount
-  std::map<int, int> usecount;
+  jbmap<int, int> usecount;
   for (int i = 0; i < ctx->classer->naclass->n; ++i) {
     usecount[(int)ctx->classer->naclass->array[i]]++;
   }
@@ -291,15 +290,15 @@ jbig2_pages_complete(struct jbig2ctx *ctx, int *const length) {
     const int numcomps = ctx->pagecomps[p].size();
     int unique_in_doc = 0;
 #error unimplemented map for symcount
-    std::map<int, int> symcount;
-    for (std::vector<int>::const_iterator i = ctx->pagecomps[p].begin();
+    jbmap<int, int> symcount;
+    for (jbvector<int>::const_iterator i = ctx->pagecomps[p].begin();
          i != ctx->pagecomps[p].end(); ++i) {
       const int sym = (int) ctx->classer->naclass->array[*i];
       symcount[sym]++;
       if (usecount[sym] == 1) unique_in_doc++;
     }
     int unique_this_page = 0;
-    for (std::map<int, int>::const_iterator i = symcount.begin();
+    for (jbmap<int, int>::const_iterator i = symcount.begin();
          i != symcount.end(); ++i) {
       if (i->second == 1) unique_this_page++;
     }
@@ -410,7 +409,7 @@ jbig2_produce_page(struct jbig2ctx *ctx, int page_no,
   pageinfo.yres = htonl(yres == -1 ? ctx->page_yres[page_no] : yres );
   pageinfo.is_lossless = ctx->refinement;
 
-  std::map<int, int> second_symbol_map;
+  jbmap<int, int> second_symbol_map;
   // If we have single-use symbols on this page we make a new symbol table
   // containing just them.
   const bool extrasymtab = ctx->single_use_symbols[page_no].size() > 0;

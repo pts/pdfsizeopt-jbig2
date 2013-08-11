@@ -1,9 +1,12 @@
-TODO: remove std::sort from *.cc (reduce dependencies)
+TODO: remove symbol_mode=true, lots of code will be removed
+TODO: remove std::vector from *.cc (reduce dependencies)
 TODO: remove std::map from *.cc (reduce dependencies)
       maybe https://github.com/paulhodge/EASTL/blob/community/include/EASTL/map.h
-TODO: remove std::vector from *.cc (reduce dependencies)
+TODO: remove new and delete -- or reduce it (hard, because map needs it,
+  otherwise it would be easy to remove) 
 TODO: use gcc-4.4 for MinGW Linux cross-compilation as well (now 4.2)
 TODO: try to make it even smaller for pdfsizeopt by accepting .pnm.gz
       instead of .png
+TODO: use C-style comparators for jbstablesort, to avoid template generation
 
 doc: Stripping the mingw_lib/*.a files makes them unlinkable.

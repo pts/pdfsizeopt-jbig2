@@ -15,8 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <map>
-#include <algorithm>
+#include "jbmap.h"
 
 #include "jbig2arith.h"
 
@@ -50,6 +49,7 @@ myiota(_ForwardIterator __first, _ForwardIterator __last, _Tp __val) {
 // Sorts a vector of indexes into the symbols PIXA by height. This is needed
 // because symbols are placed into the JBIG2 table in height order
 // -----------------------------------------------------------------------------
+
 class HeightSorter {  // concept: stl/StrictWeakOrdering
  public:
   HeightSorter(const PIXA *isymbols)
@@ -83,12 +83,59 @@ class WidthSorter {  // concept: stl/StrictWeakOrdering
 
 static const int kBorderSize = 6;
 
+template <typename T, typename IsLess>
+static void mergesort_low(T *a, size_t n, T *b, IsLess is_less, bool f) {
+  if (n == 1) {  // n == 0 is not supported.
+    if (f) *b = *a;
+    return;
+  }
+  size_t an = n >> 1;
+  size_t bn = n - an;
+  f = !f;
+  mergesort_low(a, an, b, is_less, f);
+  mergesort_low(a + an, bn, b + an, is_less, f);
+  T *c;  
+  if (f) {
+    c = a;
+    a = b;
+    b += an;
+  } else {
+    c = b;
+    b = a + an;
+  }
+  while (an > 0 && bn > 0) {  // Now merge a[:an] and b[:bn] to c[:an+bn].
+    if (is_less(*b, *a)) {
+      *c++ = *b++;
+      --bn;
+    } else {
+      *c++ = *a++;
+      --an;
+    }
+  }
+  for (; an > 0; --an) {
+    *c++ = *a++;
+  }
+  for (; bn > 0; --bn) {
+    *c++ = *b++;
+  }
+}
+
+// Using a stable sort to get deterministic output for lists with equal values. 
+template <typename T, typename IsLess>
+static void jbstablesort(std::vector<T> *v, IsLess is_less) {
+  const size_t n = v->size();
+  if (n < 2) return;
+  v->resize(n << 1);  // Allocate temporary space.
+  mergesort_low(v->data(), n, v->data() + n, is_less, false);
+  v->resize(n);
+}
+
 // see comment in .h file
 void
 jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
                      PIXA *restrict const symbols,
-                     std::vector<unsigned> *__restrict__ symbol_list,
-                     std::map<int, int> *symmap, const bool unborder_symbols) {
+                     jbvector<unsigned> *__restrict__ symbol_list,
+                     jbmap<int, int> *symmap, const bool unborder_symbols) {
   const unsigned n = symbol_list->size();
   int number = 0;
 
@@ -97,15 +144,15 @@ jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
 #endif
 
   // this is a vector of indexes into symbols
-  std::vector<unsigned> syms(*symbol_list);
+  jbvector<unsigned> syms(*symbol_list);
   // now sort that vector by height
-  std::sort(syms.begin(), syms.end(), HeightSorter(symbols));
+  jbstablesort(&syms, HeightSorter(symbols));  // on unsigned
 
   // this is used for each height class to sort into increasing width
   WidthSorter sorter(symbols);
 
   // this stores the indexes of the symbols for a given height class
-  std::vector<int> hc;
+  jbvector<int> hc;
   // this keeps the value of the height of the current class
   unsigned hcheight = 0;
   for (unsigned i = 0; i < n;) {
@@ -127,14 +174,14 @@ jbig2enc_symboltable(struct jbig2enc_ctx *restrict ctx,
 #endif
     // all the symbols from i to j-1 are a height class
     // now sort them into increasing width
-    sort(hc.begin(), hc.end(), sorter);
+    jbstablesort(&hc, sorter);  // on int
     // encode the delta height
     const int deltaheight = height - hcheight;
     jbig2enc_int(ctx, JBIG2_IADH, deltaheight);
     hcheight = height;
     int symwidth = 0;
     // encode each symbol
-    for (std::vector<int>::const_iterator k = hc.begin(); k != hc.end(); ++k) {
+    for (jbvector<int>::const_iterator k = hc.begin(); k != hc.end(); ++k) {
       const int sym = *k;
       const int thissymwidth = S(sym)->w - (unborder_symbols ? 2*kBorderSize : 0);
       const int deltawidth = thissymwidth - symwidth;
@@ -213,9 +260,9 @@ class XSorter {  // concept: stl/StrictWeakOrdering
 // see comment in .h file
 void
 jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
-                    const std::map<int, int> &symmap,
-                    const std::map<int, int> &symmap2,
-                    const std::vector<int> &comps,
+                    const jbmap<int, int> &symmap,
+                    const jbmap<int, int> &symmap2,
+                    const jbvector<int> &comps,
                     PTA *const in_ll,
                     PIXA *const symbols,
                     NUMA *assignments, int stripwidth, int symbits,
@@ -252,7 +299,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
   // syms (a copy of comps) is a list of indexes into symmap and ll
   // elements which are indexes into symmap and ll are labeled I
   // indexes into the syms array are labeled II
-  std::vector<int> syms(n);
+  jbvector<int> syms(n);
   if (source) {
     // refining: fill syms with the numbers 0..n because ll is relative to this
     // page in this case
@@ -264,7 +311,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
     syms = comps;
   }
   // sort into height order
-  sort(syms.begin(), syms.end(), YSorter(ll));
+  jbstablesort(&syms, YSorter(ll));  // on int
 
   XSorter sorter(ll);
 
@@ -279,7 +326,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
 
   // for each symbol we group it into a strip, which is stripwidth px high
   // for each strip we sort into left-right order
-  std::vector<int> strip; // elements of strip: I
+  jbvector<int> strip; // elements of strip: I
   for (int i = 0; i < n;) {   // i: II
     const int height = (BY(syms[i]) / stripwidth) * stripwidth;
     int j;
@@ -297,7 +344,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
     }
 
     // now sort the strip into left-right order
-    sort(strip.begin(), strip.end(), sorter);
+    jbstablesort(&strip, sorter);  // int
     const int deltat = height - stript;
 #ifdef SYM_DEBUGGING
     fprintf(stderr, "deltat is %d\n", deltat);
@@ -311,7 +358,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
     bool firstsymbol = true;
     int curs = 0;
     // k: iterator(I)
-    for (std::vector<int>::const_iterator k = strip.begin(); k != strip.end(); ++k) {
+    for (jbvector<int>::const_iterator k = strip.begin(); k != strip.end(); ++k) {
       const int sym = *k;  // sym: I
       if (firstsymbol) {
         firstsymbol = false;
@@ -344,7 +391,7 @@ jbig2enc_textregion(struct jbig2enc_ctx *restrict ctx,
 
       // We have two symbol dictionaries. A global one and a per-page one.
       int symid;
-      std::map<int, int>::const_iterator symit = symmap.find(assigned);
+      jbmap<int, int>::const_iterator symit = symmap.find(assigned);
       if (symit != symmap.end()) {
         symid = symit->second;
       } else {

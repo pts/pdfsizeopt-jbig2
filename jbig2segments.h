@@ -4,7 +4,8 @@
 #ifndef THIRD_PARTY_JBIG2ENC_JBIG2SEGMENTS_H__
 #define THIRD_PARTY_JBIG2ENC_JBIG2SEGMENTS_H__
 
-#include <vector>
+#include "jbvector.h"
+
 #ifdef __MINGW32__ 
 #define htons my_htons
 #define htonl my_htonl
@@ -63,7 +64,7 @@ struct Segment {
   int type;  // segment type (see enum in jbig2structs.h)
   int deferred_non_retain;  // see JBIG2 spec
   int retain_bits;
-  std::vector<unsigned> referred_to;  // list of segment numbers referred to
+  jbvector<unsigned> referred_to;  // list of segment numbers referred to
   unsigned page;  // page number
   unsigned len;   // length of trailing data
 
@@ -139,7 +140,7 @@ struct Segment {
     memcpy(&buf[j], &__i, sizeof(type)); \
     j += sizeof(type)
 
-    for (std::vector<unsigned>::const_iterator i = referred_to.begin();
+    for (jbvector<unsigned>::const_iterator i = referred_to.begin();
          i != referred_to.end(); ++i) {
       if (refsize == 4) {
         APPEND(u32, htonl(*i));

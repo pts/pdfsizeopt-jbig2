@@ -134,7 +134,7 @@ jbig2enc_init(struct jbig2enc_ctx *ctx) {
   ctx->b = 0;
   ctx->outbuf_used = 0;
   ctx->outbuf = (u8 *) malloc(JBIG2_OUTPUTBUFFER_SIZE);
-  ctx->output_chunks = new std::vector<uint8_t *>;
+  ctx->output_chunks = new jbvector<uint8_t *>;
   ctx->iaidctx = NULL;
 }
 
@@ -157,7 +157,7 @@ void
 jbig2enc_flush(struct jbig2enc_ctx *ctx) {
   ctx->outbuf_used = 0;
 
-  for (std::vector<uint8_t *>::iterator i = ctx->output_chunks->begin();
+  for (jbvector<uint8_t *>::iterator i = ctx->output_chunks->begin();
        i != ctx->output_chunks->end(); ++i) {
     free(*i);
   }
@@ -168,7 +168,7 @@ jbig2enc_flush(struct jbig2enc_ctx *ctx) {
 // see comments in .h file
 void
 jbig2enc_dealloc(struct jbig2enc_ctx *ctx) {
-  for (std::vector<uint8_t *>::iterator i = ctx->output_chunks->begin();
+  for (jbvector<uint8_t *>::iterator i = ctx->output_chunks->begin();
        i != ctx->output_chunks->end(); ++i) {
     free(*i);
   }
@@ -468,7 +468,7 @@ jbig2enc_datasize(const struct jbig2enc_ctx *ctx) {
 void
 jbig2enc_tobuffer(const struct jbig2enc_ctx *restrict ctx, u8 *restrict buffer) {
   int j = 0;
-  for (std::vector<u8 *>::const_iterator i = ctx->output_chunks->begin();
+  for (jbvector<u8 *>::const_iterator i = ctx->output_chunks->begin();
        i != ctx->output_chunks->end(); ++i) {
     memcpy(&buffer[j], *i, JBIG2_OUTPUTBUFFER_SIZE);
     j += JBIG2_OUTPUTBUFFER_SIZE;
