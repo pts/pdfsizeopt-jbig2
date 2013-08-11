@@ -71,7 +71,7 @@ ${PREFIX}/bin/i686-g++ -static -fno-stack-protector \
     -ffunction-sections -fdata-sections \
     -W -Wall \
     -I. -I${PREFIX}/include \
-    jbig2arith.cc jbig2.cc jbig2enc.cc jbig2sym.cc
+    jbig2arith.cc jbig2.cc jbig2enc.cc
 
 #g++ -Wl,--gc-sections,--print-gc-sections
 ${PREFIX}/bin/i686-g++ -static -Wl,--gc-sections \

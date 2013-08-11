@@ -15,7 +15,7 @@ i586-mingw32msvc-g++ -fno-exceptions -fno-rtti -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
     -I. -Imingw_include \
-    jbig2arith.cc jbig2.cc jbig2enc.cc jbig2sym.cc
+    jbig2arith.cc jbig2.cc jbig2enc.cc
 
 #g++ -Wl,--gc-sections,--print-gc-sections
 i586-mingw32msvc-g++ -Wl,--gc-sections \

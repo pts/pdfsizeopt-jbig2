@@ -11,7 +11,7 @@ g++ -fno-exceptions -fno-rtti -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
     -I. \
-    jbig2arith.cc jbig2.cc jbig2enc.cc jbig2sym.cc
+    jbig2arith.cc jbig2.cc jbig2enc.cc
 
 #g++ -Wl,--gc-sections,--print-gc-sections
 g++ -Wl,--gc-sections \

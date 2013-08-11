@@ -40,13 +40,10 @@ usage(const char *argv0) {
   fprintf(stderr, "Usage: %s [options] <input filenames...>\n", argv0);
   fprintf(stderr, "Some functions removed for pdfsizeopt.\n");
   fprintf(stderr, "Options:\n");
-  fprintf(stderr, "  -b <basename>: output file root name when using symbol coding\n");
   fprintf(stderr, "  -d --duplicate-line-removal: use TPGD in generic region coder\n");
   fprintf(stderr, "  -p --pdf: produce PDF ready data\n");
-  fprintf(stderr, "  -s --symbol-mode: use text region, not generic coder\n");
-  fprintf(stderr, "  -t <threshold>: set classification threshold for symbol coder (def: 0.85)\n");
+  fprintf(stderr, "  -t <threshold>: set classification threshold for symbol coder (def: 0.85)\n"); 
   fprintf(stderr, "  -T <bw threshold>: set 1 bpp threshold (def: 188)\n");
-  fprintf(stderr, "  -r --refine: use refinement (requires -s: lossless)\n");
   fprintf(stderr, "  -2: upsample 2x before thresholding\n");
   fprintf(stderr, "  -4: upsample 4x before thresholding\n");
   fprintf(stderr, "  -j --jpeg-output: write images from mixed input as JPEG\n");
@@ -105,10 +102,7 @@ main(int argc, char **argv) {
   bool pdfmode = false;
   float threshold = 0.85;
   int bw_threshold = 188;
-  bool symbol_mode = false;
-  bool refine = false;
   bool up2 = false, up4 = false;
-  const char *basename = "output";
   l_int32 img_fmt = IFF_PNG;
   const char *img_ext = "png";
   int i;
@@ -121,13 +115,6 @@ main(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp(argv[i], "-b") == 0 ||
-        strcmp(argv[i], "--basename") == 0) {
-      basename = argv[i+1];
-      i++;
-      continue;
-    }
-
     if (strcmp(argv[i], "-d") == 0 ||
         strcmp(argv[i], "--duplicate-line-removal") == 0) {
       duplicate_line_removal = true;
@@ -137,22 +124,6 @@ main(int argc, char **argv) {
     if (strcmp(argv[i], "-p") == 0 ||
         strcmp(argv[i], "--pdf") == 0) {
       pdfmode = true;
-      continue;
-    }
-
-    if (strcmp(argv[i], "-s") == 0 ||
-        strcmp(argv[i], "--symbol-mode") == 0) {
-      symbol_mode = true;
-      continue;
-    }
-
-    if (strcmp(argv[i], "-r") == 0 ||
-        strcmp(argv[i], "--refine") == 0) {
-      fprintf(stderr, "Refinement broke in recent releases since it's "
-                      "rarely used. If you need it you should bug "
-                      "agl@imperialviolet.org to fix it\n");
-      return 1;
-      refine = true;
       continue;
     }
 
@@ -220,12 +191,6 @@ main(int argc, char **argv) {
     return 4;
   }
 
-  if (refine && !symbol_mode) {
-    fprintf(stderr, "Refinement makes not sense unless in symbol mode!\n");
-    fprintf(stderr, "(if you have -r, you must have -s)\n");
-    return 5;
-  }
-
   if (up2 && up4) {
     fprintf(stderr, "Can't have both -2 and -4!\n");
     return 6;
@@ -239,10 +204,9 @@ main(int argc, char **argv) {
   }
 #endif
 
-  struct jbig2ctx *ctx = jbig2_init(threshold, 0.5, 0, 0, !pdfmode, refine ? 10 : -1);
   int pageno = -1;
 
-  int numsubimages=0, subimage=0, num_pages = 0;
+  int numsubimages=0, subimage=0;
   while (i < argc) {
     if (subimage==numsubimages) {
       subimage = numsubimages = 0;
@@ -310,62 +274,13 @@ main(int argc, char **argv) {
 
     pixDestroy(&pixl);
 
-    if (!symbol_mode) {
-      int length;
-      uint8_t *ret;
-      ret = jbig2_encode_generic(pixt, !pdfmode, 0, 0, duplicate_line_removal,
-                                 &length);
-      if (0 > write_all(1, ret, length))
-        abort();
-      return 0;
-    }
-
-    jbig2_add_page(ctx, pixt);
-    pixDestroy(&pixt);
-    num_pages++;
-    if (subimage==numsubimages) {
-      i++;
-    }
-  }
-
-  uint8_t *ret;
-  int length;
-  ret = jbig2_pages_complete(ctx, &length);
-  if (pdfmode) {
-    char *filename;
-    if (0 > asprintf(&filename, "%s.sym", basename))
-      abort();
-    const int fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT | WINBINARY, 0600);
-    free(filename);
-    if (fd < 0) abort();
-    if (0 > write_all(fd, ret, length))
-      abort();
-    close(fd);
-  } else {
+    int length;
+    uint8_t *ret;
+    ret = jbig2_encode_generic(pixt, !pdfmode, 0, 0, duplicate_line_removal,
+                               &length);
     if (0 > write_all(1, ret, length))
       abort();
+    return 0;
   }
-  free(ret);
-
-  for (int i = 0; i < num_pages; ++i) {
-    ret = jbig2_produce_page(ctx, i, -1, -1, &length);
-    if (pdfmode) {
-      char *filename;
-      if (0 > asprintf(&filename, "%s.%04d", basename, i))
-        abort();
-      const int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC | WINBINARY, 0600);
-      free(filename);
-      if (fd < 0) abort();
-      if (0 > write_all(fd, ret, length))
-        abort();
-      close(fd);
-    } else {
-      if (0 > write_all(1, ret, length))
-        abort();
-    }
-    free(ret);
-  }
-
-  jbig2_destroy(ctx);
 }
 
