@@ -236,37 +236,3 @@ lstackGetCount(L_STACK  *lstack)
 
     return lstack->n;
 }
-
-
-
-/*---------------------------------------------------------------------*
- *                            Debug output                             *
- *---------------------------------------------------------------------*/
-/*!
- *  lstackPrint()
- *
- *      Input:  stream
- *              lstack
- *      Return: 0 if OK; 1 on error
- */
-LEPTONICA_EXPORT l_int32
-lstackPrint(FILE     *fp,
-            L_STACK  *lstack)
-{
-l_int32  i;
-
-    PROCNAME("lstackPrint");
-
-    if (!fp)
-        return ERROR_INT("stream not defined", procName, 1);
-    if (!lstack)
-        return ERROR_INT("lstack not defined", procName, 1);
-
-    fprintf(fp, "\n Stack: nalloc = %d, n = %d, array = %p\n", 
-            lstack->nalloc, lstack->n, lstack->array);
-    for (i = 0; i < lstack->n; i++)
-        fprintf(fp,   "array[%d] = %p\n", i, lstack->array[i]);
-    
-    return 0;
-}
-

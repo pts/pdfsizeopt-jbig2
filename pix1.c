@@ -222,39 +222,6 @@ pix_free(void  *ptr)
 #endif  /* _MSC_VER */
 }
 
-/*!
- *  setPixMemoryManager()
- *
- *      Input: allocator (<optional>; use null to skip)
- *             deallocator (<optional>; use null to skip)
- *      Return: void
- *
- *  Notes:
- *      (1) Use this to change the alloc and/or dealloc functions;
- *          e.g., setPixMemoryManager(my_malloc, my_free).
- */
-#ifndef _MSC_VER
-LEPTONICA_EXPORT void
-setPixMemoryManager(void  *(allocator(size_t)),
-                    void  (deallocator(void *)))
-{
-    if (allocator) pix_mem_manager.allocator = allocator;
-    if (deallocator) pix_mem_manager.deallocator = deallocator;
-    return;
-}
-#else  /* _MSC_VER */
-    /* MSVC++ wants type (*fun)(types...) syntax */
-LEPTONICA_EXPORT void
-setPixMemoryManager(void  *((*allocator)(size_t)),
-                    void  ((*deallocator)(void *)))
-{
-    if (allocator) pix_mem_manager.allocator = allocator;
-    if (deallocator) pix_mem_manager.deallocator = deallocator;
-    return;
-}
-#endif /* _MSC_VER */
-
-
 /*--------------------------------------------------------------------*
  *                              Pix Creation                          *
  *--------------------------------------------------------------------*/
@@ -625,7 +592,11 @@ l_uint32  *data;
     pixSetDepth(pixd, d);
     pixSetWpl(pixd, wpl);
     bytes = 4 * wpl * h;
-    pixFreeData(pixd);  /* free any existing image data */
+
+    if ((data = pixGetData(pixd)) != NULL) {
+        pix_free(data);
+        pixd->data = NULL;
+    }
     if ((data = (l_uint32 *)pix_malloc(bytes)) == NULL)
         return ERROR_INT("pix_malloc fail for data", procName, 1);
     pixSetData(pixd, data);
@@ -695,105 +666,6 @@ pixSizesEqual(PIX  *pix1,
     else
         return 1;
 }
-
-
-/*!
- *  pixTransferAllData()
- *
- *      Input:  pixd (must be different from pixs)
- *              &pixs (will be nulled if refcount goes to 0)
- *              copytext (1 to copy the text field; 0 to skip)
- *              copyformat (1 to copy the informat field; 0 to skip)
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This does a complete data transfer from pixs to pixd,
- *          followed by the destruction of pixs (refcount permitting).
- *      (2) If the refcount of pixs is 1, pixs is destroyed.  Otherwise,
- *          the data in pixs is copied (rather than transferred) to pixd.
- *      (3) This operation, like all others with a pre-existing pixd,
- *          will side-effect any existing clones of pixd.  The pixd
- *          refcount does not change.
- *      (4) When might you use this?  Suppose you have an in-place Pix
- *          function (returning void) with the typical signature:
- *              void function-inplace(PIX *pix, ...)
- *          where "..." are non-pointer input parameters, and suppose
- *          further that you sometimes want to return an arbitrary Pix
- *          in place of the input Pix.  There are two ways you can do this:
- *          (a) The straightforward way is to change the function
- *              signature to take the address of the Pix ptr:
- *                  void function-inplace(PIX **ppix, ...) {
- *                      PIX *pixt = function-makenew(*ppix);
- *                      pixDestroy(ppix);
- *                      *ppix = pixt;
- *                      return;
- *                  }
- *              Here, the input and returned pix are different, as viewed
- *              by the calling function, and the inplace function is
- *              expected to destroy the input pix to avoid a memory leak.
- *          (b) Keep the signature the same and use pixTransferAllData()
- *              to return the new Pix in the input Pix struct:
- *                  void function-inplace(PIX *pix, ...) {
- *                      PIX *pixt = function-makenew(pix);
- *                      pixTransferAllData(pix, &pixt, 0, 0);
- *                               // pixDestroy() is called on pixt
- *                      return;
- *                  }
- *              Here, the input and returned pix are the same, as viewed
- *              by the calling function, and the inplace function must
- *              never destroy the input pix, because the calling function
- *              maintains an unchanged handle to it.
- */
-LEPTONICA_EXPORT l_int32
-pixTransferAllData(PIX     *pixd,
-                   PIX    **ppixs,
-                   l_int32  copytext,
-                   l_int32  copyformat)
-{
-l_int32  nbytes;
-PIX     *pixs;
-
-    PROCNAME("pixTransferAllData");
-
-    if (!ppixs)
-        return ERROR_INT("&pixs not defined", procName, 1);
-    if ((pixs = *ppixs) == NULL)
-        return ERROR_INT("pixs not defined", procName, 1);
-    if (!pixd)
-        return ERROR_INT("pixd not defined", procName, 1);
-    if (pixs == pixd)  /* no-op */
-        return ERROR_INT("pixd == pixs", procName, 1);
-
-    if (pixGetRefcount(pixs) == 1) {  /* transfer the data, cmap, text */
-        pixFreeData(pixd);  /* dealloc any existing data */
-        pixSetData(pixd, pixGetData(pixs));  /* transfer new data from pixs */
-        pixs->data = NULL;  /* pixs no longer owns data */
-        pixSetColormap(pixd, pixGetColormap(pixs));  /* frees old; sets new */
-        pixs->colormap = NULL;  /* pixs no longer owns colormap */
-        if (copytext) {
-            pixSetText(pixd, pixGetText(pixs));
-            pixSetText(pixs, NULL);
-        }
-    } else {  /* preserve pixs by making a copy of the data, cmap, text */
-        pixResizeImageData(pixd, pixs);
-        nbytes = 4 * pixGetWpl(pixs) * pixGetHeight(pixs);
-        memcpy((char *)pixGetData(pixd), (char *)pixGetData(pixs), nbytes);
-        pixCopyColormap(pixd, pixs);
-        if (copytext)
-            pixCopyText(pixd, pixs);
-    }
-  
-    pixCopyResolution(pixd, pixs);
-    pixCopyDimensions(pixd, pixs);
-    if (copyformat)
-        pixCopyInputFormat(pixd, pixs);
-
-        /* This will destroy pixs if data was transferred;
-         * otherwise, it just decrements its refcount. */
-    pixDestroy(ppixs);
-    return 0;
-}
-        
 
 
 /*--------------------------------------------------------------------*
@@ -914,58 +786,6 @@ pixGetDimensions(PIX      *pix,
 }
 
 
-/*!
- *  pixSetDimensions()
- *
- *      Input:  pix
- *              w, h, d (use 0 to skip the setting for any of these)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixSetDimensions(PIX     *pix,
-                 l_int32  w,
-                 l_int32  h,
-                 l_int32  d)
-{
-    PROCNAME("pixSetDimensions");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-    if (w > 0) pixSetWidth(pix, w);
-    if (h > 0) pixSetHeight(pix, h);
-    if (d > 0) pixSetDepth(pix, d);
-    return 0;
-}
-
-
-/*!
- *  pixCopyDimensions()
- *
- *      Input:  pixd
- *              pixd
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixCopyDimensions(PIX  *pixd,
-                  PIX  *pixs)
-{
-    PROCNAME("pixCopyDimensions");
-
-    if (!pixd)
-        return ERROR_INT("pixd not defined", procName, 1);
-    if (!pixs)
-        return ERROR_INT("pixs not defined", procName, 1);
-    if (pixs == pixd)
-        return 0;   /* no-op */
-
-    pixSetWidth(pixd, pixGetWidth(pixs));
-    pixSetHeight(pixd, pixGetHeight(pixs));
-    pixSetDepth(pixd, pixGetDepth(pixs));
-    pixSetWpl(pixd, pixGetWpl(pixs));
-    return 0;
-}
-
-
 LEPTONICA_EXPORT l_int32
 pixGetWpl(PIX  *pix)
 {
@@ -1062,50 +882,6 @@ pixSetYRes(PIX     *pix,
         return ERROR_INT("pix not defined", procName, 1);
 
     pix->yres = res;
-    return 0;
-}
-
-
-/*!
- *  pixGetResolution()
- *
- *      Input:  pix
- *              &xres, &yres (<optional return>; each can be null)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixGetResolution(PIX      *pix,
-                 l_int32  *pxres,
-                 l_int32  *pyres)
-{
-    PROCNAME("pixGetResolution");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-    if (pxres) *pxres = pix->xres;
-    if (pyres) *pyres = pix->yres;
-    return 0;
-}
-
-
-/*!
- *  pixSetResolution()
- *
- *      Input:  pix
- *              xres, yres (use 0 to skip the setting for either of these)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-pixSetResolution(PIX     *pix,
-                 l_int32  xres,
-                 l_int32  yres)
-{
-    PROCNAME("pixSetResolution");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-    if (xres > 0) pix->xres = xres;
-    if (yres > 0) pix->yres = yres;
     return 0;
 }
 
@@ -1236,36 +1012,6 @@ pixSetText(PIX         *pix,
 }
 
 
-/*!
- *  pixAddText()
- *
- *      Input:  pix
- *              textstring
- *      Return: 0 if OK, 1 on error
- *
- *  Notes:
- *      (1) This adds the new textstring to any existing text.
- *      (2) Either or both the existing text and the new text
- *          string can be null.
- */
-LEPTONICA_EXPORT l_int32
-pixAddText(PIX         *pix,
-           const char  *textstring)
-{
-char  *newstring;
-
-    PROCNAME("pixAddText");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-
-    newstring = stringJoin(pixGetText(pix), textstring);
-    stringReplace(&pix->text, newstring);
-    FREE(newstring);
-    return 0;
-}
-
-
 LEPTONICA_EXPORT l_int32
 pixCopyText(PIX  *pixd,
             PIX  *pixs)
@@ -1383,167 +1129,4 @@ pixSetData(PIX       *pix,
 
     pix->data = data;
     return 0;
-}
-
-
-/*!
- *  pixExtractData()
- *
- *  Notes:
- *      (1) This extracts the pix image data for use in another context.
- *          The caller still needs to use pixDestroy() on the input pix.
- *      (2) If refcount == 1, the data is extracted and the
- *          pix->data ptr is set to NULL.
- *      (3) If refcount > 1, this simply returns a copy of the data,
- *          using the pix allocator, and leaving the input pix unchanged.
- */
-LEPTONICA_EXPORT l_uint32 *
-pixExtractData(PIX  *pixs)
-{
-l_int32    count, bytes;
-l_uint32  *data, *datas;
-
-    PROCNAME("pixExtractData");
-
-    if (!pixs)
-        return (l_uint32 *)ERROR_PTR("pixs not defined", procName, NULL);
-
-    count = pixGetRefcount(pixs);
-    if (count == 1) {  /* extract */
-        data = pixGetData(pixs);
-        pixSetData(pixs, NULL);
-    }
-    else {  /* refcount > 1; copy */
-        bytes = 4 * pixGetWpl(pixs) * pixGetHeight(pixs);
-        datas = pixGetData(pixs);
-        if ((data = (l_uint32 *)pix_malloc(bytes)) == NULL)
-            return (l_uint32 *)ERROR_PTR("data not made", procName, NULL);
-        memcpy((char *)data, (char *)datas, bytes);
-    }
-
-    return data;
-}
-
-
-/*!
- *  pixFreeData()
- *
- *  Notes:
- *      (1) This frees the data and sets the pix data ptr to null.
- *          It should be used before pixSetData() in the situation where
- *          you want to free any existing data before doing
- *          a subsequent assignment with pixSetData().
- */
-LEPTONICA_EXPORT l_int32
-pixFreeData(PIX  *pix)
-{
-l_uint32  *data;
-
-    PROCNAME("pixFreeData");
-
-    if (!pix)
-        return ERROR_INT("pix not defined", procName, 1);
-
-    if ((data = pixGetData(pix)) != NULL) {
-        pix_free(data);
-        pix->data = NULL;
-    }
-    return 0;
-}
-
-
-/*--------------------------------------------------------------------*
- *                          Pix line ptrs                             *
- *--------------------------------------------------------------------*/
-/*!
- *  pixGetLinePtrs()
- *
- *      Input:  pix
- *              &size (<optional return> array size, which is the pix height)
- *      Return: array of line ptrs, or null on error
- *
- *  Notes:
- *      (1) This is intended to be used for fast random pixel access.
- *          For example, for an 8 bpp image,
- *              val = GET_DATA_BYTE(lines8[i], j);
- *          is equivalent to, but much faster than,
- *              pixGetPixel(pix, j, i, &val);
- *      (2) How much faster?  For 1 bpp, it's from 6 to 10x faster.
- *          For 8 bpp, it's an amazing 30x faster.  So if you are
- *          doing random access over a substantial part of the image,
- *          use this line ptr array.
- *      (3) When random access is used in conjunction with a stack,
- *          queue or heap, the overall computation time depends on
- *          the operations performed on each struct that is popped
- *          or pushed, and whether we are using a priority queue (O(logn))
- *          or a queue or stack (O(1)).  For example, for maze search,
- *          the overall ratio of time for line ptrs vs. pixGet/Set* is
- *             Maze type     Type                   Time ratio
- *               binary      queue                     0.4
- *               gray        heap (priority queue)     0.6
- *      (4) Because this returns a void** and the accessors take void*,
- *          the compiler cannot check the pointer types.  It is
- *          strongly recommended that you adopt a naming scheme for
- *          the returned ptr arrays that indicates the pixel depth.
- *          (This follows the original intent of Simonyi's "Hungarian"
- *          application notation, where naming is used proactively
- *          to make errors visibly obvious.)  By doing this, you can
- *          tell by inspection if the correct accessor is used.
- *          For example, for an 8 bpp pixg:
- *              void **lineg8 = pixGetLinePtrs(pixg, NULL);
- *              val = GET_DATA_BYTE(lineg8[i], j);  // fast access; BYTE, 8
- *              ...
- *              FREE(lineg8);  // don't forget this
- *      (5) These are convenient for accessing bytes sequentially in an
- *          8 bpp grayscale image.  People who write image processing code
- *          on 8 bpp images are accustomed to grabbing pixels directly out
- *          of the raster array.  Note that for little endians, you first
- *          need to reverse the byte order in each 32-bit word.
- *          Here's a typical usage pattern:
- *              pixEndianByteSwap(pix);   // always safe; no-op on big-endians
- *              l_uint8 **lineptrs = (l_uint8 **)pixGetLinePtrs(pix, NULL);
- *              pixGetDimensions(pix, &w, &h, NULL);
- *              for (i = 0; i < h; i++) {
- *                  l_uint8 *line = lineptrs[i];
- *                  for (j = 0; j < w; j++) {
- *                      val = line[j];
- *                      ...
- *                  }
- *              }
- *              pixEndianByteSwap(pix);  // restore big-endian order
- *              FREE(lineptrs);
- *          This can be done even more simply as follows:
- *              l_uint8 **lineptrs = pixSetupByteProcessing(pix, &w, &h);
- *              for (i = 0; i < h; i++) {
- *                  l_uint8 *line = lineptrs[i];
- *                  for (j = 0; j < w; j++) {
- *                      val = line[j];
- *                      ...
- *                  }
- *              }
- *              pixCleanupByteProcessing(pix, lineptrs);
- */
-LEPTONICA_EXPORT void **
-pixGetLinePtrs(PIX      *pix,
-               l_int32  *psize)
-{
-l_int32    i, h, wpl;
-l_uint32  *data;
-void     **lines;
-
-    PROCNAME("pixGetLinePtrs");
-
-    if (!pix)
-        return (void **)ERROR_PTR("pix not defined", procName, NULL);
-
-    h = pixGetHeight(pix);
-    if (psize) *psize = h;
-    if ((lines = (void **)CALLOC(h, sizeof(void *))) == NULL)
-        return (void **)ERROR_PTR("lines not made", procName, NULL);
-    wpl = pixGetWpl(pix);
-    data = pixGetData(pix);
-    for (i = 0; i < h; i++)
-        lines[i] = (void *)(data + i * wpl);
-
-    return lines;
 }

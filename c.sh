@@ -4,7 +4,7 @@ set -ex
 rm -f *.o
 gcc -s -O2 -c \
     -ffunction-sections -fdata-sections \
-    -W -Wall -Wno-uninitialized -Wno-unused -Wno-sign-compare \
+    -W -Wall -Wno-uninitialized -Wno-sign-compare -Wno-unused-parameter \
     leptonica.c
 
 g++ -fno-exceptions -fno-rtti -s -O2 -c \
@@ -18,4 +18,5 @@ g++ -Wl,--gc-sections \
     -fno-exceptions -fno-rtti -s -o jbig2 *.o \
     -lpng -lz
 
+echo OK.
 : OK.

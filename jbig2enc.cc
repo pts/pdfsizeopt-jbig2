@@ -52,30 +52,6 @@ unsigned long my_htonl(unsigned long x) {
 #endif
 
 // -----------------------------------------------------------------------------
-// Removes spots which are less than size x size pixels
-//
-// Note, this has a side-effect of removing a few pixels
-// that from components you want to keep.
-//
-// If that's a problem, you do a binary reconstruction
-// (from seedfill.c):
-// -----------------------------------------------------------------------------
-static PIX *
-remove_flyspecks(PIX *const source, const int size) {
-  Sel *sel_5h = selCreateBrick(1, size, 0, 2, SEL_HIT);
-  Sel *sel_5v = selCreateBrick(size, 1, 2, 0, SEL_HIT);
-
-  Pix *pixt = pixOpen(NULL, source, sel_5h);
-  Pix *pixd = pixOpen(NULL, source, sel_5v);
-  pixOr(pixd, pixd, pixt);
-  pixDestroy(&pixt);
-  selDestroy(&sel_5h);
-  selDestroy(&sel_5v);
-
-  return pixd;
-}
-
-// -----------------------------------------------------------------------------
 // Returns the number of bits needed to encode v symbols
 // -----------------------------------------------------------------------------
 static unsigned
@@ -133,9 +109,9 @@ jbig2_init(float thresh, float weight, int xres, int yres, bool full_headers,
   ctx->refine_level = refine_level;
   ctx->avg_templates = NULL;
 
-  ctx->classer = jbCorrelationInitWithoutComponents(JB_CONN_COMPS, 9999, 9999,
+  ctx->classer = jbCorrelationInitWithoutComponents(JB_CONN_COMPS /* components == 0 */,
+                                                    9999, 9999,
                                                     thresh, weight);
-
   return ctx;
 }
 
@@ -152,12 +128,7 @@ void
 jbig2_add_page(struct jbig2ctx *ctx, struct Pix *input) {
   PIX *bw;
 
-  if (false /*ctx->xres >= 300*/) {
-    bw = remove_flyspecks(input, (int) (0.0084*ctx->xres));
-  } else {
-    bw = pixClone(input);
-  }
-
+  bw = pixClone(input);
   if (ctx->refinement) {
     ctx->baseindexes.push_back(ctx->classer->baseindex);
   }

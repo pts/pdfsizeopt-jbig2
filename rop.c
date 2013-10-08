@@ -227,39 +227,3 @@ l_int32  dd;
 
     return 0;
 }
-
-/*--------------------------------------------------------------------*
- *                 Full image rasterop with no shifts                 *
- *--------------------------------------------------------------------*/
-/*!
- *  pixRasteropFullImage()
- *
- *      Input:  pixd
- *              pixs
- *              op (any of the op-codes)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      - this is a wrapper for a common 2-image raster operation
- *      - both pixs and pixd must be defined
- *      - the operation is performed with aligned UL corners of pixs and pixd
- *      - the operation clips to the smallest pix; if the width or height
- *        of pixd is larger than pixs, some pixels in pixd will be unchanged
- */
-LEPTONICA_EXPORT l_int32
-pixRasteropFullImage(PIX     *pixd,
-                     PIX     *pixs,
-                     l_int32  op)
-{
-    PROCNAME("pixRasteropFullImage");
-
-    if (!pixd)
-        return ERROR_INT("pixd not defined", procName, 1);
-    if (!pixs)
-        return ERROR_INT("pixs not defined", procName, 1);
-
-    pixRasterop(pixd, 0, 0, pixGetWidth(pixd), pixGetHeight(pixd), op,
-                pixs, 0, 0);
-    return 0;
-}
-

@@ -1,5 +1,14 @@
+TODO: remove jbig2sym.h
 TODO: remove symbol_mode=true, lots of code will be removed
 TODO: remove std::vector from *.cc (reduce dependencies)
+TODO: make libpng and libz functions static (for better dead code removal)
+TODO: fix bug: make the output the same for pts2.png and pts2i.png
+      (indexed1)
+TODO: make rasteropGeneralLow etc. shorter by removing switch cases for unused
+      values of `op'
+TODO: remove unused global variables
+TODO: remove std::sort from *.cc (reduce dependencies)
+>>>>>>> 7475797717065441becbb83ed4dfa611f16c9ec1
 TODO: remove std::map from *.cc (reduce dependencies)
       maybe https://github.com/paulhodge/EASTL/blob/community/include/EASTL/map.h
 TODO: remove new and delete -- or reduce it (hard, because map needs it,
@@ -8,5 +17,6 @@ TODO: use gcc-4.4 for MinGW Linux cross-compilation as well (now 4.2)
 TODO: try to make it even smaller for pdfsizeopt by accepting .pnm.gz
       instead of .png
 TODO: use C-style comparators for jbstablesort, to avoid template generation
+TODO: remove calls to L_WARNING etc.
 
 doc: Stripping the mingw_lib/*.a files makes them unlinkable.
