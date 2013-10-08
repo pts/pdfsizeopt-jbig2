@@ -95,39 +95,6 @@ void jbig2enc_tobuffer(const struct jbig2enc_ctx *__restrict__ ctx,
                        uint8_t *__restrict__ buffer);
 
 // -----------------------------------------------------------------------------
-// Encode an integer of a given class. proc is one of JBIG2_IA* and specifies
-// the type of the number. IAID is special and is handled by another function.
-// -----------------------------------------------------------------------------
-void jbig2enc_int(struct jbig2enc_ctx *__restrict__ ctx, int proc, int value);
-
-
-// -----------------------------------------------------------------------------
-// Encode an IAID number. This needs to know how many bits to use.
-// -----------------------------------------------------------------------------
-void jbig2enc_iaid(struct jbig2enc_ctx *__restrict__ ctx, int symcodelen,
-                   int value);
-
-// -----------------------------------------------------------------------------
-// Encode the special out-of-bounds (-0) number for a given type. proc is one
-// of JBIG2_IA*
-// -----------------------------------------------------------------------------
-void jbig2enc_oob(struct jbig2enc_ctx *__restrict__ ctx, int proc);
-
-// -----------------------------------------------------------------------------
-// Encode a bitmap with the arithmetic encoder.
-//   data: an array of mx * my bytes
-//   mx: max x value
-//   my: max y value
-//   duplicate_line_removal: if true, TPGD is used
-//
-// TPGD often takes very slightly more bytes to encode, but cuts the time taken
-// by half.
-// -----------------------------------------------------------------------------
-void jbig2enc_image(struct jbig2enc_ctx *__restrict__ ctx,
-                    const uint8_t *__restrict__ data, int mx, int my,
-                    bool duplicate_line_removal);
-
-// -----------------------------------------------------------------------------
 // This function takes almost the same arguments as _image, above. But in this
 // case the data pointer points to packed data.
 //
@@ -140,28 +107,6 @@ void jbig2enc_bitimage(struct jbig2enc_ctx *__restrict__ ctx,
                        const uint8_t *__restrict__ data, int mx, int my,
                        bool duplicate_line_removal);
 
-
-// -----------------------------------------------------------------------------
-// Encode the refinement of an exemplar to a bitmap.
-//
-// This encodes the difference between two images. If the template image is
-// close to the final image the amount of data needed should hopefully be
-// small.
-//   templ: the template image
-//   tx, ty: the size of the template image
-//   target: the desired image
-//   mx, my: the size of the desired image
-//   ox, oy: offset of the desired image from the template image.
-//           ox is limited to [-1, 0, 1]
-//
-// This uses Leptonica's 1bpp packed images (see comments above last function).
-//
-// *The pad bits at the end of each line, for both images, must be zero*
-// -----------------------------------------------------------------------------
-void jbig2enc_refine(struct jbig2enc_ctx *__restrict__ ctx,
-                     const uint8_t *__restrict__ templ, int tx, int ty,
-                     const uint8_t *__restrict__ target, int mx, int my,
-                     int ox, int oy);
 
 // -----------------------------------------------------------------------------
 // Init a new context

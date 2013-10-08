@@ -33,10 +33,6 @@
 #define WINBINARY 0
 #endif
 
-int answer() {
-  return 42;
-}
-
 static void
 usage(const char *argv0) {
   fprintf(stderr, "Usage: %s [options] <input filenames...>\n", argv0);

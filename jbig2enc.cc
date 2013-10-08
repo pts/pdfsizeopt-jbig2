@@ -50,70 +50,7 @@ unsigned long my_htonl(unsigned long x) {
 }
 #endif
 
-// -----------------------------------------------------------------------------
-// This is the context for a multi-page JBIG2 document.
-// -----------------------------------------------------------------------------
-struct jbig2ctx {
-  struct JbClasser *classer;  // the leptonica classifier
-  int xres, yres;  // ppi for the X and Y direction
-  bool full_headers;  // true if we are producing a full JBIG2 file
-  bool pdf_page_numbering;  // true if all text pages are page "1" (pdf mode)
-  int segnum;  // current segment number
-  int symtab_segment;  // the segment number of the symbol table
-  // a map from page number a list of components for that page
-  jbmap<int, jbvector<int> > pagecomps;
-  // for each page, the list of symbols which are only used on that page
-  jbmap<int, jbvector<unsigned> > single_use_symbols;
-  // the number of symbols in the global symbol table
-  int num_global_symbols;
-  jbvector<int> page_xres, page_yres;
-  jbvector<int> page_width, page_height;
-  // Used to store the mapping from symbol number to the index in the global
-  // symbol dictionary.
-  jbmap<int, int> symmap;
-  bool refinement;
-  PIXA *avg_templates;  // grayed templates
-  int refine_level;
-  // only used when using refinement
-    // the number of the first symbol of each page
-    jbvector<int> baseindexes;
-};
-
-// see comments in .h file
-struct jbig2ctx *
-jbig2_init(float thresh, float weight, int xres, int yres, bool full_headers,
-           int refine_level) {
-  struct jbig2ctx *ctx = new jbig2ctx;
-  ctx->xres = xres;
-  ctx->yres = yres;
-  ctx->full_headers = full_headers;
-  ctx->pdf_page_numbering = !full_headers;
-  ctx->segnum = 0;
-  ctx->symtab_segment = -1;
-  ctx->refinement = refine_level >= 0;
-  ctx->refine_level = refine_level;
-  ctx->avg_templates = NULL;
-
-  ctx->classer = jbCorrelationInitWithoutComponents(JB_CONN_COMPS /* components == 0 */,
-                                                    9999, 9999,
-                                                    thresh, weight);
-  return ctx;
-}
-
-// see comments in .h file
-void
-jbig2_destroy(struct jbig2ctx *ctx) {
-  if (ctx->avg_templates) pixaDestroy(&ctx->avg_templates);
-  jbClasserDestroy(&ctx->classer);
-  delete ctx;
-}
-
-#define F(x) memcpy(ret + offset, &x, sizeof(x)) ; offset += sizeof(x)
-#define G(x, y) memcpy(ret + offset, x, y); offset += y;
 #define SEGMENT(x) x.write(ret + offset); offset += x.size();
-
-#undef F
-#undef G
 
 // see comments in .h file
 u8 *
@@ -219,4 +156,3 @@ jbig2_encode_generic(struct Pix *const bw, const bool full_headers, const int xr
 
   return ret;
 }
-
