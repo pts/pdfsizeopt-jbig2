@@ -1,11 +1,13 @@
 #! /bin/bash --
 # by pts@fazekas.hu at Tue Jul 10 23:07:40 CEST 2012
 #
-# works with 
 set -ex
 rm -f *.o
 #i586-mingw32msvc-gcc -fdump-tree-fixupcfg-lineno -g -c \
 
+# Please note that -ffunction-sections, -fdata-sections and
+# -Wl,--gc-sections doesn't seem to have any effect, even unused code gets
+# compiled and linked.
 i586-mingw32msvc-gcc -s -O2 -c  \
     -ffunction-sections -fdata-sections \
     -W -Wall \

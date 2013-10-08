@@ -83,30 +83,6 @@ struct jbig2ctx *jbig2_init(float thresh, float weight, int xres, int yres,
 // Delete a context returned by jbig2_init
 // -----------------------------------------------------------------------------
 void jbig2_destroy(struct jbig2ctx *);
-// -----------------------------------------------------------------------------
-// Classify and record information about a page.
-//
-// bw: A 1-bpp image
-// -----------------------------------------------------------------------------
-void jbig2_add_page(struct jbig2ctx *ctx, struct Pix *bw);
-// -----------------------------------------------------------------------------
-// Finalise information about the document and encode the symbol table.
-//
-// WARNING: returns a malloced buffer which the caller must free
-// -----------------------------------------------------------------------------
-uint8_t *jbig2_pages_complete(struct jbig2ctx *ctx, int *const length);
-// -----------------------------------------------------------------------------
-// Encode a page.
-//
-// page_no: number of this page, indexed from 0. This *must* match the order of
-//          pages presented to jbig2_add_page.
-// xres, yres: if -1, use values given in _init. Otherwise, set the resolution
-//             for this page only
-//
-// WARNING: returns a malloced buffer which the caller must free
-// -----------------------------------------------------------------------------
-uint8_t *jbig2_produce_page(struct jbig2ctx *ctx, int page_no, int xres,
-                            int yres, int *const length);
 
 // WARNING: returns a malloced buffer which the caller must free
 // -----------------------------------------------------------------------------
