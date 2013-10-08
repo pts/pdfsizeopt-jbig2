@@ -9,23 +9,7 @@ use integer;
 use strict;
 
 #** ELF operating system codes from FreeBSDs /usr/share/misc/magic
-my %ELF_os_codes=qw{
-SYSV 0
-HP-UX 1
-NetBSD 2
-GNU/Linux 3
-GNU/Hurd 4
-86Open 5
-Solaris 6
-Monterey 7
-IRIX 8
-FreeBSD 9
-Tru64 10
-Novell 11
-OpenBSD 12
-ARM 97
-embedded 255
-};
+my %ELF_os_codes=qw{SYSV 0 GNU/Linux 3};
 my $from_oscode=$ELF_os_codes{"SYSV"};
 my $to_oscode=$ELF_os_codes{"GNU/Linux"};
 
@@ -53,8 +37,6 @@ for my $fn (@ARGV) {
   die "file error\n" if !close($f);
 }' -- "$@"
 }
-
-
 
 set -ex
 
