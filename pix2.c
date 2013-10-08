@@ -114,12 +114,6 @@ static const l_uint32 rmask32[] = {0x0,
     0x1fffffff, 0x3fffffff, 0x7fffffff, 0xffffffff};
 #endif
 
-    /* This is a global that determines the default 8 bpp alpha mask values
-     * for rings at distance 1 and 2 from the border.  Declare extern
-     * to use.  To change the values, use l_setAlphaMaskBorder(). */
-LEPT_DLL l_float32  AlphaMaskBorderVals[2] = {0.0, 0.5};
-
-
 #ifndef  NO_CONSOLE_IO
 #define  DEBUG_SERIALIZE        0
 #endif  /* ~NO_CONSOLE_IO */
@@ -321,27 +315,6 @@ PIX     *pixd;
         /* Copy pixs into the interior */
     pixRasterop(pixd, left, top, ws, hs, PIX_SRC, pixs, 0, 0);
     return pixd;
-}
-
-
-/*!
- *  pixRemoveBorder()
- *
- *      Input:  pixs (all depths; colormap ok)
- *              npix (number to be removed from each of the 4 sides)
- *      Return: pixd (with pixels removed around border), or null on error
- */
-LEPTONICA_REAL_EXPORT PIX *
-pixRemoveBorder(PIX     *pixs,
-                l_int32  npix)
-{
-    PROCNAME("pixRemoveBorder");
-
-    if (!pixs)
-        return (PIX *)ERROR_PTR("pixs not defined", procName, NULL);
-    if (npix == 0)
-        return pixClone(pixs);
-    return pixRemoveBorderGeneral(pixs, npix, npix, npix, npix);
 }
 
 

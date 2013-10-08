@@ -167,73 +167,6 @@ static const l_int32 INITIAL_PTR_ARRAYSIZE1 = 50;      /* n'importe quoi */
 /*--------------------------------------------------------------------------*
  *               Numa creation, destruction, copy, clone, etc.              *
  *--------------------------------------------------------------------------*/
-/*!
- *  numaCreate()
- *
- *      Input:  size of number array to be alloc'd (0 for default)
- *      Return: na, or null on error
- */
-LEPTONICA_EXPORT NUMA *
-numaCreate(l_int32  n)
-{
-NUMA  *na;
-
-    PROCNAME("numaCreate");
-
-    if (n <= 0)
-        n = INITIAL_PTR_ARRAYSIZE1;
-
-    if ((na = (NUMA *)CALLOC(1, sizeof(NUMA))) == NULL)
-        return (NUMA *)ERROR_PTR("na not made", procName, NULL);
-    if ((na->array = (l_float32 *)CALLOC(n, sizeof(l_float32))) == NULL)
-        return (NUMA *)ERROR_PTR("number array not made", procName, NULL);
-
-    na->nalloc = n;
-    na->n = 0;
-    na->refcount = 1;
-    na->startx = 0.0;
-    na->delx = 1.0;
-
-    return na;
-}
-
-/*!
- *  numaDestroy()
- *
- *      Input:  &na (<to be nulled if it exists>)
- *      Return: void
- *
- *  Notes:
- *      (1) Decrements the ref count and, if 0, destroys the numa.
- *      (2) Always nulls the input ptr.
- */
-LEPTONICA_EXPORT void
-numaDestroy(NUMA  **pna)
-{
-NUMA  *na;
-
-    PROCNAME("numaDestroy");
-
-    if (pna == NULL) {
-        L_WARNING("ptr address is NULL", procName);
-        return;
-    }
-
-    if ((na = *pna) == NULL)
-        return;
-
-        /* Decrement the ref count.  If it is 0, destroy the numa. */
-    numaChangeRefcount(na, -1);
-    if (numaGetRefcount(na) <= 0) {
-        if (na->array)
-            FREE(na->array);
-        FREE(na);
-    }
-
-    *pna = NULL;
-    return;
-}
-
 
 /*!
  *  numaClone()
@@ -256,32 +189,6 @@ numaClone(NUMA  *na)
 /*--------------------------------------------------------------------------*
  *                 Number array: add number and extend array                *
  *--------------------------------------------------------------------------*/
-/*!
- *  numaAddNumber()
- *
- *      Input:  na
- *              val  (float or int to be added; stored as a float)
- *      Return: 0 if OK, 1 on error
- */
-LEPTONICA_EXPORT l_int32
-numaAddNumber(NUMA      *na,
-              l_float32  val)
-{
-l_int32  n;
-
-    PROCNAME("numaAddNumber");
-
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-
-    n = numaGetCount(na);
-    if (n >= na->nalloc)
-        numaExtendArray(na);
-    na->array[n] = val;
-    na->n++;
-    return 0;
-}
-
 
 /*!
  *  numaExtendArray()
@@ -324,42 +231,6 @@ numaGetCount(NUMA  *na)
     if (!na)
         return ERROR_INT("na not defined", procName, 0);
     return na->n;
-}
-
-
-/*!
- *  numaGetIValue()
- *
- *      Input:  na
- *              index (into numa)
- *              &ival  (<return> integer value; 0 on error)
- *      Return: 0 if OK; 1 on error
- *
- *  Notes:
- *      (1) Caller may need to check the function return value to
- *          decide if a 0 in the returned ival is valid.
- */
-LEPTONICA_REAL_EXPORT l_int32
-numaGetIValue(NUMA     *na,
-              l_int32   index,
-              l_int32  *pival)
-{
-l_float32  val;
-
-    PROCNAME("numaGetIValue");
-
-    if (!pival)
-        return ERROR_INT("&ival not defined", procName, 1);
-    *pival = 0;
-    if (!na)
-        return ERROR_INT("na not defined", procName, 1);
-
-    if (index < 0 || index >= na->n)
-        return ERROR_INT("index not valid", procName, 1);
-
-    val = na->array[index];
-    *pival = (l_int32)(val + L_SIGN(val) * 0.5);
-    return 0;
 }
 
 /*!

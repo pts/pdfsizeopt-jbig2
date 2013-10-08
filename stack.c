@@ -54,34 +54,6 @@ static const l_int32  INITIAL_PTR_ARRAYSIZE7 = 20;
 /*---------------------------------------------------------------------*
  *                          Create/Destroy                             *
  *---------------------------------------------------------------------*/
-/*!
- *  lstackCreate()
- *
- *      Input:  nalloc (initial ptr array size; use 0 for default)
- *      Return: lstack, or null on error
- */
-LEPTONICA_EXPORT L_STACK *
-lstackCreate(l_int32  nalloc)
-{
-L_STACK  *lstack;
-
-    PROCNAME("lstackCreate");
-
-    if (nalloc <= 0)
-        nalloc = INITIAL_PTR_ARRAYSIZE7;
-
-    if ((lstack = (L_STACK *)CALLOC(1, sizeof(L_STACK))) == NULL)
-        return (L_STACK *)ERROR_PTR("lstack not made", procName, NULL);
-
-    if ((lstack->array = (void **)CALLOC(nalloc, sizeof(void *))) == NULL)
-        return (L_STACK *)ERROR_PTR("lstack array not made", procName, NULL);
-
-    lstack->nalloc = nalloc;
-    lstack->n = 0;
-    
-    return lstack;
-}
-
 
 /*!
  *  lstackDestroy()
@@ -139,62 +111,6 @@ L_STACK  *lstack;
 /*---------------------------------------------------------------------*
  *                               Accessors                             *
  *---------------------------------------------------------------------*/
-/*!
- *  lstackAdd()
- *
- *      Input:  lstack
- *              item to be added to the lstack
- *      Return: 0 if OK; 1 on error.
- */
-LEPTONICA_EXPORT l_int32
-lstackAdd(L_STACK  *lstack,
-          void     *item)
-{
-    PROCNAME("lstackAdd");
-
-    if (!lstack)
-        return ERROR_INT("lstack not defined", procName, 1);
-    if (!item)
-        return ERROR_INT("item not defined", procName, 1);
-
-        /* Do we need to extend the array? */
-    if (lstack->n >= lstack->nalloc)
-        lstackExtendArray(lstack);
-
-        /* Store the new pointer */
-    lstack->array[lstack->n] = (void *)item;
-    lstack->n++;
-
-    return 0;
-}
-
-
-/*!
- *  lstackRemove()
- *
- *      Input:  lstack 
- *      Return: ptr to item popped from the top of the lstack,
- *              or null if the lstack is empty or on error
- */
-LEPTONICA_EXPORT void *
-lstackRemove(L_STACK  *lstack)
-{
-void  *item;
-
-    PROCNAME("lstackRemove");
-
-    if (!lstack)
-        return ERROR_PTR("lstack not defined", procName, NULL);
-
-    if (lstack->n == 0)
-        return NULL;
-
-    lstack->n--;
-    item = lstack->array[lstack->n];
-        
-    return item;
-}
-
 
 /*!
  *  lstackExtendArray()
