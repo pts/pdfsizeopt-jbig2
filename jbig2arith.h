@@ -119,16 +119,6 @@ void jbig2enc_init(struct jbig2enc_ctx *ctx);
 void jbig2enc_dealloc(struct jbig2enc_ctx *ctx);
 
 // -----------------------------------------------------------------------------
-// Flush all the data stored in a context
-// -----------------------------------------------------------------------------
-void jbig2enc_flush(struct jbig2enc_ctx *ctx);
-
-// -----------------------------------------------------------------------------
-// Reset the arithmetic coder back to a init state
-// -----------------------------------------------------------------------------
-void jbig2enc_reset(struct jbig2enc_ctx *ctx);
-
-// -----------------------------------------------------------------------------
 // Flush any remaining arithmetic encoder context to the output.
 // -----------------------------------------------------------------------------
 void jbig2enc_final(struct jbig2enc_ctx *ctx);

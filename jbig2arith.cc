@@ -138,37 +138,6 @@ jbig2enc_init(struct jbig2enc_ctx *ctx) {
   ctx->iaidctx = NULL;
 }
 
-#if JBIG2_COMPILE_UNUSED
-// see comments in .h file
-void
-jbig2enc_reset(struct jbig2enc_ctx *ctx) {
-  ctx->a = 0x8000;
-  ctx->c = 0;
-  ctx->ct = 12;
-  ctx->bp = -1;
-  ctx->b = 0;
-  free(ctx->iaidctx);
-  ctx->iaidctx = NULL;
-  memset(ctx->context, 0, JBIG2_MAX_CTX);
-  memset(ctx->intctx, 0, 13 * 512);
-}
-#endif
-
-#if JBIG2_COMPILE_UNUSED
-// see comments in .h file
-void
-jbig2enc_flush(struct jbig2enc_ctx *ctx) {
-  ctx->outbuf_used = 0;
-
-  for (jbvector<uint8_t *>::iterator i = ctx->output_chunks->begin();
-       i != ctx->output_chunks->end(); ++i) {
-    free(*i);
-  }
-  ctx->output_chunks->clear();
-  ctx->bp = -1;
-}
-#endif
-
 // see comments in .h file
 void
 jbig2enc_dealloc(struct jbig2enc_ctx *ctx) {
