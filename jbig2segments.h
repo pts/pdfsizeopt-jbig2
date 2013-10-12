@@ -4,8 +4,6 @@
 #ifndef THIRD_PARTY_JBIG2ENC_JBIG2SEGMENTS_H__
 #define THIRD_PARTY_JBIG2ENC_JBIG2SEGMENTS_H__
 
-#include "jbvector.h"
-
 #ifdef __MINGW32__ 
 #define htons my_htons
 #define htonl my_htonl
@@ -64,7 +62,6 @@ struct Segment {
   int type;  // segment type (see enum in jbig2structs.h)
   int deferred_non_retain;  // see JBIG2 spec
   int retain_bits;
-  jbvector<unsigned> referred_to;  // list of segment numbers referred to
   unsigned page;  // page number
   unsigned len;   // length of trailing data
 
@@ -75,24 +72,6 @@ struct Segment {
         retain_bits(0),
         page(0),
         len(0) {}
-
-  // ---------------------------------------------------------------------------
-  // Return the size of the segment reference for this segment. Segments can
-  // only refer to previous segments, so the bits needed is determined by the
-  // number of this segment. (7.2.5)
-  // ---------------------------------------------------------------------------
-  unsigned reference_size() const {
-    int refsize;
-    if (number <= 256) {
-      refsize = 1;
-    } else if (number <= 65536) {
-      refsize = 2;
-    } else {
-      refsize = 4;
-    }
-
-    return refsize;
-  }
 
   // ---------------------------------------------------------------------------
   // Return the size of the segment page association field for this segment.
@@ -106,11 +85,9 @@ struct Segment {
   // Return the number of bytes that this segment header will take up
   // ---------------------------------------------------------------------------
   unsigned size() const {
-    const int refsize = reference_size();
     const int pagesize = page_size();
 
-    return sizeof(struct jbig2_segment) + refsize * referred_to.size() +
-           pagesize + sizeof(u32);
+    return sizeof(struct jbig2_segment) + pagesize + sizeof(u32);
   }
 
   // ---------------------------------------------------------------------------
@@ -126,10 +103,9 @@ struct Segment {
     s.deferred_non_retain = deferred_non_retain;
     s.retain_bits = retain_bits;
 #undef F
-    s.segment_count = referred_to.size();
+    s.segment_count = 0;
 
     const int pagesize = page_size();
-    const int refsize = reference_size();
     if (pagesize == 4) s.page_assoc_size = 1;
 
     unsigned j = 0;
@@ -139,17 +115,6 @@ struct Segment {
 #define APPEND(type, val) type __i; __i = val; \
     memcpy(&buf[j], &__i, sizeof(type)); \
     j += sizeof(type)
-
-    for (jbvector<unsigned>::const_iterator i = referred_to.begin();
-         i != referred_to.end(); ++i) {
-      if (refsize == 4) {
-        APPEND(u32, htonl(*i));
-      } else if (refsize == 2) {
-        APPEND(u16, htons(*i));
-      } else {
-        APPEND(u8, *i);
-      }
-    }
 
     if (pagesize == 4) {
       APPEND(u32, htonl(page));

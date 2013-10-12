@@ -33,8 +33,6 @@
 #define u16 uint16_t
 #define u8  uint8_t
 
-#include "jbvector.h"
-
 #include "jbig2arith.h"
 #include "jbig2structs.h"
 #include "jbig2segments.h"
