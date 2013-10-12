@@ -1,5 +1,6 @@
-TODO: make rasteropGeneralLow etc. shorter by removing switch cases for unused
-      values of `op'
+TODO: make pixInvert a single function, without rop.c and roplow.c
+      all we need is from pixInvert: PIX_NOT(PIX_DST)
+      pts2.png is a good input to test pixInvert.
 TODO: make libpng and libz functions static (for better dead code removal)
 TODO: fix bug: make the output the same for pts2.png and pts2i.png
       (indexed1)

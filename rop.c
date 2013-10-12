@@ -199,7 +199,7 @@ l_int32  dd;
 
         /* Check if operation is only on dest */
     dd = pixGetDepth(pixd);
-    if (op == PIX_CLR || op == PIX_SET || op == PIX_NOT(PIX_DST)) {
+    if (op == PIX_NOT(PIX_DST)) {
         rasteropUniLow(pixGetData(pixd),
                        pixGetWidth(pixd), pixGetHeight(pixd), dd,
                         pixGetWpl(pixd),
@@ -208,22 +208,5 @@ l_int32  dd;
         return 0;
     }
 
-    if (!pixs)
-        return ERROR_INT("pixs not defined", procName, 1);
-
-        /* Check depth of src and dest; these must agree */
-    if (dd != pixGetDepth(pixs))
-        return ERROR_INT("depths of pixs and pixd differ", procName, 1);
-
-    rasteropLow(pixGetData(pixd),
-                pixGetWidth(pixd), pixGetHeight(pixd), dd,
-                pixGetWpl(pixd),
-                dx, dy, dw, dh,
-                op,
-                pixGetData(pixs),
-                pixGetWidth(pixs), pixGetHeight(pixs),
-                pixGetWpl(pixs),
-                sx, sy);
-
-    return 0;
+    return ERROR_INT("unsupported op", procName, 1);
 }
