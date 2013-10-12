@@ -23,8 +23,7 @@
 #else
 #include <stdint.h>
 #endif
-
-#include "jbvector.h"
+#include <sys/types.h>
 
 #define JBIG2_MAX_CTX 65536
 #define JBIG2_OUTPUTBUFFER_SIZE 20 * 1024
@@ -54,7 +53,9 @@ struct jbig2enc_ctx {
   int bp;
 
   // This is a list of output chunks, not including the current one
-  jbvector<uint8_t *> *output_chunks;
+  uint8_t **output_chunks;
+  size_t output_chunks_size;
+  size_t output_chunks_capacity;
   uint8_t *outbuf;  // this is the current output chunk
   int outbuf_used;  // number of bytes used in outbuf
   uint8_t context[JBIG2_MAX_CTX];  // state machine context for encoding images

@@ -134,18 +134,18 @@ jbig2enc_init(struct jbig2enc_ctx *ctx) {
   ctx->b = 0;
   ctx->outbuf_used = 0;
   ctx->outbuf = (u8 *) malloc(JBIG2_OUTPUTBUFFER_SIZE);
-  ctx->output_chunks = new jbvector<uint8_t *>;
+  ctx->output_chunks = NULL;
+  ctx->output_chunks_size = ctx->output_chunks_capacity = 0;
   ctx->iaidctx = NULL;
 }
 
 // see comments in .h file
 void
 jbig2enc_dealloc(struct jbig2enc_ctx *ctx) {
-  for (jbvector<uint8_t *>::iterator i = ctx->output_chunks->begin();
-       i != ctx->output_chunks->end(); ++i) {
-    free(*i);
+  for (size_t i = 0; i < ctx->output_chunks_size; ++i) {
+    free(ctx->output_chunks[i]);
   }
-  delete ctx->output_chunks;
+  free(ctx->output_chunks);
   free(ctx->outbuf);
   free(ctx->iaidctx);
 }
@@ -157,7 +157,16 @@ jbig2enc_dealloc(struct jbig2enc_ctx *ctx) {
 static void inline
 emit(struct jbig2enc_ctx *restrict ctx) {
   if (unlikely(ctx->outbuf_used == JBIG2_OUTPUTBUFFER_SIZE)) {
-    ctx->output_chunks->push_back(ctx->outbuf);
+    if (ctx->output_chunks_size == ctx->output_chunks_capacity) {
+      if (ctx->output_chunks_capacity < 16) ctx->output_chunks_capacity = 16;
+      while (ctx->output_chunks_size >= ctx->output_chunks_capacity) {
+        ctx->output_chunks_capacity <<= 1;
+      }
+      ctx->output_chunks = (u8 **) realloc(
+          ctx->output_chunks,
+          ctx->output_chunks_capacity * sizeof *ctx->output_chunks);
+    }
+    ctx->output_chunks[ctx->output_chunks_size++] = ctx->outbuf;
     ctx->outbuf = (u8 *) malloc(JBIG2_OUTPUTBUFFER_SIZE);
     ctx->outbuf_used = 0;
   }
@@ -312,16 +321,15 @@ jbig2enc_final(struct jbig2enc_ctx *restrict ctx) {
 // see comments in .h file
 unsigned
 jbig2enc_datasize(const struct jbig2enc_ctx *ctx) {
-  return JBIG2_OUTPUTBUFFER_SIZE * ctx->output_chunks->size() + ctx->outbuf_used;
+  return JBIG2_OUTPUTBUFFER_SIZE * ctx->output_chunks_size + ctx->outbuf_used;
 }
 
 // see comments in .h file
 void
 jbig2enc_tobuffer(const struct jbig2enc_ctx *restrict ctx, u8 *restrict buffer) {
   int j = 0;
-  for (jbvector<u8 *>::const_iterator i = ctx->output_chunks->begin();
-       i != ctx->output_chunks->end(); ++i) {
-    memcpy(&buffer[j], *i, JBIG2_OUTPUTBUFFER_SIZE);
+  for (size_t i = 0; i < ctx->output_chunks_size; ++i) {
+    memcpy(&buffer[j], ctx->output_chunks[i], JBIG2_OUTPUTBUFFER_SIZE);
     j += JBIG2_OUTPUTBUFFER_SIZE;
   }
 
