@@ -40,29 +40,28 @@ for my $fn (@ARGV) {
 
 set -ex
 
-PREFIX=/home/pts/prg/pts-mini-gpl/uevalrun/cross-compiler
 rm -f *.o
 
-${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
+xstatic gcc -static -fno-stack-protector -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
     -I. \
     zall.c
 
-${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
+xstatic gcc -static -fno-stack-protector -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-sign-compare \
     -I. \
     pngall.c
 
-${PREFIX}/bin/i686-gcc -static -fno-stack-protector -s -O2 -c \
+xstatic gcc -static -fno-stack-protector -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall -Wno-uninitialized -Wno-unused-parameter -Wno-sign-compare \
     -Wno-strict-aliasing -fno-strict-aliasing \
     -I. \
     leptonica.c
 
-${PREFIX}/bin/i686-g++ -static -fno-stack-protector \
+xstatic g++ -static -fno-stack-protector \
     -fno-exceptions -fno-rtti -s -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
@@ -70,10 +69,12 @@ ${PREFIX}/bin/i686-g++ -static -fno-stack-protector \
     jbig2arith.cc jbig2.cc jbig2enc.cc
 
 #g++ -Wl,--gc-sections,--print-gc-sections
-${PREFIX}/bin/i686-g++ -static -Wl,--gc-sections \
-    -fno-exceptions -fno-rtti -s -o jbig2.static *.o
+xstatic g++ -static -Wl,--gc-sections \
+    -fno-exceptions -fno-rtti -s -o jbig2.xstatic.uncompressed *.o
 
-do_elfosfix jbig2.static
-
+do_elfosfix jbig2.xstatic.uncompressed
+cp -a jbig2.xstatic.uncompressed jbig2.xstatic
+upx.pts --brute jbig2.xstatic
+do_elfosfix jbig2.xstatic
 
 : OK.
