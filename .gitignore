@@ -11,6 +11,8 @@ jbig2-small3
 jbig2-small4
 jbig2.exe
 jbig2.static
+jbig2.xstatic
+jbig2.xstatic.uncompressed
 pts2.jbig2.dynamic
 pts2.jbig2.mingw
 pts2.jbig2.orig
