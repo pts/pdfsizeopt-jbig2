@@ -307,7 +307,7 @@ static l_int32
 pnmReadNextAsciiValue(FILE  *fp,
                       l_int32 *pval)
 {
-l_int32   c, ignore;
+l_int32   c;
 
     PROCNAME("pnmReadNextAsciiValue");
 
@@ -322,7 +322,7 @@ l_int32   c, ignore;
     } while (c == ' ' || c == '\t' || c == '\n' || c == '\r');
 
     fseek(fp, -1L, SEEK_CUR);        /* back up one byte */
-    ignore = fscanf(fp, "%d", pval);
+    (void)!fscanf(fp, "%d", pval);
     return 0;
 }
 

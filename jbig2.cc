@@ -44,7 +44,6 @@ usage(const char *argv0) {
   fprintf(stderr, "  -T <bw threshold>: set 1 bpp threshold (def: 188)\n");
   fprintf(stderr, "  -2: upsample 2x before thresholding\n");
   fprintf(stderr, "  -4: upsample 4x before thresholding\n");
-  fprintf(stderr, "  -j --jpeg-output: write images from mixed input as JPEG\n");
   fprintf(stderr, "  -v: be verbose\n");
 }
 
@@ -101,8 +100,6 @@ main(int argc, char **argv) {
   float threshold = 0.85;
   int bw_threshold = 188;
   bool up2 = false, up4 = false;
-  l_int32 img_fmt = IFF_PNG;
-  const char *img_ext = "png";
   int i;
 
   for (i = 1; i < argc; ++i) {
@@ -131,13 +128,6 @@ main(int argc, char **argv) {
     }
     if (strcmp(argv[i], "-4") == 0) {
       up4 = true;
-      continue;
-    }
-
-    if (strcmp(argv[i], "-j") == 0 ||
-        strcmp(argv[i], "--jpeg-output") == 0) {
-      img_ext = "jpg";
-      img_fmt = IFF_JFIF_JPEG;
       continue;
     }
 
