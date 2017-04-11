@@ -26,7 +26,7 @@ g++-mp-4.4 -fno-exceptions -fno-rtti -static-libgcc -O2 -c \
     -ffunction-sections -fdata-sections \
     -W -Wall \
     -I. \
-    jbig2arith.cc jbig2.cc jbig2enc.cc jbig2sym.cc
+    jbig2arith.cc jbig2.cc jbig2enc.cc
 
 # Find libstdc++.a next to libstdc++.*.dylib.
 echo 'main(){}' >empty.cc
