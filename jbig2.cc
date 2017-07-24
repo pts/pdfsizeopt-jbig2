@@ -221,11 +221,13 @@ main(int argc, char **argv) {
     if (numsubimages<=1) {
       source = pixRead(argv[i]);
     }
-#if HAVE_LIBTIFF
     else {
+#if HAVE_LIBTIFF
       source = pixReadTiff(argv[i], subimage++);
-    }
+#else
+      source = NULL;
 #endif
+    }
 
     if (!source) return 3;
     if (verbose)
